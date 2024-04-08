@@ -10,6 +10,10 @@ const CUSTOM_COLOR = {
     FlushOrange: '#FF8400',
     Mercury: '#E9E9E9',
     Sapphire: '#2A4BA0',
+    Sliver: '#C0C0C0',
+    Gray: '#808080',
+    Maroon: '#800000',
+    Olive: '#808000'
   };
   
   export default CUSTOM_COLOR;
