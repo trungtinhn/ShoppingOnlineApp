@@ -6,6 +6,7 @@ import { IC_Line } from '../../../assets/Login_SignUp/icons';
 import CustomButton from '../../components/Login_SignUp/CustomButton';
 import { IMG_Rectangle, IMG_Rectangle2, IMG_image1 } from '../../../assets/Login_SignUp/images';
 import LoadingComponent from '../../components/LoadingComponent';
+import Line from '../../../assets/Login_SignUp/svg/Line.svg'
 export default function IntroScreen({navigation}) {
 
   const [isLoading, setLoading] = useState('true');
@@ -29,16 +30,13 @@ export default function IntroScreen({navigation}) {
           resizeMode="cover"
           style={styles.image}>
           <ImageBackground
-            source={IMG_Rectangle2}
+            source={IMG_Rectangle}
             resizeMode="cover"
             style={styles.image}>
             <>
               <View style={styles.containeTop}>
                 <View style={styles.viewTop}>
-                  <Image
-                    source={IC_Line}
-                    style={{width: '100%', height: '10%', top: '10%'}}
-                  />
+                  <Line width={'100%'} height={15}></Line>
                   <Text style={styles.baseText}>NAMU</Text>
                 </View>
 
@@ -132,6 +130,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: FONT_FAMILY.CeraPro,
     color: CUSTOM_COLOR.White,
+  },
+  botBaseTextBlack:{
+    fontSize: 20,
+    fontFamily: FONT_FAMILY.CeraPro,
+    color: CUSTOM_COLOR.Black,
   },
   buttonContainer: {
     width: '180%',

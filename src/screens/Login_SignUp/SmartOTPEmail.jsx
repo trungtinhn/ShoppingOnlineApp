@@ -1,5 +1,5 @@
 import { ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native'
-import React, {useState} from 'react'
+import {React, useState} from 'react'
 import HeaderWithBack from '../../components/Login_SignUp/HeaderWithBack';
 import HeaderTitlle from '../../components/Login_SignUp/HeaderTitlle';
 import CustomButton from '../../components/Login_SignUp/CustomButton';
@@ -10,13 +10,13 @@ import { IMG_Rectangle182 } from '../../../assets/Login_SignUp/images';
 import OTPCard from '../../components/Login_SignUp/OTPCard';
 import Size from '../../constants/size';
 
-export default function SmartOTPScreen({navigation}) {
-  const [otp, setOTP] = useState('');
+export default function SmartOTPEmailScreen({navigation}) {
+    const [otp, setOTP] = useState('');
 
-  const handleOTPChange = (otpValue) => {
-    setOTP(otpValue);
-  };
-
+    const handleOTPChange = (otpValue) => {
+      setOTP(otpValue);
+      
+    };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -30,11 +30,11 @@ export default function SmartOTPScreen({navigation}) {
           <HeaderTitlle title="Smart OTP" />
         </View>
         <View style={[styles.topContainer, styles.unitContainer]}>
-          <HeaderContent content="Please check your phone and type the verification code we sent to 0336******" />
+          <HeaderContent content="Please check your phone and type the verification code we sent to tr***@gmail.com" />
         </View>
 
         <View style={{width: '100%', height: Size.DeviceHeight*0.08, top: Size.DeviceHeight*0.08}}>
-          <OTPCard onOTPChange={handleOTPChange} />
+        <OTPCard onOTPChange={handleOTPChange} />
         </View>
 
         <View style={styles.centerContainer}>
@@ -62,7 +62,7 @@ export default function SmartOTPScreen({navigation}) {
               text="Continue"
               onPress={() => {
                 Alert.alert('OTP', otp);
-                navigation.navigate('ResetPassword')
+                navigation.navigate('Congratulation')
               }}
             />
           </View>
@@ -90,7 +90,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: Size.DeviceHeight*0.05,
         top: Size.DeviceHeight*0.08,
-        //marginHorizontal: '5%',
         flexDirection: 'row',
       },
       containerBot: {
@@ -98,6 +97,7 @@ const styles = StyleSheet.create({
         bottom: -Size.DeviceHeight*0.45,
         alignItems: 'center',
         justifyContent: 'center',
+        
       },
       button: {
         width: '150%',

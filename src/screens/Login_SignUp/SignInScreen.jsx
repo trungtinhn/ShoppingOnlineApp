@@ -1,6 +1,6 @@
-import { View, Text, SafeAreaView, ImageBackground, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, SafeAreaView, ImageBackground, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import React from 'react'
-import { IMG_Rectangle182 } from '../../../assets/Login_SignUp/images'
+import { IMG_Rectangle182, IMG_Separator } from '../../../assets/Login_SignUp/images'
 import TextInputCard from '../../components/Login_SignUp/TextInputCard'
 import PasswordCard from '../../components/Login_SignUp/PasswordCard'
 import CustomButton from '../../components/Login_SignUp/CustomButton'
@@ -9,21 +9,25 @@ import HeaderWithBack from '../../components/Login_SignUp/HeaderWithBack'
 import HeaderTitlle from '../../components/Login_SignUp/HeaderTitlle'
 import FONT_FAMILY from '../../constants/font'
 import CUSTOM_COLOR from '../../constants/color'
-
+import LogoButton from '../../components/Login_SignUp/LogoButton'
+import Size from '../../constants/size'
 export default function SignInScreen({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
+      {/* <ImageBackground
         source={IMG_Rectangle182}
         resizeMode="cover"
-        style={styles.container}>
-        <View style={{width: '100%', height: 10}} />
+        style={styles.container}> */}
+        <View style={{width: '100%', height: 10}}/>
         <HeaderWithBack onPress={() => navigation.goBack()} />
+        <View style={{width: '100%', height: Size.DeviceHeight*0.05}} />
         <View style={[styles.unitContainer, {height: 50}]}>
-          <HeaderTitlle title="Sign in" />
+          <HeaderTitlle title="Login" />
+          <View style={{width: '100%', height: '5%'}}/>
+          <HeaderContent content="Login to accsess your Namu account"/>
         </View>
 
-        <View style={{width: '100%', height: '5%'}} />
+        <View style={{width: '100%', height: Size.DeviceHeight*0.05}} />
 
         <View style={[styles.unitContainer, styles.bodyContainer]}>
           <View style={{width: '100%', height: 110}}>
@@ -37,7 +41,7 @@ export default function SignInScreen({navigation}) {
 
           <View style={{width: '100%', height: 110}}>
             <PasswordCard
-              title="Pasword*"
+              title="Password*"
               txtInput="********"
               onChangeText={()=>{}}
             />
@@ -56,15 +60,13 @@ export default function SignInScreen({navigation}) {
             <View style={styles.buttonContainer}>
               <CustomButton
                 type="primary"
-                text="Sign in"
+                text="Login"
                 onPress={() => {
-                 
                 }}
               />
             </View>
           </View>
         </>
-
         <View style={[styles.unitContainer, styles.botContainer]}>
           <View
             style={{flex: 5, justifyContent: 'center', alignItems: 'flex-end'}}>
@@ -81,13 +83,19 @@ export default function SignInScreen({navigation}) {
             </TouchableOpacity>
           </View>
         </View>
-      </ImageBackground>
+        <View style={[styles.logoContainer]}>
+            <LogoButton type='google' onPress={()=>{}}></LogoButton>
+            <LogoButton type='facebook' onPress={()=>{}}></LogoButton>
+            <LogoButton type='twitter' onPress={()=>{}}></LogoButton>
+        </View>
+      
     </SafeAreaView>
   )
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: CUSTOM_COLOR.White
   },
   unitContainer: {
     width: '80%',
@@ -115,6 +123,12 @@ const styles = StyleSheet.create({
     height: '5%',
     flexDirection: 'row',
     // backgroundColor: 'red',
+  },
+  logoContainer:{
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    width: '100%',
+    paddingHorizontal: '20%'
   },
   contentStyle: {
     fontFamily: FONT_FAMILY.Light,
