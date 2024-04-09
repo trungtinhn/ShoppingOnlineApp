@@ -11,6 +11,9 @@ import SignUpScreen from '../../screens/Login_SignUp/SignUpScreen';
 import ForgetPasswordScreen from '../../screens/Login_SignUp/ForgetPasswordScreen';
 import SmartOTPScreen from '../../screens/Login_SignUp/SmartOTPScreen';
 import ResetPasswordScreen from '../../screens/Login_SignUp/ResetPasswordScreen';
+import CongratulationScreen from '../../screens/Login_SignUp/CongratulationScreen';
+import SmartOTPEmailScreen from '../../screens/Login_SignUp/SmartOTPEmail';
+import DoneScreen from '../../screens/Login_SignUp/DoneScreen';
 
 const Stack = createStackNavigator();
 
@@ -28,7 +31,10 @@ const MainNavigation = () => {
           <Stack.Screen name='SignUp' component={SignUpScreen}/>
           <Stack.Screen name='ForgotPassword' component={ForgetPasswordScreen}/>
           <Stack.Screen name='SmartOTP' component={SmartOTPScreen}/>
+          <Stack.Screen name='SmartOTPEmail' component={SmartOTPEmailScreen}/>
+          <Stack.Screen name='Congratulation' component={CongratulationScreen}/>
           <Stack.Screen name='ResetPassword' component={ResetPasswordScreen}/>
+          <Stack.Screen name='Done' component={DoneScreen}/>
         </Stack.Navigator>
        
     </NavigationContainer>

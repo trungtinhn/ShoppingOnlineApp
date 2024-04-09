@@ -2,6 +2,7 @@ import { View, Text, TextInput, StyleSheet } from 'react-native'
 import React from 'react'
 import FONT_FAMILY from '../../constants/font';
 import CUSTOM_COLOR from '../../constants/color';
+import Size from '../../constants/size';
 
 const TextInputCard = (props: any) => {
   return (
@@ -33,14 +34,16 @@ const styles = StyleSheet.create({
       fontFamily: FONT_FAMILY.Medium,
       fontSize: 20,
       color: CUSTOM_COLOR.Black,
-      left: '5%',
     },
     textInputContainer: {
       width: '100%',
       height: '50%',
-      backgroundColor: CUSTOM_COLOR.Alto,
-      borderRadius: 40,
+      backgroundColor: CUSTOM_COLOR.White,
+      borderRadius: Size.BorderRadius,
+      borderWidth: 1,
+      borderColor: CUSTOM_COLOR.Sliver,
       flexDirection: 'row',
+      top: '1%'
     },
     textinputStyle: {
       fontFamily: FONT_FAMILY.Semibold,

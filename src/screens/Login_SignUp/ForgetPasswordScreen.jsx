@@ -7,22 +7,21 @@ import TextInputCard from '../../components/Login_SignUp/TextInputCard';
 import CustomButton from '../../components/Login_SignUp/CustomButton';
 import CUSTOM_COLOR from '../../constants/color';
 import FONT_FAMILY from '../../constants/font';
+import Size from '../../constants/size';
 
 export default function ForgetPasswordScreen({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
-        source={IMG_Rectangle182}
-        resizeMode="cover"
-        style={styles.container}>
-        <View style={{width: '100%', height: 20}} />
+      {/*  */}
+        <View style={{width: '100%', height: 10}} />
         <HeaderWithBack onPress={() => navigation.goBack()} />
+        <View style={{width: '100%', height: Size.DeviceHeight*0.05}} />
         <View style={[styles.topContainer, styles.unitContainer]}>
           <HeaderTitlle title="Forgot Password" />
           {/* <HederContent content="Fill some Personal Information" /> */}
         </View>
 
-        <View style={{width: '100%', height: '10%'}} />
+        <View style={{width: '100%', height: Size.DeviceHeight*0.2}} />
 
         <View style={[styles.centerContainer, styles.unitContainer]}>
           <TextInputCard
@@ -33,7 +32,7 @@ export default function ForgetPasswordScreen({navigation}) {
           />
         </View>
 
-        <View style={{width: '100%', height: '5%'}} />
+        <View style={{width: '100%', height: Size.DeviceHeight*0.2}} />
 
         <View style={[styles.botContainer, styles.unitContainer]}>
           <View
@@ -54,7 +53,6 @@ export default function ForgetPasswordScreen({navigation}) {
             />
           </View>
         </View>
-      </ImageBackground>
     </SafeAreaView>
   )
 }

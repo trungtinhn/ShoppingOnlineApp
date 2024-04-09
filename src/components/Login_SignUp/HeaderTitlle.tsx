@@ -10,10 +10,10 @@ const HeaderTitlle = (props: any) => {
 }
 const styles = StyleSheet.create({
     titleView: {
-      fontFamily: FONT_FAMILY.Semibold,
-      fontSize: 30,
+      fontFamily: FONT_FAMILY.CeraPro,
+      fontSize: 40,
       color: CUSTOM_COLOR.Black,
-      fontWeight: 'bold',
+      fontWeight: 'bold'
     },
   });
 export default HeaderTitlle
