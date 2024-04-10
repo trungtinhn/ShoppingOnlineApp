@@ -35,6 +35,7 @@ export default function CongratulationScreen({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: CUSTOM_COLOR.White
   },
   containerCenter: {
     width: '90%',
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   botText: {
-    fontFamily: FONT_FAMILY.Semibold,
+    fontFamily: FONT_FAMILY.CeraPro,
     fontSize: 15,
     color: CUSTOM_COLOR.Black,
   },
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   button: {
-    width: '100%',
+    width: '150%',
     height: '100%',
   },
 });

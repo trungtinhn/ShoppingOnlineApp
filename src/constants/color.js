@@ -13,7 +13,8 @@ const CUSTOM_COLOR = {
     Sliver: '#C0C0C0',
     Gray: '#808080',
     Maroon: '#800000',
-    Olive: '#808000'
+    Olive: '#808000',
+    AliceBlue: '#f0f8ff'
   };
   
   export default CUSTOM_COLOR;

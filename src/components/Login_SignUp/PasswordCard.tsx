@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import FONT_FAMILY from '../../constants/font';
 import CUSTOM_COLOR from '../../constants/color';
 import { IC_visibility, IC_visibility1 } from '../../../assets/Login_SignUp/icons';
+import Size from '../../constants/size';
 
 const PasswordCard = (props: any) => {
     const [isPasswordVisible, setPasswordVisible] = useState(false);
@@ -59,14 +60,16 @@ const styles = StyleSheet.create({
       fontFamily: FONT_FAMILY.Medium,
       fontSize: 20,
       color: CUSTOM_COLOR.Black,
-      left: '5%',
     },
     textInputContainer: {
       width: '100%',
       height: '50%',
-      backgroundColor: CUSTOM_COLOR.Alto,
-      borderRadius: 40,
+      backgroundColor: CUSTOM_COLOR.White,
+      borderRadius: Size.BorderRadius,
+      borderWidth: Size.BorderWidthThink,
+      borderColor: CUSTOM_COLOR.Sliver,
       flexDirection: 'row',
+      top: '1%'
     },
     textinputStyle: {
       fontFamily: FONT_FAMILY.Semibold,
