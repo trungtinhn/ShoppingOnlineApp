@@ -8,7 +8,7 @@ const Categories = (props: any) => {
   return (
     <View style={{ width: 300, height: 150, borderRadius: 30, marginVertical: 10, marginHorizontal: 50, alignItems: "center", justifyContent: 'center' }}>
 
-      <Image source={{ uri: props.source }}
+      <Image source={props.source}
         resizeMode='cover'
 
         style={{
@@ -28,7 +28,7 @@ const Categories = (props: any) => {
 
       <View style={{
         width: 300,
-        backgroundColor: "red",
+        backgroundColor: 'rgba(50, 50, 50, 0.5)',
         alignItems: 'center',
         position: 'absolute',
         bottom: 45,

@@ -1,0 +1,14 @@
+export {default as IC_Home} from '../icons/Home.png';
+export {default as IC_Bell} from '../icons/bell.png';
+export {default as IC_Delivery} from '../icons/delivery.png';
+export {default as IC_Gift} from '../icons/gift.png';
+export {default as IC_Lock} from '../icons/lock.png';
+export {default as IC_Order} from '../icons/order.png';
+export {default as IC_Profile} from '../icons/profile.png';
+export {default as IC_Question} from '../icons/question.png';
+export {default as IC_Revote} from '../icons/revote.png';
+export {default as IC_Theme} from '../icons/theme.png';
+export {default as IC_Wallet} from '../icons/wallet.png';
+export {default as IC_User} from '../icons/User.png';
+export {default as IC_Logout} from '../icons/logout.png'
+export {default as IC_Next} from '../icons/next.png';

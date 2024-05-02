@@ -15,7 +15,7 @@ const ProductView = (props: any) => {
       }} >
 
          <Image
-            source={{ uri: props.source }}
+            source={props.source}
             style={{
                width: 150,
                height: 165,

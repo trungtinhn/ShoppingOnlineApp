@@ -1,0 +1,11 @@
+export { default as PR_1 } from '../images/product_1.jpg';
+export { default as PR_2 } from '../images/product_2.jpg';
+export { default as PR_3 } from '../images/product_3.jpg';
+export { default as PR_4 } from '../images/product_4.jpg';
+export { default as PR_5 } from '../images/product_5.jpg';
+export { default as IM_AnhGiay1 } from '../images/AnhGiay1.png';
+export { default as IM_AnhGiay2 } from '../images/AnhGiay2.png';
+export { default as IM_AnhGiay3 } from '../images/AnhGiay3.png';
+export { default as IM_AnhGiay4 } from '../images/AnhGiay4.png';
+export { default as Default_Avatar } from '../images/avartar.png';
+export { default as IMG_backgroundCard } from '../images/Rectangle21.png';
