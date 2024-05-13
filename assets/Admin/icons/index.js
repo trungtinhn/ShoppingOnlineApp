@@ -10,7 +10,7 @@ export { default as product } from '../icons/OverView/product.png';
 export { default as user } from '../icons/OverView/user.png';
 export { default as report } from '../icons/OverView/report.png';
 export { default as back } from '../icons/OverView/BackTo.png';
-export { default as backto } from '../icons/OverView/BackNext.png';
+export { default as IC_Back } from '../icons/OverView/BackNext.png';
 export { default as StartCorner } from '../icons/OverView/starcorner.png';
 export { default as StartFull } from '../icons/OverView/starfull.png';
 export { default as IC_Down } from '../icons/OverView/down.png';
@@ -41,4 +41,8 @@ export { default as IC_Next } from '../icons/next.png';
 export { default as IC_Catgory } from '../icons/OverView/categories.png';
 export { default as IC_Search } from '../icons/Search.png';
 export { default as IC_Add } from '../icons/OverView/addIcon.png';
+export { default as IC_Emo } from '../icons/emo.png';
+export {default as IC_Camera} from '../icons/camera.png'
+export {default as IC_Send} from '../icons/send.png'
+export {default as IC_Attachment} from '../icons/attachment.png'
 
