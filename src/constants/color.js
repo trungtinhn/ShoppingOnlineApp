@@ -14,7 +14,17 @@ const CUSTOM_COLOR = {
     Gray: '#808080',
     Maroon: '#800000',
     Olive: '#808000',
-    AliceBlue: '#f0f8ff'
+    AliceBlue: '#f0f8ff',
+    Red: '#FF0000',
+    LightGray: '#DDDDDD',
+    SlateGray: '#9FB6CD',
+    Theme: '#996699',
+    LavenderBlush: '#CDC1C5',
+    DarkOrange: '#CD6600',
+    DarkBlue: '#143F6B',
+    LightBlue: '#36648B',
+    RoseBud: '#FAA9A9',
+    Gallery: '#F0F0F0',
   };
   
   export default CUSTOM_COLOR;

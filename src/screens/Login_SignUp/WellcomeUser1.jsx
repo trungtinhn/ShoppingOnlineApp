@@ -6,7 +6,7 @@ import WellcomeCard from '../../components/Login_SignUp/WellcomeCard';
 
 export default function WellcomeUser1({navigation}) {
   return (
-    <SafeAreaView style={styles.container}>
+   // <SafeAreaView style={styles.container}>
       <WellcomeCard
         image={IMG_WellcomeUser5}
         title="Fantastic And Modern"
@@ -17,7 +17,7 @@ export default function WellcomeUser1({navigation}) {
         text="Continue"
         onPress={() => navigation.navigate('WellcomeUser2')}
       />
-    </SafeAreaView>
+   // </SafeAreaView>
   )
 }
 const styles = StyleSheet.create({
