@@ -18,7 +18,7 @@ import PromotionCard from '../../components/Customer/PromotionCard'
 import CUSTOM_COLOR from '../../constants/color';
 import { PR_1, PR_2, PR_3, PR_4, PR_5 } from '../../../assets/Customer/images';
 import { Slider } from 'react-native-elements';
-function HomeScreen() {
+function HomeScreen({navigation}) {
   const [trending, setTrending] = useState([]);
   const [danhmuc, setDanhMuc] = useState([]);
   const [chatUser, setChatUser] = useState();
@@ -28,7 +28,6 @@ function HomeScreen() {
   const [dataPromotion, setDataPromotion] = useState([]);
   const [search, setSearch] = useState(true);
   const [sanpham, setSanPham] = useState([]);
-
   const getDanhMuc = async () => {
     const data = [
       {
@@ -264,7 +263,7 @@ function HomeScreen() {
             borderRadius: 10,
           }}
           onPress={() => {
-            navigation.navigate('ShoppingCard', { idUser });
+            navigation.navigate('Shopping Card', { idUser });
           }}>
           {badgeCart != 0 ? (
             <Badge
@@ -346,7 +345,7 @@ function HomeScreen() {
                       marginHorizontal: -10,
                     }}
                     onPress={() => {
-                      navigation.navigate('DetailProduct', { item });
+                      navigation.navigate('Product Detail', { item });
                     }}>
                     <ProductView
                       source={item.HinhAnhSP}
@@ -409,7 +408,7 @@ function HomeScreen() {
                   flexDirection: 'row',
                   //justifyContent: 'space-around'
                 }}
-                  onPress={() => { navigation.navigate('DetailProduct', { item }) }}
+                  onPress={() => { navigation.navigate('Product Detail', { item }) }}
                 >
                   <ProductView
                     source={item.HinhAnhSP}

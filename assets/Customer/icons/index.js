@@ -12,3 +12,6 @@ export {default as IC_Wallet} from '../icons/wallet.png';
 export {default as IC_User} from '../icons/User.png';
 export {default as IC_Logout} from '../icons/logout.png'
 export {default as IC_Next} from '../icons/next.png';
+export {default as IC_StartFull} from '../icons/starfull.png';
+export {default as IC_StartCorner} from '../icons/starcorner.png';
+export {default as IC_Delete} from '../icons/delete.png';
