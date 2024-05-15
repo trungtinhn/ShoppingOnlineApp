@@ -1,3 +1,4 @@
+
 // export {default as tênhình} from 'đường dẫn';
 export { default as IM_Giay1 } from '../images/IM_Giay1.png';
 export { default as IM_Giay2 } from '../images/IM_Giay2.png';
@@ -7,4 +8,14 @@ export { default as IM_MauAo } from '../images/MauAo.jpeg';
 export { default as AddImage } from '../images/addimage.png';
 export { default as IMG_backgroundCard } from '../images/Rectangle21.png';
 export { default as ic_add } from '../images/ic_add.png';
-export { default as border_add } from '../images/border_add.png';
+export { default as border_add } from '../images/border_add.png'
+export { default as PR_1 } from '../images/product_1.jpg';
+export { default as PR_2 } from '../images/product_2.jpg';
+export { default as PR_3 } from '../images/product_3.jpg';
+export { default as PR_4 } from '../images/product_4.jpg';
+export { default as PR_5 } from '../images/product_5.jpg';
+export { default as IM_AnhGiay1 } from '../images/AnhGiay1.png';
+export { default as IM_AnhGiay2 } from '../images/AnhGiay2.png';
+export { default as IM_AnhGiay3 } from '../images/AnhGiay3.png';
+export { default as IM_AnhGiay4 } from '../images/AnhGiay4.png';
+export { default as Default_Avatar } from '../images/avartar.png';

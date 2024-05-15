@@ -1,3 +1,4 @@
+
 // export {default as tên icon} from 'đường dẫn';
 
 export { default as settingicon } from '../icons/OverView/setting.png';
@@ -45,4 +46,6 @@ export { default as IC_Emo } from '../icons/emo.png';
 export {default as IC_Camera} from '../icons/camera.png'
 export {default as IC_Send} from '../icons/send.png'
 export {default as IC_Attachment} from '../icons/attachment.png'
-
+export { default as IC_Search } from '../icons/Search.png';
+export { default as IC_Chat } from '../icons/chat.png'
+export { default as IC_ShoppingCart } from '../icons/shoppingcarticon.png'
