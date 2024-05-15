@@ -6,7 +6,7 @@ const ProductSchema = new mongoose.Schema({
         required: true
     },
     HinhAnhSP: {
-        type: [String],
+        type: [String], // Array of strings for image URLs or paths
         required: true
     },
     MaDM: {
@@ -28,11 +28,31 @@ const ProductSchema = new mongoose.Schema({
     },
     SoLuongDaBan: {
         type: Number,
-        required: true
+        default: 0
     },
     SoLuongSP: {
         type: Number,
         required: true
+    },
+    SoLuotXem: {
+        type: Number,
+        default: 0
+    },
+    SoLuotYeuThich: {
+        type: Number,
+        default: 0
+    },
+    TenSP: {
+        type: String,
+        required: true
+    },
+    TrangThai: {
+        type: String,
+        required: true
+    },
+    Trending: {
+        type: Boolean,
+        default: false
     }
 }, { timestamps: true });
 
