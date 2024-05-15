@@ -11,8 +11,6 @@ import { set } from "firebase/database";
 import Delivery from "../components/Delivery";
 
 
-
-
 function DeliveryScreen({ navigation, route }) {
 
     const { itemsCheckout, totalMoney, choosePayment, promotion } = route.params
