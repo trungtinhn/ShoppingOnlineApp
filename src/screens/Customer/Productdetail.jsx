@@ -5,14 +5,15 @@ import CUSTOM_COLOR from "../../constants/color";
 import StarRating from "../../components/Customer/StartRating";
 import { IC_User } from "../../../assets/Customer/icons";
 import ColorPicker from "../../components/Customer/ColorPicker";
+import { IM_AnhGiay1 } from "../../../assets/Customer/images";
 function ProductDeatail({ navigation, route }) {
-    const { item } = route.params
+    //const { item } = route.params
     return (
         <View style={styles.container}>
-            <Image source={item.HinhAnhSP} resizeMode="center" style={{ backgroundColor: CUSTOM_COLOR.White, height: 400, width: 400 }} />
+            <Image source={IM_AnhGiay1} resizeMode="center" style={{ backgroundColor: CUSTOM_COLOR.White, height: 400, width: 400 }} />
             <View style={{ padding: 10, flexDirection: 'row' }}>
                 <Text style={styles.productName}>
-                    {item.TenSP}
+                    Giày
                 </Text>
             </View>
             <View style={styles.flexRow}>
@@ -30,7 +31,7 @@ function ProductDeatail({ navigation, route }) {
             <View style={styles.text}>
                 <View>
                     <Text>Giá tiền:</Text>
-                    <Text style={styles.pride}>{item.GiaSP}đ</Text>
+                    <Text style={styles.pride}>1000đ</Text>
                 </View>
                 <View style={{ backgroundColor: 'red', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                     <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>Thêm Vào Giỏ Hàng</Text>
