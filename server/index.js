@@ -28,7 +28,7 @@ app.use("/api/category", categoryRoutes)
 app.use('/api/products', productRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/promotion', promotionRoutes);
-app.use('api/addresses', addressRoutes);
+app.use('/api/addresses', addressRoutes);
 
 
 app.listen(8000, () => {
