@@ -99,7 +99,7 @@ function DeliveryScreen({ navigation, route }) {
                                 width: '20%',
                                 height: '40%',
                                 marginHorizontal: 20,
-                                marginVertical: '20%'
+                                marginVertical: 15
                             }}
                             resizeMode='stretch'
                         />
@@ -188,8 +188,8 @@ function DeliveryScreen({ navigation, route }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: CUSTOM_COLOR.White
-
+        backgroundColor: CUSTOM_COLOR.White,
+        paddingTop: 10
     },
 
 

@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import CUSTOM_COLOR from '../../constants/color';
+import { IC_Search } from '../../../assets/Admin/icons';
 
 interface SearchInputProps {
   onSearch: (searchTerm: string) => void;
@@ -59,7 +60,7 @@ const SearchButton: React.FC<SearchInputProps> = ({onSearch}) => {
     <View style={{flex: 1}}>
       <TouchableOpacity onPress={handlePress}>
         <Image
-          source={require('../assets/icons/SearchIcon.png')}
+          source={IC_Search}
           style={{width: 20, height: 20}}
           resizeMode="contain"
         />

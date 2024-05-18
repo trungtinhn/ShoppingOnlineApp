@@ -3,7 +3,7 @@ import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity } 
 import { getFocusedRouteNameFromRoute, NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-import { IC_Home, IC_Bell, IC_User } from "../../../assets/Customer/icons";
+import { IC_Home, IC_Bell, IC_User, IC_Heart } from "../../../assets/Customer/icons";
 
 import CUSTOM_COLOR from "../../constants/color";
 import CustomerNavigation from "./HomeNavigation";
@@ -96,7 +96,7 @@ function CustomerBottomTab() {
                                     return( 
                                         <View style ={{alignItems: 'center', justifyContent: 'center'}}>
                                             <Image
-                                            source={IC_Home}
+                                            source={IC_Heart}
                                             resizeMode = 'stretch'
                                             style = {{
                                                 width: 25,

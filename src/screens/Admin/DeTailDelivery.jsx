@@ -10,7 +10,7 @@ import React, { useState, useEffect } from 'react';;
 import { Address, Delivery, Payment } from '../../../assets/Admin/icons';
 import { ScrollView } from 'react-native-gesture-handler';
 import { IM_MauAo } from '../../../assets/Admin/images';
-import PerSon from '../../components/Admin/Person';
+import PerSon from '../../components/Admin/PerSon';
 import OneOrder from '../../components/Admin/OneOrder';
 
 import dayjs from 'dayjs';

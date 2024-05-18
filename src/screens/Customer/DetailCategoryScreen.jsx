@@ -1,17 +1,16 @@
 
 import React, {useEffect, useState} from 'react';
 import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
-
 import { IC_Back } from '../../../assets/Customer/icons';
 import ProductView from '../../components/Customer/ProductView';
 import SearchInput from '../../components/Customer/SearchInput';
 import SortDropdown from '../../components/Customer/SortDropDown';
 import CUSTOM_COLOR from '../../constants/color';
-
+import { PR_1, PR_2, PR_3, PR_4, PR_5 } from '../../../assets/Customer/images';
 function DetailCategoryScreen({navigation, route}) {
   const {item} = route.params;
 
-  const [items, setItems] = useState([]);
+  //const [items, setItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortType, setSortType] = useState('');
 
@@ -21,6 +20,38 @@ function DetailCategoryScreen({navigation, route}) {
   const handleSort = type => {
     setSortType(type);
   };
+  const items = [
+    {
+      MaSP: 1,
+      TenSP: 'San Pham 1',
+      HinhAnhSP: PR_1,
+      GiaSP: '10000'
+    },
+    {
+      MaSP: 2,
+      TenSP: 'San Pham 2',
+      HinhAnhSP: PR_2,
+      GiaSP: '10000'
+    },
+    {
+      MaSP: 3,
+      TenSP: 'San Pham 3',
+      HinhAnhSP: PR_3,
+      GiaSP: '10000'
+    },
+    {
+      MaSP: 4,
+      TenSP: 'San Pham 4',
+      HinhAnhSP: PR_4,
+      GiaSP: '10000'
+    },
+    {
+      MaSP: 5,
+      TenSP: 'San Pham 5',
+      HinhAnhSP: PR_5,
+      GiaSP: '10000'
+    },
+  ];
 
   const getDataCategory = async () => {
     // const q = query(
@@ -95,7 +126,7 @@ function DetailCategoryScreen({navigation, route}) {
           />
         </TouchableOpacity>
         <View style={{width: '1%', height: '100%'}} />
-        <View style={{width: '85%', height: '80%'}}>
+        <View style={{width: '85%', height: '70%'}}>
           <SearchInput onSearch={handleSearch} />
         </View>
         <View style={{width: '5%', height: '100%'}} />
@@ -125,7 +156,7 @@ function DetailCategoryScreen({navigation, route}) {
             fontWeight: 'bold',
             marginBottom: 10,
           }}>
-          {item.TenDM}
+          Quần
         </Text>
 
         <Text
@@ -135,13 +166,13 @@ function DetailCategoryScreen({navigation, route}) {
             fontWeight: 'bold',
             marginBottom: 0,
           }}>
-          {items.length} sản phẩm
+          9 sản phẩm
         </Text>
       </View>
-      <SortDropDown onChangeText={handleSort} />
+      <SortDropdown onChangeText={handleSort} />
       <View
         style={{
-          height: '80%',
+          height: '100%',
         }}>
         <FlatList
           data={items}
@@ -150,13 +181,14 @@ function DetailCategoryScreen({navigation, route}) {
               <TouchableOpacity
                 style={{
                   flexDirection: 'row',
-                  //justifyContent: 'space-around'
+                  justifyContent: 'space-around',
+                  margin: 0
                 }}
                 onPress={() => {
-                  navigation.navigate('DetailProduct', {item});
+                  navigation.navigate('ProductDetail', {item});
                 }}>
                 <ProductView
-                  source={item.HinhAnhSP[0]}
+                  source={item.HinhAnhSP}
                   title={item.TenSP}
                   price={item.GiaSP}
                 />

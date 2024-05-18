@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity } from "react-native";
-import { IC_Back, IC_Banking, IC_HandMoney, IC_Location, IC_Momo, IC_MyLocation } from "../assets/icons";
+import { IC_Back, IC_Banking, IC_HandMoney, IC_Location, IC_Momo, IC_MyLocation } from "../../../assets/Customer/icons";
 import Button from "../../components/Customer/Button";
 import InputData from "../../components/Customer/InputData";
 import CUSTOM_COLOR from "../../constants/color";
@@ -31,7 +31,7 @@ function PaymentMethodScreen({ navigation, route }) {
                             width: '20%',
                             height: '40%',
                             marginHorizontal: 20,
-                            marginVertical: '20%'
+                            marginVertical: 15
                         }}
                         resizeMode='stretch'
                     />

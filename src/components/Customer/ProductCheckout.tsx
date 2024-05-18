@@ -11,6 +11,8 @@ const ProductCheckOut = (props: any) => {
             alignItems: 'center',
             justifyContent: 'space-between',
             marginHorizontal: 10,
+            borderWidth: 1,
+            borderColor: CUSTOM_COLOR.LightGray,
             backgroundColor: CUSTOM_COLOR.White,
             padding: 5,
             borderRadius: 20,

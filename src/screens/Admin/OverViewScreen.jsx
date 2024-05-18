@@ -7,6 +7,7 @@ import FunctionCard from '../../components/Admin/FunctionCard';
 import MenuIcon from '../../components/Admin/MenuIcon';
 import { IC_Catgory, IC_User, IC_financial, IC_logout, IC_messenger, IC_order, IC_product, IC_promotions, IC_user } from '../../../assets/Admin/icons';
 import ViewNowStatus from '../../components/Admin/ViewNowStatus';
+import { IC_Bell, IC_Order } from '../../../assets/Customer/icons';
 
 export default function OverViewScreen({navigation}) {
 
@@ -62,8 +63,8 @@ export default function OverViewScreen({navigation}) {
                     <Image
                       source={{ uri: imageUrl }}
                       style={{
-                        width: '100%',
-                        height: '100%',
+                        width: 90,
+                        height: 90,
                         aspectRatio: 1,
                         borderRadius: 60,
                         resizeMode: 'center',
@@ -86,7 +87,6 @@ export default function OverViewScreen({navigation}) {
                     />
                   )}
                 </View>
-                <View style={{ width: 15, height: '100%' }} />
                 <View
                   style={{ flexDirection: 'column', justifyContent: 'center' }}>
                   <Text style={[styles.textViewStyles, { fontSize: 20 }]}>
@@ -195,9 +195,9 @@ export default function OverViewScreen({navigation}) {
                 </View>
                 <View style={styles.unitContainer}>
                   <FunctionCard
-                    onPress={() => navigation.navigate('Report')}
-                    source={IC_financial}
-                    text="Financial Report"
+                    onPress={() => navigation.navigate('ManageUser')}
+                    source={IC_order}
+                    text="Manage User"
                   />
                 </View>
                 <View style={styles.unitContainer}>
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
         height: '80%',
         justifyContent: 'center',
         alignItems: 'center',
-        marginHorizontal: 10,
+        marginHorizontal: 5,
       },
       textViewStyles: {
         fontFamily: FONT_FAMILY.Semibold,

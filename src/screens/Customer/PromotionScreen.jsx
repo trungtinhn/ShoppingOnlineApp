@@ -21,6 +21,36 @@ function PromotionScreen({ navigation, route }) {
         //     data.push({ ...doc.data(), checkSelect: false })
         // });
         // setDataKhuyenMai(data)
+        const dataKhuyenMai = [
+            {
+              id: 1,
+              TenKM: "Giảm giá 20%",
+              HinhAnhKM: "https://example.com/khuyenmai1.jpg",
+              DonToiThieu: 500000, // Số tiền tối thiểu để được giảm giá
+              NgayBatDau: new Date("2024-05-01"), // Ngày bắt đầu khuyến mãi
+              NgayKetThuc: new Date("2024-05-31"), // Ngày kết thúc khuyến mãi
+              checkSelect: false, // Trạng thái chọn khuyến mãi
+            },
+            {
+              id: 2,
+              TenKM: "Giảm 50k cho đơn hàng trên 300k",
+              HinhAnhKM: "https://example.com/khuyenmai2.jpg",
+              DonToiThieu: 300000,
+              NgayBatDau: new Date("2024-06-10"),
+              NgayKetThuc: new Date("2024-06-30"),
+              checkSelect: false,
+            },
+            {
+              id: 3,
+              TenKM: "Mua 1 tặng 1",
+              HinhAnhKM: "https://example.com/khuyenmai3.jpg",
+              DonToiThieu: 0,
+              NgayBatDau: new Date("2024-07-01"),
+              NgayKetThuc: new Date("2024-07-15"),
+              checkSelect: false,
+            },
+          ];
+          setDataKhuyenMai(dataKhuyenMai)
     }
 
     const updateCheck = (item) => {
@@ -41,7 +71,7 @@ function PromotionScreen({ navigation, route }) {
 
     useEffect(() => {
         getDataKhuyenMai()
-        console.log(dataKhuyenMai)
+        //console.log(dataKhuyenMai)
     }, [])
 
 
@@ -102,13 +132,13 @@ function PromotionScreen({ navigation, route }) {
                 data={dataKhuyenMai}
                 renderItem={({ item }) => {
 
-                    const dayBD = item.NgayBatDau.toDate().getDate();
-                    const monthBD = item.NgayBatDau.toDate().getMonth();
-                    const yearBD = item.NgayBatDau.toDate().getFullYear();
+                    const dayBD = item.NgayBatDau.getDate();
+                    const monthBD = item.NgayBatDau.getMonth();
+                    const yearBD = item.NgayBatDau.getFullYear();
 
-                    const dayKT = item.NgayKetThuc.toDate().getDate();
-                    const monthKT = item.NgayKetThuc.toDate().getMonth();
-                    const yearKT = item.NgayKetThuc.toDate().getFullYear();
+                    const dayKT = item.NgayKetThuc.getDate();
+                    const monthKT = item.NgayKetThuc.getMonth();
+                    const yearKT = item.NgayKetThuc.getFullYear();
                     return (
                         <Promotion
                             source={item.HinhAnhKM}
@@ -136,8 +166,8 @@ function PromotionScreen({ navigation, route }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: CUSTOM_COLOR.White
-
+        backgroundColor: CUSTOM_COLOR.White,
+        paddingTop: 10
     },
 
 

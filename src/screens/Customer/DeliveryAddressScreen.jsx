@@ -4,6 +4,7 @@ import { IC_Back, IC_Location, IC_MyLocation} from "../../../assets/Customer/ico
 import Button from "../../components/Customer/Button";
 import InputData from "../../components/Customer/InputData";
 import CUSTOM_COLOR from "../../constants/color";
+import TextInputCard from "../../components/Login_SignUp/TextInputCard";
 
 function DeliveryAddressScreen({ navigation, route }) {
 
@@ -83,6 +84,7 @@ function DeliveryAddressScreen({ navigation, route }) {
             }}>
                 <InputData
                     title='Name'
+                    
                     width='85%'
                     placeholder='Input your name'
                     onChangeText={(text) => setName(text)}
@@ -117,7 +119,6 @@ function DeliveryAddressScreen({ navigation, route }) {
                     onChangeText={(text) => setQuanHuyen(text)}
                 />
                 <InputData
-
                     title='City'
                     width='40%'
                     placeholder='Ho Chi Minh City'
@@ -161,7 +162,8 @@ function DeliveryAddressScreen({ navigation, route }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: CUSTOM_COLOR.White
+        backgroundColor: CUSTOM_COLOR.White,
+        paddingTop: 10
     }
 
 })

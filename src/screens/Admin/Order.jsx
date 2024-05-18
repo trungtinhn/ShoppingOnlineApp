@@ -2,9 +2,102 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList, SafeAreaView
 import React, { useState, useEffect } from 'react';
 import BackTo from '../../components/Admin/BackTo';
 import OneOrder from '../../components/Admin/OneOrder';
-import PerSon from '../../components/Admin/Person';
+import PerSon from '../../components/Admin/PerSon';
 import CUSTOM_COLOR from '../../constants/color';
 import Status from '../../components/Admin/Status';
+const orders = [
+  {
+    MaDH: 'DH001',
+    TrangThai: 'Confirm',
+    Avatar: 'https://example.com/avatar1.jpg',
+    TenND: 'Nguyen Van A',
+    MaND: 'ND001',
+    DatHang: [
+      {
+        SanPham: {
+          HinhAnhSP: ['https://example.com/product1.jpg'],
+          TenSP: 'Áo phông nam',
+          GiaSP: 250000,
+        },
+        MauSac: 'Trắng',
+        Size: 'L',
+        SoLuong: 2,
+        ThanhTien: 500000,
+      },
+      {
+        SanPham: {
+          HinhAnhSP: ['https://example.com/product2.jpg'],
+          TenSP: 'Quần jeans nữ',
+          GiaSP: 300000,
+        },
+        MauSac: 'Xanh',
+        Size: 'M',
+        SoLuong: 1,
+        ThanhTien: 300000,
+      },
+    ],
+  },
+  {
+    MaDH: 'DH002',
+    TrangThai: 'OnWait',
+    Avatar: 'https://example.com/avatar2.jpg',
+    TenND: 'Tran Thi B',
+    MaND: 'ND002',
+    DatHang: [
+      {
+        SanPham: {
+          HinhAnhSP: ['https://example.com/product3.jpg'],
+          TenSP: 'Giày thể thao',
+          GiaSP: 500000,
+        },
+        MauSac: 'Đen',
+        Size: '42',
+        SoLuong: 1,
+        ThanhTien: 500000,
+      },
+    ],
+  },
+  {
+    MaDH: 'DH003',
+    TrangThai: 'Delivering',
+    Avatar: 'https://example.com/avatar3.jpg',
+    TenND: 'Le Van C',
+    MaND: 'ND003',
+    DatHang: [
+      {
+        SanPham: {
+          HinhAnhSP: ['https://example.com/product4.jpg'],
+          TenSP: 'Túi xách nữ',
+          GiaSP: 700000,
+        },
+        MauSac: 'Đỏ',
+        Size: 'M',
+        SoLuong: 1,
+        ThanhTien: 700000,
+      },
+    ],
+  },
+  {
+    MaDH: 'DH004',
+    TrangThai: 'Delivered',
+    Avatar: 'https://example.com/avatar4.jpg',
+    TenND: 'Pham Thi D',
+    MaND: 'ND004',
+    DatHang: [
+      {
+        SanPham: {
+          HinhAnhSP: ['https://example.com/product5.jpg'],
+          TenSP: 'Áo khoác nam',
+          GiaSP: 800000,
+        },
+        MauSac: 'Xám',
+        Size: 'XL',
+        SoLuong: 1,
+        ThanhTien: 800000,
+      },
+    ],
+  },
+];
 
 export default function Order({ navigation }) {
   const [confirm, setConfirm] = useState(true);
@@ -72,16 +165,17 @@ export default function Order({ navigation }) {
   };
 
   useEffect(() => {
-    getDonHangConfirm();
-    getDonHangOnWait();
-    getDonHangDelivering();
-    getDonHangDelivered();
-  }, [
-    donHangConfirm.length,
-    donHangOnWait.length,
-    donHangDelivering.length,
-    donHangDelivered.length,
-  ]);
+    // Phân loại các đơn hàng theo trạng thái
+    const confirmOrders = orders.filter(order => order.TrangThai === 'Confirm');
+    const onWaitOrders = orders.filter(order => order.TrangThai === 'OnWait');
+    const deliveringOrders = orders.filter(order => order.TrangThai === 'Delivering');
+    const deliveredOrders = orders.filter(order => order.TrangThai === 'Delivered');
+
+    setDonHangConfirm(confirmOrders);
+    setDonHangOnWait(onWaitOrders);
+    setDonHangDelivering(deliveringOrders);
+    setDonHangDelivered(deliveredOrders);
+  }, []);
 
   if (confirm == true) {
     return (

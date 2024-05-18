@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet,FlatList, TouchableOpacity, Image } from "react-native";
 import ProductCheckOut from "../../components/Customer/ProductCheckout";
-import { IC_Back } from "../../../assets/Admin/icons";
+import { IC_Back } from "../../../assets/Customer/icons";
 import { PR_1, PR_2, PR_3, PR_4, PR_5 } from "../../../assets/Customer/images";
 import CUSTOM_COLOR from "../../constants/color";
 import Button from '../../components/Admin/Button'
+import CustomButton from "../../components/Login_SignUp/CustomButton";
 const ShoppingCard = ({navigation, route}) => {
     const { idUser } = route.params
     const [items, setItems] = useState([]);
@@ -37,12 +38,6 @@ const ShoppingCard = ({navigation, route}) => {
               MaSP: 4,
               TenSP: 'San Pham 4',
               HinhAnhSP: PR_4,
-              GiaSP: 10000
-            },
-            {
-              MaSP: 5,
-              TenSP: 'San Pham 5',
-              HinhAnhSP: PR_5,
               GiaSP: 10000
             },
           ];
@@ -195,7 +190,7 @@ const ShoppingCard = ({navigation, route}) => {
 
             <FlatList
                 style={{
-                    height: 470,
+                    height: 750,
                     flexGrow: 0
                 }}
                 data={items}
@@ -228,9 +223,8 @@ const ShoppingCard = ({navigation, route}) => {
                 <View style={{
                     flexDirection: 'row',
                     marginTop: 10,
-                    marginBottom: 2,
                     justifyContent: 'space-between',
-                    marginHorizontal: 15
+                    marginHorizontal: 15,
                 }}>
                     <View style={{
                         flexDirection: 'row',
@@ -283,28 +277,36 @@ const ShoppingCard = ({navigation, route}) => {
                 }}>
                     <Text style={{
                         fontSize: 17, marginHorizontal: 15
-                    }}>{totalMoney} đ</Text>
+                    }}>1.000.000 đ</Text>
                 </View>
 
-                <View style={{
+                <View style={styles.buttonContainer}>
+                <CustomButton
+                    type="primary"
+                    text="CHECK OUT"
+                    onPress={() => {
+                        
+                    }}
+                 />
+                        
+                </View>
+                {/* <View style={{
                     height: 60,
                     alignItems: 'center',
                     justifyContent: 'center',
                     marginVertical: '2%',
                 }}>
                     <Button
-                    style={{width: '90%', height: '85%'}}
+                    style={{width: 300, height: 50}}
                         title='CHECK OUT'
                         color={CUSTOM_COLOR.FlushOrange}
                         onPress={() => {
 
                             if (itemsCheckout.length > 0)
                                 navigation.navigate('Checkout', { itemsCheckout, totalMoney })
-
-
                         }}
                     />
-                </View>
+                </View> */}
             </View>
         </View>
     );
@@ -313,13 +315,22 @@ export default ShoppingCard;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: CUSTOM_COLOR.White,
     },
     bottomView: {
         position: 'absolute',
         bottom: 0,
         left: 0,
         right: 0,
-        height: 60,
-        backgroundColor: '#ddd',
-    }
+        height: 150,
+        backgroundColor: CUSTOM_COLOR.White,
+    },
+    buttonContainer: {
+        width: '180%',
+        height: '35%',
+        top: '13%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        left: '-40%',
+      },
 });

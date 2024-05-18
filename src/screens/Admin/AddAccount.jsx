@@ -9,14 +9,13 @@ import {
   Image,
 } from 'react-native';
 
-
-import HeaderWithBack from '../../components/Login_SignUp/HeaderWithBack.js';
-import HeaderTitlle from '../../components/Login_SignUp/HeaderTitlle.js';
-import TextInputCard from '../../components/Login_SignUp/TextInputCard.js';
-import CustomButton from '../../components/Login_SignUp/CustomButton.js';
-import CUSTOM_COLOR from '../../constants/color.js';
-import FONT_FAMILY from '../../constants/font.js';
-import { IC_Selected } from '../../../assets/Admin/icons/index.js';
+import HeaderWithBack from '../../components/Login_SignUp/HeaderWithBack';
+import HeaderTitlle from '../../components/Login_SignUp/HeaderTitlle';
+import TextInputCard from '../../components/Login_SignUp/TextInputCard';
+import CustomButton from '../../components/Login_SignUp/CustomButton';
+import CUSTOM_COLOR from '../../constants/color';
+import FONT_FAMILY from '../../constants/font';
+import { IC_Selected } from '../../../assets/Admin/icons/index';
 
 const AddAccount = props => {
   const {navigation} = props;
