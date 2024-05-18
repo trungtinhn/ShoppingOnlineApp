@@ -18,6 +18,7 @@ import CheckBox from '@react-native-community/checkbox';
 import ButtonDetail from '../../components/Admin/ButtonDetail';
 import FONT_FAMILY from '../../constants/font';
 import { Dropdown } from 'react-native-element-dropdown';
+import { border_add } from '../../../assets/Admin/images';
 
 export default function AddProduct({ navigation }) {
   const [value, setValue] = useState(null);

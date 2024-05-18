@@ -14,11 +14,41 @@ import dayjs from 'dayjs';
 import PromotionButton from '../../components/Admin/PromotionButton';
 import CUSTOM_COLOR from '../../constants/color';
 import PromotionCard from '../../components/Admin/PromotionCard';
+const sampleDataPromotion = [
+  {
+    NgayBatDau: new Date('2023-01-01T00:00:00Z'),
+    NgayKetThuc: new Date('2023-01-31T23:59:59Z'),
+    HinhAnhKM: 'https://example.com/image1.jpg',
+    TenKM: 'New Year Sale',
+    TiLe: 0.2,
+    DonToiThieu: 100,
+    Loai: 'Discount',
+  },
+  {
+    NgayBatDau: new Date('2023-02-01T00:00:00Z'),
+    NgayKetThuc: new Date('2023-02-14T23:59:59Z'),
+    HinhAnhKM: 'https://example.com/image2.jpg',
+    TenKM: 'Valentine Special',
+    TiLe: 0.3,
+    DonToiThieu: 50,
+    Loai: 'Discount',
+  },
+  {
+    NgayBatDau: new Date('2023-03-01T00:00:00Z'),
+    NgayKetThuc: new Date('2023-03-31T23:59:59Z'),
+    HinhAnhKM: 'https://example.com/image3.jpg',
+    TenKM: 'Spring Sale',
+    TiLe: 0.15,
+    DonToiThieu: 75,
+    Loai: 'Discount',
+  },
+];
 
 function Promotion({navigation}){
   const [dataPromotion, setDataPromotion] = useState([]);
 
   const getDataPromotion = async () => {
+    setDataPromotion(sampleDataPromotion);
     // const q = query(collection(Firestore, 'KHUYENMAI'));
 
     // const unsubscribe = onSnapshot(q, querySnapshot => {
@@ -37,7 +67,6 @@ function Promotion({navigation}){
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ width: '100%', height: 10 }} />
-
       <>
         <View
           style={{
@@ -52,7 +81,7 @@ function Promotion({navigation}){
             <Image
               source={IC_Back}
               style={{
-                width: 10,
+                width: 20,
                 height: 20,
                 marginHorizontal: 20,
                 marginVertical: 15,
@@ -80,14 +109,14 @@ function Promotion({navigation}){
             data={dataPromotion}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => {
-              const timestampBD = item.NgayBatDau.toDate();
+              const timestampBD = item.NgayBatDau;
               const dateBD = dayjs(timestampBD);
 
               const dayBD = dateBD.date();
               const monthBD = dateBD.month();
               const yearBD = dateBD.year();
 
-              const timestampKT = item.NgayKetThuc.toDate();
+              const timestampKT = item.NgayKetThuc;
               const dateKT = dayjs(timestampKT);
 
               const dayKT = dateKT.date();

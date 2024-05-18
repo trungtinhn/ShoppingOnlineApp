@@ -7,6 +7,7 @@ import CUSTOM_COLOR from '../../constants/color';
 import ProductView from '../../components/Admin/ProductView';
 import SearchInput from '../../components/Admin/SearchInput';
 import SortDropdown from '../../components/Admin/SortDropdown';
+
 function DetailCategory({navigation, route}) {
   const {category} = route.params;
 
@@ -53,7 +54,7 @@ function DetailCategory({navigation, route}) {
           <Image
             source={IC_Back}
             style={{
-              width: 10,
+              width: 20,
               height: 20,
               margin: 20,
             }}

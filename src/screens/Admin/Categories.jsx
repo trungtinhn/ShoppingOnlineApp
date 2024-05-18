@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-
 import {
   Image,
   SafeAreaView,
@@ -13,6 +12,7 @@ import ItemList from '../../components/Admin/ItemList';
 import ButtonDetail from '../../components/Admin/ButtonDetail';
 import { id } from 'date-fns/locale';
 import { IC_Back } from '../../../assets/Admin/icons';
+import BackTo from '../../components/Admin/BackTo';
 
 
 export default function Categories({navigation}) {
@@ -61,37 +61,14 @@ export default function Categories({navigation}) {
         style={{
           flexDirection: 'row',
           alignItems: 'center',
+          padding: 10,
           backgroundColor: CUSTOM_COLOR.White,
         }}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.goBack();
-          }}>
-          <Image
-            source={IC_Back}
-            style={{
-              width: 10,
-              height: 20,
-              marginHorizontal: 20,
-              marginVertical: 15,
-            }}
-            resizeMode="stretch"
-          />
-        </TouchableOpacity>
-
-        <Text
-          style={{
-            fontSize: 20,
-            color: CUSTOM_COLOR.Black,
-            fontWeight: 'bold',
-          }}>
-          Categories
-        </Text>
+        <BackTo onPress={() => navigation.goBack()} Info="My Category" />
       </View>
-
       <ScrollView
         style={{
-          backgroundColor: CUSTOM_COLOR.Alto,
+          backgroundColor: CUSTOM_COLOR.White,
           height: '85%',
         }}>
         {dataCategories.map((category, index) => {
