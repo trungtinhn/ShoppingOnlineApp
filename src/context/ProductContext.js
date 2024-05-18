@@ -5,7 +5,7 @@ import {
     deleteProduct as apiDeleteProduct,
     getAllProducts as apiGetAllProducts,
     getProductById as apiGetProductById
-} from './api';
+} from '../api/ProductApi';
 
 const ProductContext = createContext();
 
