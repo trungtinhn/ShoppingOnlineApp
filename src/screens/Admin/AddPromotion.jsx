@@ -191,7 +191,6 @@ function AddPromotion({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ width: '100%', height: 10 }} />
-
       <>
         <View
           style={{

@@ -7,7 +7,7 @@ import ViewShopScreen from '../../screens/Admin/ViewShopScreen';
 import ViewShopProduct from '../../screens/Admin/ViewShopProduc';
 import ViewDetailsinList from '../../screens/Admin/ViewDetailsinList';
 import AddAccount from '../../screens/Admin/AddAccount';
-import Promotion from '../../components/Customer/Promotion';
+import Promotion from '../../screens/Admin/Promotion';
 import AddNewCategory from '../../screens/Admin/AddNewCategory';
 import AddProduct from '../../screens/Admin/AddProduct';
 import AddPromotion from '../../screens/Admin/AddPromotion';

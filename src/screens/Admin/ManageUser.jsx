@@ -31,12 +31,32 @@ export const Acount = {
 
 function ManageUser({navigation}){
   const [isLoading, setIsLoading] = useState(true);
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(Acount);
   const [imageUrl, setImageUrl] = useState(null);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([
+    {
+      Avatar: 'https://example.com/avatar1.jpg',
+      TenND: 'John Doe',
+      LoaiND: 'Admin',
+      Email: 'john.doe@example.com',
+    },
+    {
+      Avatar: 'https://example.com/avatar2.jpg',
+      TenND: 'Jane Smith',
+      LoaiND: 'User',
+      Email: 'jane.smith@example.com',
+    },
+    {
+      Avatar: 'https://example.com/avatar3.jpg',
+      TenND: 'Michael Johnson',
+      LoaiND: 'Moderator',
+      Email: 'michael.johnson@example.com',
+    },
+  ]);
   const [userAvata, setUserAvata] = useState([]);
   const [searchTerm, setSearchTerm] = useState();
-  const [filteredItems, setFilteredItems] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([
+  ]);
   const handleSearch = searchTerm => {
     setSearchTerm(searchTerm);
     // const filteredItems = users.filter(item =>
@@ -61,42 +81,15 @@ function ManageUser({navigation}){
     
   }, []);
 
-  const fetchUserData = async userId => {
-    try {
-      // const userRef = firebase.firestore().collection('NGUOIDUNG').doc(userId);
-      // const userDoc = await userRef.get();
 
-      // if (userDoc.exists) {
-      //   const userData = userDoc.data();
-
-      //   setUserData(userData);
-      // } else {
-      //   console.log('User document does not exist');
-      // }
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
-  };
-
-  const fetchImageUrl = async (documentId, fieldName) => {
-    try {
-      
-    } catch (error) {
-      console.error('Error fetching image URL:', error);
-      return null;
-    }
-  };
 
   const handleUserPress = user => {
     // Navigate to the edit screen with the selected user data
     navigation.navigate('EditAccount', { user });
   };
 
-  const handleDeleteUser = async uid => {
-   
-  };
 
-  const handleResetPassword = email => {
+  const handleResetPassword = () => {
     
   };
 
@@ -125,8 +118,8 @@ function ManageUser({navigation}){
                 <Image
                   source={{ uri: imageUrl }}
                   style={{
-                    width: '100%',
-                    height: '100%',
+                    width: '80%',
+                    height: '80%',
                     aspectRatio: 1,
                     borderRadius: 50,
                     resizeMode: 'center',
@@ -152,11 +145,11 @@ function ManageUser({navigation}){
             <View style={{ width: 15, height: '100%' }} />
             <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
               <Text style={[styles.textViewStyles, { fontSize: 20 }]}>
-                {userData.TenND}
+                {userData.name}
               </Text>
               <View style={{ width: '100%', height: 5 }} />
               <Text style={[styles.textViewStyles, { fontSize: 15 }]}>
-                {userData.LoaiND}
+                Admin
               </Text>
             </View>
           </View>

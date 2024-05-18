@@ -5,6 +5,7 @@ import OneOrder from '../../components/Admin/OneOrder';
 import PerSon from '../../components/Admin/PerSon';
 import CUSTOM_COLOR from '../../constants/color';
 import Status from '../../components/Admin/Status';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 const orders = [
   {
     MaDH: 'DH001',

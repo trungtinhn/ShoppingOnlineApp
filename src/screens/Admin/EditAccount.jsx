@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     height: 50,
-    top: '-1%',
+    top: 7,
     left: '3%',
   },
   bodyContainer: {
