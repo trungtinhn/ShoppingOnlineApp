@@ -10,7 +10,7 @@ import {
   ImageBackground,
   Alert
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { launchImageLibrary } from 'react-native-image-picker';
 import CUSTOM_COLOR from '../../constants/color';
 import CustomHeader from '../../components/Admin/CustomHeader';
@@ -19,8 +19,8 @@ import ButtonDetail from '../../components/Admin/ButtonDetail';
 import FONT_FAMILY from '../../constants/font';
 import { Dropdown } from 'react-native-element-dropdown';
 import { border_add } from '../../../assets/Admin/images';
-
 export default function AddProduct({ navigation }) {
+  const {addProduct} = useContext(useProducts);
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
@@ -109,8 +109,6 @@ export default function AddProduct({ navigation }) {
   };
 
   const setData = async () => {
-    
-
   };
 
   const UploadFile = async () => {

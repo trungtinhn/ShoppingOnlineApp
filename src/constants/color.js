@@ -10,6 +10,7 @@ const CUSTOM_COLOR = {
     FlushOrange: '#FF8400',
     Mercury: '#E9E9E9',
     Sapphire: '#2A4BA0',
+    Sliver: '#C0C0C0',
     Gray: '#808080',
     Maroon: '#800000',
     Olive: '#808000',
@@ -24,14 +25,7 @@ const CUSTOM_COLOR = {
     LightBlue: '#36648B',
     RoseBud: '#FAA9A9',
     Gallery: '#F0F0F0',
-    Lynch: '#637B94',
-    BackgroundText: '#31313180',
-    Sunglow: '#FFCD29',
-    Sunshade: '#FF9B2F',
-    Whisper: '#F5F6FA',
-    Yellow: '#FFF500',
-    Sliver: '#C0C0C0',
   };
   
-export default CUSTOM_COLOR;
+  export default CUSTOM_COLOR;
   
