@@ -40,7 +40,6 @@ export { default as IC_Selected } from '../icons/Selected.png';
 export { default as IC_Review } from '../icons/Review.png';
 export { default as IC_Next } from '../icons/next.png';
 export { default as IC_Catgory } from '../icons/OverView/categories.png';
-export { default as IC_Search } from '../icons/Search.png';
 export { default as IC_Add } from '../icons/OverView/addIcon.png';
 export { default as IC_Emo } from '../icons/emo.png';
 export {default as IC_Camera} from '../icons/camera.png'

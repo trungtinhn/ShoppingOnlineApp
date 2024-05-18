@@ -16,7 +16,7 @@ import { IC_Back, IC_Review } from '../../../assets/Admin/icons';
 import StarRating from '../../components/Admin/StarRating';
 import CUSTOM_COLOR from '../../constants/color';
 import Review from '../../components/Admin/Review';
-import ReviewDe from '../../components/Admin/ReviewDe';
+import ReviewDe from '../../components/Admin/ReViewDe';
 function ReviewScreen({navigation, route}) {
   const [RemoveReview, setRemoveReview] = useState(false);
   const {item} = route.params

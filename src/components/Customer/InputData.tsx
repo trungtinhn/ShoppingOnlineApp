@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, TextInput, View, Image, TouchableWithoutFeedback } from "react-native";
 import { IC_Search } from "../../../assets/Admin/icons";
 import CUSTOM_COLOR from "../../constants/color";
+import FONT_FAMILY from "../../constants/font";
 
 const InputData = (props: any) => {
 
@@ -21,12 +22,12 @@ const InputData = (props: any) => {
         <Text style={{
           color: CUSTOM_COLOR.Black,
           fontSize: 17,
-          fontWeight: 'bold',
-          marginVertical: '2%'
+          fontFamily: FONT_FAMILY.Bold,
+          marginVertical: '2%',
         }}>{props.title} </Text>
 
         <Text style={{
-          color: CUSTOM_COLOR.Carnation
+          color: CUSTOM_COLOR.Red
         }}>
           *
         </Text>
@@ -37,13 +38,12 @@ const InputData = (props: any) => {
         <TextInput
           style={{
             width: '100%',
-            height: 45,
-
+            height: 65,
             borderRadius: 15,
             fontSize: 17,
             paddingHorizontal: 15,
-            backgroundColor: CUSTOM_COLOR.Whisper,
-
+            backgroundColor: CUSTOM_COLOR.LightGray,
+            fontFamily: FONT_FAMILY.Medium
           }}
 
           placeholder={props.placeholder}

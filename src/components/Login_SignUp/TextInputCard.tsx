@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     },
     titleStyle: {
       fontFamily: FONT_FAMILY.Medium,
-      fontSize: 20,
+      fontSize: 18,
       color: CUSTOM_COLOR.Black,
     },
     textInputContainer: {

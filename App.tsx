@@ -5,10 +5,11 @@ import { NavigationContainer } from '@react-navigation/native'
 import MainNavigation from './src/navigator/Login_SignUp/navigation'
 import CustomerNavigation from './src/navigator/Customer/HomeNavigation'
 import CustomerBottomTab from './src/navigator/Customer/CustomerBottomNavigation'
+import AdminNavigation from './src/navigator/Admin/navigation'
 
 export default function App() {
   return (
-    <CustomerBottomTab></CustomerBottomTab>
+    <AdminNavigation></AdminNavigation>
   )
 }
 const styles = StyleSheet.create({})

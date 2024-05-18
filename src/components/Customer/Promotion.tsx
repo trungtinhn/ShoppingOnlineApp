@@ -35,12 +35,13 @@ const Promotion = (props: any) => {
                 />
 
                 <View style={{
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    width: 250
                 }}>
                     <Text style={{
                         color: CUSTOM_COLOR.Black,
                         fontSize: 18,
-                        fontWeight: 'bold'
+                        fontWeight: 'bold',
                     }}>{props.title}</Text>
                     <Text style={{
                         color: CUSTOM_COLOR.Black

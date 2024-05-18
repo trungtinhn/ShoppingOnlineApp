@@ -1,52 +1,70 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, ScrollView, Keyboard } from "react-native";
-import { IC_Add, IC_Attachment, IC_Back, IC_Camera, IC_Emo, IC_Send } from "../assets/icons";
-import { IM_AnhGiay2 } from "../assets/images";
-import Message from "../components/Message";
-import CUSTOM_COLOR from "../constants/colors";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
-import { Firestore, firebase } from "../../../Firebase/firebase";
-import { async } from "@firebase/util";
-import { set } from "firebase/database";
-import Delivery from "../components/Delivery";
-
-
+import CUSTOM_COLOR from "../../constants/color";
+import { IC_Back, IC_Add } from "../../../assets/Customer/icons";
+import Delivery from "../../components/Customer/Delivery";
 function DeliveryScreen({ navigation, route }) {
 
     const { itemsCheckout, totalMoney, choosePayment, promotion } = route.params
 
-    const [dataDelivery, setDataDelivery] = useState([])
+    const [dataDelivery, setDataDelivery] = useState([
+        {
+            id: 1,
+            TenNguoiMua: "Nguyen Van A",
+            SDT: "0901234567",
+            PhuongXa: "Phuong 1",
+            QuanHuyen: "Quan 1",
+            TinhThanhPho: "Thanh Pho Ho Chi Minh",
+            DiaChi: "123 Nguyen Trai",
+            checkSelect: false
+        },
+        {
+            id: 2,
+            TenNguoiMua: "Le Thi B",
+            SDT: "0912345678",
+            PhuongXa: "Phuong 2",
+            QuanHuyen: "Quan 2",
+            TinhThanhPho: "Thanh Pho Ho Chi Minh",
+            DiaChi: "456 Le Loi",
+            checkSelect: true
+        },
+        {
+            id: 3,
+            TenNguoiMua: "Tran Van C",
+            SDT: "0923456789",
+            PhuongXa: "Phuong 3",
+            QuanHuyen: "Quan 3",
+            TinhThanhPho: "Thanh Pho Ho Chi Minh",
+            DiaChi: "789 Tran Hung Dao",
+            checkSelect: false
+        }
+    ])
 
     const [delivery, setDelivey] = useState()
 
     const getDataDelivery = () => {
-        const q = query(collection(Firestore, "DIACHI"), where("MaND", "==", firebase.auth().currentUser.uid));
+        // const q = query(collection(Firestore, "DIACHI"), where("MaND", "==", firebase.auth().currentUser.uid));
 
-        const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            const data = [];
+        // const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        //     const data = [];
 
-            querySnapshot.forEach((doc) => {
+        //     querySnapshot.forEach((doc) => {
 
-                data.push({ ...doc.data(), checkSelect: false })
-            });
-            setDataDelivery(data)
+        //         data.push({ ...doc.data(), checkSelect: false })
+        //     });
+        //     setDataDelivery(data)
 
 
-        });
+        // });
 
 
     }
 
     const updateCheck = (item) => {
-        const updateItem = dataDelivery.map((diachi) => {
-            if (diachi.MaDC === item.MaDC) {
-                diachi.checkSelect = true
-                setDelivey(item)
-            }
-            else diachi.checkSelect = false
-            return diachi
-        })
-        setDataDelivery(updateItem)
+        const updatedData = dataDelivery.map((delivery) => 
+            delivery.id === item.id ? { ...delivery, checkSelect: !delivery.checkSelect } : delivery
+        );
+        setDataDelivery(updatedData);
     }
 
 
@@ -81,7 +99,7 @@ function DeliveryScreen({ navigation, route }) {
                                 width: '20%',
                                 height: '40%',
                                 marginHorizontal: 20,
-                                marginVertical: '20%'
+                                marginVertical: 15
                             }}
                             resizeMode='stretch'
                         />
@@ -170,8 +188,8 @@ function DeliveryScreen({ navigation, route }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: CUSTOM_COLOR.White
-
+        backgroundColor: CUSTOM_COLOR.White,
+        paddingTop: 10
     },
 
 

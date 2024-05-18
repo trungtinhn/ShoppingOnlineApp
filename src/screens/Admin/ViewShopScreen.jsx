@@ -3,9 +3,10 @@ import React, { useState } from 'react'
 import CUSTOM_COLOR from '../../constants/color';
 import scale from '../../constants/responsive';
 import SortDropdown from '../../components/Admin/SortDropdown';
-import ProductView from '../../components/Admin/ProductView';
+import ProductView from '../../components/Customer/ProductView';
 import ItemList from '../../components/Admin/ItemList';
 import { backto } from '../../../assets/Admin/icons';
+import { PR_1, PR_2 } from '../../../assets/Customer/images';
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',
@@ -28,13 +29,13 @@ export default function ViewShopScreen({navigation}) {
     {
       TenSP: 'Sản phẩm 1',
       GiaSP: 50,
-      HinhAnhSP: [avatar, avatar],
+      HinhAnhSP: [PR_1, PR_1],
       // Các thông tin khác nếu cần
     },
     {
       TenSP: 'Sản phẩm 2',
       GiaSP: 75,
-      HinhAnhSP: [avatar, avatar],
+      HinhAnhSP: [PR_2, PR_2],
       // Các thông tin khác nếu cần
     },
     // Các mục sản phẩm khác có thể được thêm vào đây

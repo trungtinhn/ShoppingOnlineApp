@@ -19,9 +19,59 @@ import {
 } from '../../../assets/Customer/icons'
 import Message from "../../components/Customer/Message"
 import CUSTOM_COLOR from '../../constants/color';
+const data = [
+  {
+      id: '1',
+      isRight: true,
+      content: 'Ê mày',
+      time: '11:30'
+  },
+  {
+      id: '2',
+      isRight: false,
+      content: 'Sao đó?',
+      time: '11:30'
+  },
+  {
+      id: '3',
+      isRight: true,
+      content: 'Tao ghét thằng Tính quá m ơi',
+      time: '11:30'
+  },
+  {
+      id: '4',
+      isRight: false,
+      content: 'Ừ tao cũng ghét nó lắm',
+      time: '11:30'
+  },
+  {
+      id: '5',
+      isRight: true,
+      content: 'Má nó mập lắm mày ơi',
+      time: '11:30'
+  },
+  {
+      id: '6',
+      isRight: false,
+      content: 'Chứ gì nữa, cái mặt nọng không à',
+      time: '11:30'
+  },
+  {
+      id: '7',
+      isRight: true,
+      content: 'Cái tật ham ăn ham uống là phải vậy rồi, thấy thương ghê',
+      time: '11:30'
+  },
+  {
+      id: '9',
+      isRight: false,
+      content: 'Cái tật ham ăn ham uống là phải vậy rồi, thấy thương ghê',
+      time: '11:30'
+  },
+]
 
 function ChatScreen({navigation, route}) {
-  const {chatUser} = route.params;
+  //const {chatUser} = route.params;
 
   const [message, setMessage] = useState([]);
   const [chat, setChat] = useState('');
@@ -139,19 +189,27 @@ function ChatScreen({navigation, route}) {
         style={{
           backgroundColor: CUSTOM_COLOR.Gallery,
         }}>
-        {message.map((message, index) => {
+        {/* {message.map((message, index) => {
           const hour = message.ThoiGian.toDate().getHours();
-          const minute = message.ThoiGian.toDate().getMinutes();
+          const minute = message.ThoiGian.toDate().getMinutes(); */}
 
-          return (
+          {/* return (
             <Message
               key={index}
               content={message.NoiDung}
               time={`${hour}:${minute}`}
               isRight={message.LaNguoiMua}
             />
-          );
-        })}
+          ) */}
+          {data.map((message, index) =>( 
+                    <Message
+                        key = {message.id}
+                        content = {message.content}
+                        time = {message.time}
+                        isRight = {message.isRight}
+                    />
+                ))}
+        
       </ScrollView>
 
       <View

@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 
-import {collection, onSnapshot, query} from 'firebase/firestore';
 import {
   Image,
   SafeAreaView,
@@ -9,36 +8,46 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { IC_Back } from '../../../assets/Admin/icons';
 import CUSTOM_COLOR from '../../constants/color';
 import ItemList from '../../components/Admin/ItemList';
 import ButtonDetail from '../../components/Admin/ButtonDetail';
+import { id } from 'date-fns/locale';
+import { IC_Back } from '../../../assets/Admin/icons';
 
 
 export default function Categories({navigation}) {
   const [dataCategories, setDataCategories] = useState([]);
 
   const getDataCategories = () => {
-    const sampleCategories = [
+    const dataCategories = [
       {
-          TenDM: 'Đồ điện tử',
-          AnhDM: 'https://www.cleanipedia.com/images/5iwkm8ckyw6v/p2e3c7e3V9nSuIIlfPdsW/1eb9893e6216a2066186d3db03c78cf8/MS05Ny5qcGc/600w/b%C3%AD-k%C3%ADp-gi%E1%BB%AF-qu%E1%BA%A7n-%C3%A1o-b%E1%BB%81n-%C4%91%E1%BA%B9p-nh%C6%B0-m%E1%BB%9Bi.avif',
-          SoLuongSP: 20 // Số lượng sản phẩm trong danh mục
+        id  : 1,
+        AnhDM: 'https://example.com/category1.jpg',
+        TenDM: 'Áo nam',
+        SoLuongSP: 10,
       },
       {
-          TenDM: 'Thời trang',
-          AnhDM: 'https://www.cleanipedia.com/images/5iwkm8ckyw6v/p2e3c7e3V9nSuIIlfPdsW/1eb9893e6216a2066186d3db03c78cf8/MS05Ny5qcGc/600w/b%C3%AD-k%C3%ADp-gi%E1%BB%AF-qu%E1%BA%A7n-%C3%A1o-b%E1%BB%81n-%C4%91%E1%BA%B9p-nh%C6%B0-m%E1%BB%9Bi.avif',
-          SoLuongSP: 30
+        id  : 2,
+        AnhDM: 'https://example.com/category2.jpg',
+        TenDM: 'Áo nữ',
+        SoLuongSP: 15,
       },
       {
-          TenDM: 'Đồ gia dụng',
-          AnhDM: 'https://www.cleanipedia.com/images/5iwkm8ckyw6v/p2e3c7e3V9nSuIIlfPdsW/1eb9893e6216a2066186d3db03c78cf8/MS05Ny5qcGc/600w/b%C3%AD-k%C3%ADp-gi%E1%BB%AF-qu%E1%BA%A7n-%C3%A1o-b%E1%BB%81n-%C4%91%E1%BA%B9p-nh%C6%B0-m%E1%BB%9Bi.avif',
-          SoLuongSP: 15
+        id  : 3,
+        AnhDM: 'https://example.com/category3.jpg',
+        TenDM: 'Giày dép',
+        SoLuongSP: 8,
       },
-      // Thêm các danh mục khác nếu cần
+      {
+        id  : 4,
+        AnhDM: 'https://example.com/category4.jpg',
+        TenDM: 'Phụ kiện',
+        SoLuongSP: 12,
+      },
     ];
+    
   
-  setDataCategories(sampleCategories);
+  setDataCategories(dataCategories);
   
   };
 
@@ -115,15 +124,9 @@ export default function Categories({navigation}) {
             marginVertical: 10,
             padding: 10,
           }}
-        />
+        />  
       </View>
-          <View style={{width: '100%', height: 50}}/>
-        <ItemList
-                source={'https://firebasestorage.googleapis.com/v0/b/shoppingapp-ada07.appspot.com/o/images%2Fproduct%2FPhuKien.jpg?alt=media&token=8d72397d-464a-4dfb-9883-05b2df136b93&_gl=1*p1305q*_ga*OTc0NTU2MzEuMTY3OTQ5NTU1MQ..*_ga_CW55HF8NVT*MTY4NTQ3MzQ3NC43MS4xLjE2ODU0NzYwODYuMC4wLjA'}
-                namelist={"Áo nam"}
-                numberitem={3}
-            />
-            
+
     </SafeAreaView>
   );
 }

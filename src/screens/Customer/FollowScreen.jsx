@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { Badge } from 'react-native-elements';
+import { Avatar, Badge } from 'react-native-elements';
+
 import { IC_Chat, IC_Heart3X, IC_ShoppingCart  } from '../../../assets/Customer/icons';
 import Button from '../../components/Customer/Button';
 import ProductView from '../../components/Customer/ProductView';
@@ -16,6 +17,7 @@ import SearchInput from '../../components/Customer/SearchInput';
 import CUSTOM_COLOR from '../../constants/color';
 function FollowScreen({navigation}) {
   //
+  const avatar = 'https://i.pinimg.com/originals/0d/dc/ca/0ddccae723d85a703b798a5e682c23c1.png';
   const [chatUser, setChatUser] = useState();
   const [loadingChatUser, setLoadingChatUser] = useState(false);
   const [idUser, setIdUser] = useState();
@@ -34,6 +36,21 @@ function FollowScreen({navigation}) {
     // );
     // setFilteredItems(filteredItems);
   };
+  const items = [
+    {
+      TenSP: 'Sản phẩm 1',
+      GiaSP: 50,
+      HinhAnhSP: [avatar, avatar],
+      // Các thông tin khác nếu cần
+    },
+    {
+      TenSP: 'Sản phẩm 2',
+      GiaSP: 75,
+      HinhAnhSP: [avatar, avatar],
+      // Các thông tin khác nếu cần
+    },
+    // Các mục sản phẩm khác có thể được thêm vào đây
+  ];
   
   const getDataYeuThich = async () => {
     // const q = query(

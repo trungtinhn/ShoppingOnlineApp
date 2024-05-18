@@ -29,7 +29,7 @@ const UserChat = (props: any) => {
             marginTop: 5,
             fontStyle: 'italic',
             fontWeight: props.notification == 0 && !props.justCreate ? 'normal' : "bold",
-            color: props.notification == 0 && !props.justCreate ? CUSTOM_COLOR.SilverChalice : CUSTOM_COLOR.Black
+            color: props.notification == 0 && !props.justCreate ? CUSTOM_COLOR.Sliver : CUSTOM_COLOR.Black
 
           }}>{props.message} - {props.time}</Text>
         </View>

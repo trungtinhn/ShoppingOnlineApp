@@ -19,7 +19,7 @@ export {default as IC_CheckGrey} from '../icons/checkGrey.png';
 export {default as IC_Location} from '../icons/location.png';
 export {default as IC_Visa} from '../icons/visa.png';
 export {default as IC_MyLocation} from '../icons/mylocation.png';
-export {default as IC_Banking} from '../icons/banking.png';
+export {default as IC_Banking} from '../icons/bank.png';
 export {default as IC_HandMoney} from '../icons/handmoney.png';
 export {default as IC_Momo} from '../icons/momo.png';
 export {default as IC_Bank} from '../icons/bank.png';

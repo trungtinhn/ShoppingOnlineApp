@@ -182,6 +182,8 @@ function HomeScreen({navigation}) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredItems, setFilteredItems] = useState([]);
 
+  const setSoLuongChuaDocCuaCustomer = async () => {}
+
   const handleSearch = (searchTerm, data) => {
     if (searchTerm === '') {
       setSearch(true);
@@ -236,7 +238,7 @@ function HomeScreen({navigation}) {
           }}
           onPress={() => {
             setSoLuongChuaDocCuaCustomer();
-            navigation.navigate('Chat', { chatUser });
+            navigation.navigate('ChatScreen', { chatUser });
           }}>
           {chatUser && chatUser.SoLuongChuaDocCuaCustomer != 0 ? (
             <Badge
@@ -263,7 +265,7 @@ function HomeScreen({navigation}) {
             borderRadius: 10,
           }}
           onPress={() => {
-            navigation.navigate('Shopping Card', { idUser });
+            navigation.navigate('ShoppingCard', { idUser });
           }}>
           {badgeCart != 0 ? (
             <Badge
@@ -345,7 +347,7 @@ function HomeScreen({navigation}) {
                       marginHorizontal: -10,
                     }}
                     onPress={() => {
-                      navigation.navigate('Product Detail', { item });
+                      navigation.navigate('ProductDetail', { item });
                     }}>
                     <ProductView
                       source={item.HinhAnhSP}
@@ -408,7 +410,7 @@ function HomeScreen({navigation}) {
                   flexDirection: 'row',
                   //justifyContent: 'space-around'
                 }}
-                  onPress={() => { navigation.navigate('Product Detail', { item }) }}
+                  onPress={() => { navigation.navigate('ProductDetail', { item }) }}
                 >
                   <ProductView
                     source={item.HinhAnhSP}

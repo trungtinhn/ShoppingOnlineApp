@@ -10,12 +10,12 @@ import {
 
 import CheckBox from '@react-native-community/checkbox';
 import { useRoute } from '@react-navigation/native';
-import CustomButton from '../../components/Login_SignUp/CustomButton.js';
-import HeaderTitlle from '../../components/Login_SignUp/HeaderTitlle.js';
-import HeaderWithBack from '../../components/Login_SignUp/HeaderWithBack.js';
-import TextInputCard from '../../components/Login_SignUp/TextInputCard.js';
-import CUSTOM_COLOR from '../../constants/color.js';
-import FONT_FAMILY from '../../constants/font.js';
+import CustomButton from '../../components/Login_SignUp/CustomButton';
+import HeaderTitlle from '../../components/Login_SignUp/HeaderTitlle';
+import HeaderWithBack from '../../components/Login_SignUp/HeaderWithBack';
+import TextInputCard from '../../components/Login_SignUp/TextInputCard';
+import CUSTOM_COLOR from '../../constants/color';
+import FONT_FAMILY from '../../constants/font';
 
 
 function EditAccount ({navigation, route}) {
