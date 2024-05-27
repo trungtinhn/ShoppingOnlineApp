@@ -5,11 +5,13 @@ const dotenv = require("dotenv")
 const mongoose = require("mongoose")
 const cokieParser = require("cookie-parser")
 
+
 const categoryRoutes = require("./routes/routeCategory")
 const productRoutes = require('./routes/routeProduct');
 const reviewRoutes = require("./routes/routeRating");
 const promotionRoutes = require("./routes/routePromotion");
 const addressRoutes = require("./routes/routeAddress");
+const userRoutes = require("./routes/routeUser");
 
 
 dotenv.config()
@@ -29,6 +31,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/promotion', promotionRoutes);
 app.use('/api/addresses', addressRoutes);
+app.use('/api/user', userRoutes);
 
 
 app.listen(8000, () => {

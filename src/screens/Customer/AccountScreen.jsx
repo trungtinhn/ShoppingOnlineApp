@@ -26,7 +26,7 @@ import CUSTOM_COLOR from '../../constants/color';
 import { useNavigation } from '@react-navigation/native';
 import LoadingComponent from '../../components/LoadingComponent';
 import { Default_Avatar } from '../../../assets/Customer/images';
-
+import {firebase} from '../../../firebase/firebase'
 function AccountScreen() {
     const navigation = useNavigation();
     const hanleSignOut = () => { };

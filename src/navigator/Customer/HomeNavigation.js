@@ -2,7 +2,7 @@ import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from '../../screens/Customer/HomeScreen';
-import ProductDeatail from '../../screens/Customer/ProductDetail';
+import ProductDetail from '../../screens/Customer/Productdetail';
 import ShoppingCard from '../../screens/Customer/ShoppingCard';
 import ChatScreen from '../../screens/Customer/ChatSreen';
 import PromotionScreen from '../../screens/Customer/PromotionScreen';
@@ -11,6 +11,8 @@ import CheckoutScreen from '../../screens/Customer/CheckOutScreen';
 import DeliveryScreen from '../../screens/Customer/DeliveryScreen';
 import DeliveryAddressScreen from '../../screens/Customer/DeliveryAddressScreen';
 import PaymentMethodScreen from '../../screens/Customer/PaymentMethodScreen';
+import CustomerOrder from '../../screens/Customer/CustomerOrder';
+import ChangeProfile from '../../screens/Admin/ChangeProfile';
 const Stack = createStackNavigator();
 
 const CustomerNavigation = () => {
@@ -20,7 +22,7 @@ const CustomerNavigation = () => {
       screenOptions={{
         headerShown: false,
     }}>
-      <Stack.Screen name="ProductDetail" component={ProductDeatail}/>
+      <Stack.Screen name="ProductDetail" component={ProductDetail}/>
       <Stack.Screen name="ShoppingCard" component={ShoppingCard}/>
       <Stack.Screen name="CustomerHomeScreen" component={HomeScreen}/>
       <Stack.Screen name="ChatScreen" component={ChatScreen}/>
@@ -30,6 +32,8 @@ const CustomerNavigation = () => {
       <Stack.Screen name="Delivery" component={DeliveryScreen}/>
       <Stack.Screen name="DeliveryAddress" component={DeliveryAddressScreen}/>
       <Stack.Screen name="PaymentMethod" component={PaymentMethodScreen}/>
+      <Stack.Screen name="MyOrder" component={CustomerOrder}/>
+      <Stack.Screen name="ChangeProfile" component={ChangeProfile}/>
     </Stack.Navigator>
   )
 }
