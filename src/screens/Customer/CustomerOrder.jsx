@@ -1,18 +1,18 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import BackTo from '../../components/Admin'
+import BackTo from '../../components/Admin/BackTo'
 //import { SearchIcon } from '../../CustomerView/assets/icons'
 import { FlatList, ScrollView, } from 'react-native-gesture-handler'
+import Status from '../../components/Admin/Status'
 import CUSTOM_COLOR from '../../constants/color'
-import Status from '../../components/Admin'
 //import { Acount } from './OverView'
-import PerSon from '../../components/Admin'
+import PerSon from '../../components/Admin/PerSon'
 //import { IM_MauAo } from '../assets/images'
-import OneOrder from '../../components/Admin'
+import OneOrder from '../../components/Admin/OneOrder'
 
 
-export default function Order({navigation, route}) {
+export default function CustomerOrder({navigation, route}) {
     const [confirm, setConfirm] = useState(true)
     const [onWait, setOnWait] = useState(false)
     const [delivering, setDelivering] = useState(false)

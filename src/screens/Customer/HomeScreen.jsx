@@ -17,6 +17,8 @@ import SearchInput from '../../components/Customer/SearchInput';
 import PromotionCard from '../../components/Customer/PromotionCard'
 import CUSTOM_COLOR from '../../constants/color';
 import { PR_1, PR_2, PR_3, PR_4, PR_5 } from '../../../assets/Customer/images';
+import MessengerLogo from '../../../assets/Admin/svgs/Messenger.svg'
+import ShoppingCartLogo from '../../../assets/Customer/svgs/shopping-cart.svg'
 import { Slider } from 'react-native-elements';
 function HomeScreen({navigation}) {
   const [trending, setTrending] = useState([]);
@@ -212,24 +214,26 @@ function HomeScreen({navigation}) {
         }}>
         <View style={{ width: '5%', height: '100%' }} />
 
-        <View style={{ width: '65%', height: 45 }}>
+        <View style={{ width: '55%', height: 45 }}>
 
-          <SearchInput
+          {/* <SearchInput
             placeholder="Search product"
             style={{
-              width: '70%',
+              width: '60%',
               margin: 10,
             }}
             onSearch={(searchTerm) => handleSearch(searchTerm, sanpham)}
 
-          />
+          /> */}
         </View>
         <View style={{ width: 10, height: '100%' }} />
         <TouchableOpacity
           style={{
-            width: 45,
-            height: 45,
-            backgroundColor: CUSTOM_COLOR.Mercury,
+            width: 55,
+            height: 55,
+            //backgroundColor: CUSTOM_COLOR.Mercury,/
+            borderWidth: 1,
+            borderColor: CUSTOM_COLOR.Mercury,
             alignItems: 'center',
             justifyContent: 'center',
             // marginVertical: 10,
@@ -248,16 +252,17 @@ function HomeScreen({navigation}) {
             />
           ) : null}
 
-          <Image source={IC_Chat} />
+          <MessengerLogo />
         </TouchableOpacity>
 
         <View style={{ width: 10, height: '100%' }} />
 
         <TouchableOpacity
           style={{
-            width: 45,
-            height: 45,
-            backgroundColor: CUSTOM_COLOR.Mercury,
+            width: 55,
+            height: 55,
+            borderWidth: 1,
+            borderColor: CUSTOM_COLOR.Mercury,
             alignItems: 'center',
             justifyContent: 'center',
             // marginVertical: 10,
@@ -274,7 +279,7 @@ function HomeScreen({navigation}) {
               containerStyle={{ position: 'absolute', top: -5, right: -5 }}
             />
           ) : null}
-          <Image source={IC_ShoppingCart} />
+          <ShoppingCartLogo />
         </TouchableOpacity>
       </View>
 

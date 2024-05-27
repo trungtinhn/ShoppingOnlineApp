@@ -1,5 +1,5 @@
 import { ImageBackground, SafeAreaView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import HeaderWithBack from '../../components/Login_SignUp/HeaderWithBack';
 import HeaderTitlle from '../../components/Login_SignUp/HeaderTitlle';
 import { IMG_Rectangle182 } from '../../../assets/Login_SignUp/images';
@@ -8,17 +8,28 @@ import CustomButton from '../../components/Login_SignUp/CustomButton';
 import CUSTOM_COLOR from '../../constants/color';
 import FONT_FAMILY from '../../constants/font';
 import Size from '../../constants/size';
-
+import {firebase} from '../../../firebase/firebase'
 export default function ForgetPasswordScreen({navigation}) {
+  const [email, setEmail] = useState('');
+  const fogotPassword = email => {
+    firebase
+      .auth()
+      .sendPasswordResetEmail(email)
+      .then(() => {
+        navigation.navigate('Done');
+      })
+      .catch(error => {
+        Alert.alert('Error', error.message);
+      });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      {/*  */}
         <View style={{width: '100%', height: 10}} />
         <HeaderWithBack onPress={() => navigation.goBack()} />
         <View style={{width: '100%', height: Size.DeviceHeight*0.05}} />
         <View style={[styles.topContainer, styles.unitContainer]}>
           <HeaderTitlle title="Forgot Password" />
-          {/* <HederContent content="Fill some Personal Information" /> */}
         </View>
 
         <View style={{width: '100%', height: Size.DeviceHeight*0.2}} />
@@ -27,7 +38,7 @@ export default function ForgetPasswordScreen({navigation}) {
           <TextInputCard
             title="Enter your account email"
             txtInput="abc@gmail.com"
-            onChangeText={()=>{}}
+            onChangeText={email => setEmail(email)}
             keyboardType="email-address"
           />
         </View>
@@ -47,8 +58,7 @@ export default function ForgetPasswordScreen({navigation}) {
               type="primary"
               text="Continue"
               onPress={() => {
-                //fogotPassword(email);
-                navigation.navigate('SmartOTP')
+                fogotPassword(email);
               }}
             />
           </View>

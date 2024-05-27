@@ -1,24 +1,124 @@
-import { View, Text, SafeAreaView, ImageBackground, TouchableOpacity, StyleSheet, ScrollView } from 'react-native'
+import { View, Text, SafeAreaView, ImageBackground, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native'
 import React, { useState } from 'react'
 import HeaderWithBack from '../../components/Login_SignUp/HeaderWithBack';
 import HeaderTitlle from '../../components/Login_SignUp/HeaderTitlle';
 import TextInputCard from '../../components/Login_SignUp/TextInputCard';
 import PasswordCard from '../../components/Login_SignUp/PasswordCard';
 import CustomButton from '../../components/Login_SignUp/CustomButton';
-import { IMG_Rectangle182 } from '../../../assets/Login_SignUp/images';
 import HeaderContent from '../../components/Login_SignUp/HeaderContent';
 import CUSTOM_COLOR from '../../constants/color';
 import FONT_FAMILY from '../../constants/font';
 import CheckBox from '@react-native-community/checkbox';
 import DateInputCard from '../../components/Login_SignUp/DateInputCard'
 import Size from '../../constants/size';
+import { avatarDefault, isValidEmail, isValidPassword } from '../../utils/helpers';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {firebase} from '../../../firebase/firebase.js'
+import { registerUser } from '../../api/UserApi';
 export default function SignUpScreen({navigation}) {
+  
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [birth, setBirth] = useState('01/01/2023');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [userType, setuserType] = useState('customer');
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
+  const isValidForm = (
+    fullName,
+    email,
+    password,
+    corfirmPassword,
+    toggleCheckBox,
+  ) => {
+    let isValid = true;
+    if (
+      fullName === '' &&
+      email === '' &&
+      password === '' &&
+      corfirmPassword === ''
+    ) {
+      isValid = false;
+      setErrorMessage('Please enter your information then click sign up');
+    } else if (fullName === '') {
+      isValid = false;
+      setErrorMessage('Please enter your full name');
+    } else if (email === '') {
+      isValid = false;
+      
+      setErrorMessage('Please enter your email');
+    } else if (password === '') {
+      isValid = false;
+     
+      setErrorMessage('Please enter your password');
+    } else if (!isValidEmail(email)) {
+      isValid = false;
+      
+      setErrorMessage('Your email is not valid');
+    } else if (!isValidPassword(password)) {
+      isValid = false;
+     
+      setErrorMessage('Your password must be longer than 8 characters');
+    } else if (password != corfirmPassword) {
+      isValid = false;
+      
+      setErrorMessage('Corfirm password not match with password');
+    } else if (corfirmPassword === '') {
+      isValid = false;
+      
+      setErrorMessage('Please enter your corfirm password');
+    } else if (!toggleCheckBox) {
+      isValid = false;
+     
+      setErrorMessage('Please check agree with policy');
+    }
+    return isValid;
+  };
+
+  const handleRegister = () => {
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then(async(userCredential) => {
+          // Signed in
+        const user = userCredential.user;
+        console.log('Register success: ', user);
+          // ...
+        try{
+          const data = {
+            TenND: fullName,
+            Email: email,
+            Phone: phoneNumber,
+            NgaySinh: birth,
+            MaND: user.uid,
+            LoaiND: userType,
+            Avatar: avatarDefault,
+            DiaChi: '',
+          }
+          console.log(data);
+          const res = await registerUser({data: data});
+          if (res.status === 200) {
+            Alert.alert('Success', 'Account created successfully');
+            navigation.navigate('Congratulation');
+          } else {
+            console.log(res);
+            Alert.alert("Error", 'Failed to create account');
+          }
+          
+        }catch(error){
+          console.log(error);
+        } 
+      })
+      .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log('Register failed: ', errorMessage);
+        });
+  }
   const handleDateChange = (date) => {
-    setSelectedDate(date);
-    // Xử lý giá trị ngày ở đây
+    // Xử lý khi người dùng chọn ngày
+    setBirth(date);
     console.log('Selected date:', date);
   };
   return (
@@ -39,14 +139,14 @@ export default function SignUpScreen({navigation}) {
               title="Full name*"
               txtInput="Nguyen Van A"
               // value={fullName}
-              onChangeText={()=>{}}
+              onChangeText={fullName => setFullName(fullName)}
             />
           </View>
           <View style={{flex: 1}}>
             <TextInputCard
               title="Email*"
               txtInput="abc@gmail.com"
-              onChangeText={()=>{}}
+              onChangeText={email => setEmail(email)}
               keyboardType="email-address"
               // value={email}
             />
@@ -57,7 +157,7 @@ export default function SignUpScreen({navigation}) {
               title="Phone number"
               txtInput="03333333333"
               // value={phoneNumber}
-              onChangeText={()=> {}}
+              onChangeText={phoneNumber=> setPhoneNumber(phoneNumber)}
             />
           </View>
 
@@ -70,7 +170,7 @@ export default function SignUpScreen({navigation}) {
               title="Password*"
               txtInput="********"
               // value={password}
-              onChangeText={()=>{}}
+              onChangeText={password=>setPassword(password)}
             />
           </View>
 
@@ -78,8 +178,7 @@ export default function SignUpScreen({navigation}) {
             <PasswordCard
               title="Confirm Password*"
               txtInput="********"
-              onChangeText={()=>{}
-              }
+              onChangeText={confirmPassword=>setConfirmPassword(confirmPassword)}
             />
           </View>
 
@@ -87,9 +186,9 @@ export default function SignUpScreen({navigation}) {
               <CheckBox
                 disabled={false}
                 value={toggleCheckBox}
-                onValueChange={()=>{
-
-                }}
+                onValueChange={
+                  newValue => setToggleCheckBox(newValue)
+                }
               />
               <HeaderContent content="I agree with this " />
               <TouchableOpacity onPress={() => navigation.navigate('Policy')}>
@@ -103,7 +202,19 @@ export default function SignUpScreen({navigation}) {
                 type="primary"
                 text="Sign up now"
                 onPress={() => {
-                  navigation.navigate('SmartOTPEmail')
+                  if (
+                    isValidForm(
+                      fullName,
+                      email,
+                      password,
+                      confirmPassword,
+                      toggleCheckBox,
+                    )
+                  ) {
+                    handleRegister();
+                  } else {
+                    Alert.alert('Error', errorMessage);
+                  }
                 }}
               />
             </View>

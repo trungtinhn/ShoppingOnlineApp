@@ -23,6 +23,7 @@ const DateInputCard = (props: any) => {
         //console.log('Date of birth: ', fDate);
         setBirth(fDate);
         setDate(selected);
+        props.onDateChange(currentDate);
       };
     
   return (

@@ -8,7 +8,6 @@ const TextInputCard = (props: any) => {
   return (
     <View style={styles.container}>
       <Text style={styles.titleStyle}>{props.title}</Text>
-
       <View style={styles.textInputContainer}>
         <TextInput
           style={styles.textinputStyle}

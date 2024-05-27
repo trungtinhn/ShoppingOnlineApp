@@ -21,6 +21,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import CustomHeader from '../../components/Admin/CustomHeader';
 import { IMG_Rectangle } from '../../../assets/Login_SignUp/images';
 import { launchImageLibrary } from 'react-native-image-picker';
+import { Acount } from './ViewShopScreen';
 function ChangeProfile({navigation}) {
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -35,7 +36,7 @@ function ChangeProfile({navigation}) {
   const [text, setText] = useState('01/01/2023');
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(Acount);
   const [imageUrl, setImageUrl] = useState(null);
   const [backgroundUrl, setBackgroundUrl] = useState(null);
   const [image, setImage] = useState();
