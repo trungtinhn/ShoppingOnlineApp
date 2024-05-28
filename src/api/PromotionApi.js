@@ -1,10 +1,10 @@
 import { getIdToken } from "../middleware/getToken";
 import { api } from "./AppApi";
 
-const addProduct = async ({ data }) => {
+const addPromotion = async ({ data }) => {
   try {
     const idToken = await getIdToken();
-    const url = "/products";
+    const url = "/addPromotion";
     const config = {
       method: "POST",
       headers: {
@@ -25,10 +25,56 @@ const addProduct = async ({ data }) => {
   }
 };
 
-const updateProduct = async ({ productId, data }) => {
+const getAllPromotions = async () => {
   try {
     const idToken = await getIdToken();
-    const url = `/products/${productId}`;
+    const url = "/getAllPromotions";
+    const config = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${idToken}`
+      },
+    };
+
+    const res = await api(url, config);
+    return res;
+  } catch (error) {
+    if (error.response) {
+      return error.response.data;
+    } else {
+      throw error;
+    }
+  }
+};
+
+const getPromotionById = async ({ id }) => {
+  try {
+    const idToken = await getIdToken();
+    const url = `/getPromotionById/id=${id}`;
+    const config = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${idToken}`
+      },
+    };
+
+    const res = await api(url, config);
+    return res;
+  } catch (error) {
+    if (error.response) {
+      return error.response.data;
+    } else {
+      throw error;
+    }
+  }
+};
+
+const updatePromotion = async ({ id, data }) => {
+  try {
+    const idToken = await getIdToken();
+    const url = `/updatePromotion/id=${id}`;
     const config = {
       method: "PUT",
       headers: {
@@ -49,10 +95,10 @@ const updateProduct = async ({ productId, data }) => {
   }
 };
 
-const deleteProduct = async ({ productId }) => {
+const deletePromotion = async ({ id }) => {
   try {
     const idToken = await getIdToken();
-    const url = `/products/${productId}`;
+    const url = `/deletePromotion/id=${id}`;
     const config = {
       method: "DELETE",
       headers: {
@@ -72,50 +118,4 @@ const deleteProduct = async ({ productId }) => {
   }
 };
 
-const getAllProducts = async () => {
-  try {
-    const idToken = await getIdToken();
-    const url = "/products";
-    const config = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${idToken}`
-      },
-    };
-
-    const res = await api(url, config);
-    return res;
-  } catch (error) {
-    if (error.response) {
-      return error.response.data;
-    } else {
-      throw error;
-    }
-  }
-};
-
-const getProductById = async ({ productId }) => {
-  try {
-    const idToken = await getIdToken();
-    const url = `/products/${productId}`;
-    const config = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${idToken}`
-      },
-    };
-
-    const res = await api(url, config);
-    return res;
-  } catch (error) {
-    if (error.response) {
-      return error.response.data;
-    } else {
-      throw error;
-    }
-  }
-};
-
-export { addProduct, updateProduct, deleteProduct, getAllProducts, getProductById };
+export { addPromotion, getAllPromotions, getPromotionById, updatePromotion, deletePromotion };

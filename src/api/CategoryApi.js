@@ -1,10 +1,10 @@
 import { getIdToken } from "../middleware/getToken";
 import { api } from "./AppApi";
 
-const addProduct = async ({ data }) => {
+const addCategory = async ({ data }) => {
   try {
     const idToken = await getIdToken();
-    const url = "/products";
+    const url = "/addCategory";
     const config = {
       method: "POST",
       headers: {
@@ -25,10 +25,10 @@ const addProduct = async ({ data }) => {
   }
 };
 
-const updateProduct = async ({ productId, data }) => {
+const updateCategory = async ({ categoryId, data }) => {
   try {
     const idToken = await getIdToken();
-    const url = `/products/${productId}`;
+    const url = `/id=${categoryId}`;
     const config = {
       method: "PUT",
       headers: {
@@ -49,10 +49,10 @@ const updateProduct = async ({ productId, data }) => {
   }
 };
 
-const deleteProduct = async ({ productId }) => {
+const deleteCategory = async ({ categoryId }) => {
   try {
     const idToken = await getIdToken();
-    const url = `/products/${productId}`;
+    const url = `/id=${categoryId}`;
     const config = {
       method: "DELETE",
       headers: {
@@ -72,10 +72,10 @@ const deleteProduct = async ({ productId }) => {
   }
 };
 
-const getAllProducts = async () => {
+const getCategory = async () => {
   try {
     const idToken = await getIdToken();
-    const url = "/products";
+    const url = "/getCategory";
     const config = {
       method: "GET",
       headers: {
@@ -95,27 +95,4 @@ const getAllProducts = async () => {
   }
 };
 
-const getProductById = async ({ productId }) => {
-  try {
-    const idToken = await getIdToken();
-    const url = `/products/${productId}`;
-    const config = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${idToken}`
-      },
-    };
-
-    const res = await api(url, config);
-    return res;
-  } catch (error) {
-    if (error.response) {
-      return error.response.data;
-    } else {
-      throw error;
-    }
-  }
-};
-
-export { addProduct, updateProduct, deleteProduct, getAllProducts, getProductById };
+export { addCategory, updateCategory, deleteCategory, getCategory };

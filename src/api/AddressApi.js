@@ -1,10 +1,10 @@
 import { getIdToken } from "../middleware/getToken";
 import { api } from "./AppApi";
 
-const addProduct = async ({ data }) => {
+const addAddress = async ({ data }) => {
   try {
     const idToken = await getIdToken();
-    const url = "/products";
+    const url = "/addAddress";
     const config = {
       method: "POST",
       headers: {
@@ -25,10 +25,10 @@ const addProduct = async ({ data }) => {
   }
 };
 
-const updateProduct = async ({ productId, data }) => {
+const updateAddress = async ({ addressId, data }) => {
   try {
     const idToken = await getIdToken();
-    const url = `/products/${productId}`;
+    const url = `/updateAddress/id=${addressId}`;
     const config = {
       method: "PUT",
       headers: {
@@ -49,10 +49,10 @@ const updateProduct = async ({ productId, data }) => {
   }
 };
 
-const deleteProduct = async ({ productId }) => {
+const deleteAddress = async ({ addressId }) => {
   try {
     const idToken = await getIdToken();
-    const url = `/products/${productId}`;
+    const url = `/deleteAddress/id=${addressId}`;
     const config = {
       method: "DELETE",
       headers: {
@@ -72,10 +72,10 @@ const deleteProduct = async ({ productId }) => {
   }
 };
 
-const getAllProducts = async () => {
+const getAllAddresses = async () => {
   try {
     const idToken = await getIdToken();
-    const url = "/products";
+    const url = "/getAddresses";
     const config = {
       method: "GET",
       headers: {
@@ -95,10 +95,10 @@ const getAllProducts = async () => {
   }
 };
 
-const getProductById = async ({ productId }) => {
+const getAddressById = async ({ addressId }) => {
   try {
     const idToken = await getIdToken();
-    const url = `/products/${productId}`;
+    const url = `/getAddress/id=${addressId}`;
     const config = {
       method: "GET",
       headers: {
@@ -118,4 +118,4 @@ const getProductById = async ({ productId }) => {
   }
 };
 
-export { addProduct, updateProduct, deleteProduct, getAllProducts, getProductById };
+export { addAddress, updateAddress, deleteAddress, getAllAddresses, getAddressById };
