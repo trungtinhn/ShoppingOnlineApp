@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, View, Image, ImageBackground } from "react-native";
 import CUSTOM_COLOR from "../../constants/color";
+import FONT_FAMILY from "../../constants/font";
 
 
 const Categories = (props: any) => {
@@ -10,7 +11,6 @@ const Categories = (props: any) => {
 
       <Image source={props.source}
         resizeMode='cover'
-
         style={{
           borderRadius: 30,
           borderColor: CUSTOM_COLOR.FlushOrange,
@@ -19,12 +19,8 @@ const Categories = (props: any) => {
           alignContent: 'center',
           justifyContent: 'center',
           alignSelf: 'center'
-
-
         }}
       />
-
-
 
       <View style={{
         width: 300,
@@ -35,8 +31,9 @@ const Categories = (props: any) => {
       }}>
         <Text style={{
           textAlign: 'center',
-          fontSize: 30, fontWeight: 'bold',
+          fontSize: 30,
           color: CUSTOM_COLOR.White,
+          fontFamily: FONT_FAMILY.CeraPro,
           paddingHorizontal: 40,
           paddingVertical: 10,
           shadowOpacity: 1

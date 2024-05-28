@@ -4,8 +4,10 @@ import { IC_Home } from '../../../assets/Customer/icons'
 import { IM_AnhGiay1, IM_AnhGiay2, IM_AnhGiay3, IM_AnhGiay4 } from '../../../assets/Customer/images'
 import Notify from "../../components/Customer/Notify";
 import CUSTOM_COLOR from "../../constants/color";
-
-
+import MessengerLogo from '../../../assets/Admin/svgs/Messenger.svg'
+import ShoppingCartLogo from '../../../assets/Customer/svgs/shopping-cart.svg'
+import LogoApp from '../../../assets/Customer/svgs/Logo.svg'
+import { Badge } from 'react-native-elements';
 const datasGeneral = [
   {
     id: '1',
@@ -85,8 +87,9 @@ const dataRecomanded = [
 ]
 
 function NotificationScreen({ navigation }) {
+  const [chatUser, setChatUser] = useState();
   const [isGeneral, setIsCeneral] = useState(1)
-
+  const [badgeCart, setBadgeCart] = useState(5);
   const [notificationPromotion, setNotificationPromotion] = useState([])
 
   const getDataNotificationPromotion = () => {
@@ -117,34 +120,76 @@ function NotificationScreen({ navigation }) {
       flex: 1,
       backgroundColor: CUSTOM_COLOR.White
     }}>
-
-      <View style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: CUSTOM_COLOR.White
-      }}>
-        <TouchableOpacity onPress={() => {
-          navigation.goBack();
+      <View
+        style={{
+          width: '100%',
+          height: 70,
+          alignItems: 'center',
+          flexDirection: 'row',
+          justifyContent: 'space-between'
         }}>
-          <Image
-            source={IC_Home}
+        <View style={{marginLeft: "5%"}}>
+          <LogoApp width={130} height={50}></LogoApp>
+        </View>
+        <View style= {{flexDirection: 'row'}}>
+          <TouchableOpacity
             style={{
-              width: 10,
-              height: 20,
-              marginHorizontal: 20,
-              marginVertical: 15
+              width: 50,
+              height: 50,
+              //backgroundColor: CUSTOM_COLOR.Mercury,/
+              borderWidth: 1,
+              borderColor: CUSTOM_COLOR.Mercury,
+              alignItems: 'center',
+              justifyContent: 'center',
+              // marginVertical: 10,
+              // padding: 8,
+              borderRadius: 10,
             }}
-            resizeMode='stretch'
-          />
-        </TouchableOpacity>
+            onPress={() => {
+              navigation.navigate('ChatScreen', { chatUser });
+            }}>
+            {chatUser && chatUser.SoLuongChuaDocCuaCustomer != 0 ? (
+              <Badge
+                value={chatUser.SoLuongChuaDocCuaCustomer}
+                status="error"
+                containerStyle={{ position: 'absolute', top: -5, right: -5 }}
+              />
+            ) : null}
 
+            <MessengerLogo color={CUSTOM_COLOR.Black} />
+          </TouchableOpacity>
 
-        <Text style={{
-          fontSize: 20,
-          color: CUSTOM_COLOR.Black,
-          fontWeight: 'bold'
-        }}>Notification</Text>
+          <View style={{ width: 10, height: '100%' }} />
+
+          <TouchableOpacity
+            style={{
+              width: 50,
+              height: 50,
+              borderWidth: 1,
+              borderColor: CUSTOM_COLOR.Mercury,
+              alignItems: 'center',
+              justifyContent: 'center',
+              // marginVertical: 10,
+              // padding: 8,
+              borderRadius: 10,
+            }}
+            onPress={() => {
+              navigation.navigate('ShoppingCard', { idUser });
+            }}>
+                {badgeCart != 0 ? (
+                <Badge
+                  value={badgeCart}
+                  status="error"
+                  containerStyle={{ position: 'absolute', top: -5, right: -5 }}
+                />
+              ) : null}
+            <ShoppingCartLogo>
+            </ShoppingCartLogo>
+          </TouchableOpacity>
+          <View style={{marginLeft: "5%"}}></View>
+        </View>
       </View>
+
       <View style={{ width: '100%', height: 10 }} />
       <FlatList
         data={notificationPromotion}

@@ -13,6 +13,14 @@ const promotionSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    SoLuotSuDung: {
+        type: Number,
+        required: true,
+    },
+    SoLuong: {
+        type: Number,
+        required: true,
+    },
     HinhAnhKhuyenMai: {
         type: String,
         required: true
@@ -20,11 +28,6 @@ const promotionSchema = new mongoose.Schema({
     Loai: {
         type: String,
         required: true
-    },
-    MaKM: {
-        type: String,
-        required: true,
-        unique: true
     },
     NgayBatDau: {
         type: Date,
