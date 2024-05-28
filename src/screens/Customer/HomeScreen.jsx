@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { IC_Chat, IC_ShoppingCart } from '../../../assets/Admin/icons'
+import { Badge } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import Categories from '../../components/Customer/Categories';
 import ProductView from '../../components/Customer/ProductView';
@@ -19,14 +19,16 @@ import CUSTOM_COLOR from '../../constants/color';
 import { PR_1, PR_2, PR_3, PR_4, PR_5 } from '../../../assets/Customer/images';
 import MessengerLogo from '../../../assets/Admin/svgs/Messenger.svg'
 import ShoppingCartLogo from '../../../assets/Customer/svgs/shopping-cart.svg'
+import LogoApp from '../../../assets/Customer/svgs/Logo.svg'
 import { Slider } from 'react-native-elements';
+import FONT_FAMILY from '../../constants/font';
 function HomeScreen({navigation}) {
   const [trending, setTrending] = useState([]);
   const [danhmuc, setDanhMuc] = useState([]);
   const [chatUser, setChatUser] = useState();
   const [loadingChatUser, setLoadingChatUser] = useState(false);
   const [idUser, setIdUser] = useState();
-  const [badgeCart, setBadgeCart] = useState(0);
+  const [badgeCart, setBadgeCart] = useState(5);
   const [dataPromotion, setDataPromotion] = useState([]);
   const [search, setSearch] = useState(true);
   const [sanpham, setSanPham] = useState([]);
@@ -211,76 +213,69 @@ function HomeScreen({navigation}) {
           height: 70,
           alignItems: 'center',
           flexDirection: 'row',
+          justifyContent: 'space-between'
         }}>
-        <View style={{ width: '5%', height: '100%' }} />
-
-        <View style={{ width: '55%', height: 45 }}>
-
-          {/* <SearchInput
-            placeholder="Search product"
-            style={{
-              width: '60%',
-              margin: 10,
-            }}
-            onSearch={(searchTerm) => handleSearch(searchTerm, sanpham)}
-
-          /> */}
+        <View style={{marginLeft: "5%"}}>
+          <LogoApp width={130} height={50}></LogoApp>
         </View>
-        <View style={{ width: 10, height: '100%' }} />
-        <TouchableOpacity
-          style={{
-            width: 55,
-            height: 55,
-            //backgroundColor: CUSTOM_COLOR.Mercury,/
-            borderWidth: 1,
-            borderColor: CUSTOM_COLOR.Mercury,
-            alignItems: 'center',
-            justifyContent: 'center',
-            // marginVertical: 10,
-            // padding: 8,
-            borderRadius: 10,
-          }}
-          onPress={() => {
-            setSoLuongChuaDocCuaCustomer();
-            navigation.navigate('ChatScreen', { chatUser });
-          }}>
-          {chatUser && chatUser.SoLuongChuaDocCuaCustomer != 0 ? (
-            <Badge
-              value={chatUser.SoLuongChuaDocCuaCustomer}
-              status="error"
-              containerStyle={{ position: 'absolute', top: -5, right: -5 }}
-            />
-          ) : null}
+        <View style= {{flexDirection: 'row'}}>
+          <TouchableOpacity
+            style={{
+              width: 50,
+              height: 50,
+              //backgroundColor: CUSTOM_COLOR.Mercury,/
+              borderWidth: 1,
+              borderColor: CUSTOM_COLOR.Mercury,
+              alignItems: 'center',
+              justifyContent: 'center',
+              // marginVertical: 10,
+              // padding: 8,
+              borderRadius: 10,
+            }}
+            onPress={() => {
+              setSoLuongChuaDocCuaCustomer();
+              navigation.navigate('ChatScreen', { chatUser });
+            }}>
+            {chatUser && chatUser.SoLuongChuaDocCuaCustomer != 0 ? (
+              <Badge
+                value={chatUser.SoLuongChuaDocCuaCustomer}
+                status="error"
+                containerStyle={{ position: 'absolute', top: -5, right: -5 }}
+              />
+            ) : null}
 
-          <MessengerLogo />
-        </TouchableOpacity>
+            <MessengerLogo color={CUSTOM_COLOR.Black} />
+          </TouchableOpacity>
 
-        <View style={{ width: 10, height: '100%' }} />
+          <View style={{ width: 10, height: '100%' }} />
 
-        <TouchableOpacity
-          style={{
-            width: 55,
-            height: 55,
-            borderWidth: 1,
-            borderColor: CUSTOM_COLOR.Mercury,
-            alignItems: 'center',
-            justifyContent: 'center',
-            // marginVertical: 10,
-            // padding: 8,
-            borderRadius: 10,
-          }}
-          onPress={() => {
-            navigation.navigate('ShoppingCard', { idUser });
-          }}>
-          {badgeCart != 0 ? (
-            <Badge
-              value={badgeCart}
-              status="error"
-              containerStyle={{ position: 'absolute', top: -5, right: -5 }}
-            />
-          ) : null}
-          <ShoppingCartLogo />
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              width: 50,
+              height: 50,
+              borderWidth: 1,
+              borderColor: CUSTOM_COLOR.Mercury,
+              alignItems: 'center',
+              justifyContent: 'center',
+              // marginVertical: 10,
+              // padding: 8,
+              borderRadius: 10,
+            }}
+            onPress={() => {
+              navigation.navigate('ShoppingCard', { idUser });
+            }}>
+                {badgeCart != 0 ? (
+                <Badge
+                  value={badgeCart}
+                  status="error"
+                  containerStyle={{ position: 'absolute', top: -5, right: -5 }}
+                />
+              ) : null}
+            <ShoppingCartLogo>
+            </ShoppingCartLogo>
+          </TouchableOpacity>
+          <View style={{marginLeft: "5%"}}></View>
+        </View>
       </View>
 
       {search ? (
@@ -339,7 +334,7 @@ function HomeScreen({navigation}) {
                 onPress={() => {
                   navigation.navigate('Trending');
                 }}>
-                <Text style={{ margin: 20 }}>See all</Text>
+                <Text style={styles.text}>See all</Text>
               </TouchableOpacity>
             </View><View style={{}}>
               <FlatList
@@ -364,29 +359,10 @@ function HomeScreen({navigation}) {
             </View><View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <Text style={styles.textView}>Orther categories</Text>
               <TouchableOpacity>
-                <Text style={{ margin: 20 }}>Explore now</Text>
+                <Text style={styles.text}>Explore now</Text>
               </TouchableOpacity>
             </View>
-            {/*
-          <FlatList
 
-
-          data={danhmuc}
-
-          renderItem={({ item }) =>
-            <TouchableOpacity style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}
-              onPress={() => { navigation.navigate('DetailCategory', { item }) }}
-            >
-              <Categories
-                source={item.AnhDM}
-                title={item.TenDM}
-              />
-            </TouchableOpacity>
-
-
-          }
-          keyExtractor={item => item.MaDM}
-          /> */}
             {danhmuc
               ? danhmuc.map(item => (
                 <TouchableOpacity
@@ -439,10 +415,18 @@ const styles = StyleSheet.create({
   textView: {
     marginHorizontal: 15,
     marginVertical: 10,
-    fontWeight: 'bold',
-    color: CUSTOM_COLOR.Black,
+    fontFamily: FONT_FAMILY.SemiBoldItalic,
+    color: CUSTOM_COLOR.FlushOrange,
     fontSize: 20,
   },
+  text:{
+    fontFamily: FONT_FAMILY.CeraPro,
+    color: CUSTOM_COLOR.Black,
+    fontStyle: 'italic',
+    padding: 15,
+    textDecorationLine: 'underline'
+    
+  }
 });
 
 export default HomeScreen;

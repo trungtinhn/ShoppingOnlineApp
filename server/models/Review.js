@@ -3,12 +3,6 @@ const mongoose = require('mongoose');
 const reviewSchema = new mongoose.Schema({
     AnhDG: {
         type: String,
-        required: true
-    },
-    MaDG: {
-        type: String,
-        required: true,
-        unique: true
     },
     MaND: {
         type: String,

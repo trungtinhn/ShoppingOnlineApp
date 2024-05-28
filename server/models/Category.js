@@ -1,17 +1,17 @@
 const mongoose = require("mongoose")
 
 const useSchema = new mongoose.Schema({
-    key: {
+    description: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     name: {
         type: String,
         required: true
     },
     image: {
-        type: String
+        type: String,
+        required: true
     },
     numProduct: {
         type: Number

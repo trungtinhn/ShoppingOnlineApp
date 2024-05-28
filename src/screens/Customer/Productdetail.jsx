@@ -10,6 +10,7 @@ import { Badge } from "react-native-elements";
 import Swiper from "react-native-swiper";
 import ProductView from "../../components/Customer/ProductView";
 import { ScrollView } from "react-native-gesture-handler";
+import { BackIcon } from "../../../assets/Customer/svgs";
 const dataSanPham = [
     {
       TenSP: "Product 1",
@@ -97,18 +98,12 @@ function ProductDetail({ navigation, route }) {
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
 
                 <View style={{ flexDirection: "row", alignItems: 'center', }}>
-                    <TouchableOpacity onPress={() => {
-                        navigation.goBack();
-                    }}>
-                        <Image
-                            source={IC_Back}
-                            style={{
-                                width: 10,
-                                height: 20,
-                                margin: 20,
-                            }}
-                            resizeMode='stretch'
-                        />
+                    <TouchableOpacity 
+                        style={{padding: 12}}
+                        onPress={() => {
+                            navigation.goBack();
+                        }}>
+                        <BackIcon width={20} height={20}></BackIcon>
                     </TouchableOpacity>
 
                     <Text style={{ height: 40, padding: 7, fontSize: 18, fontWeight: 'bold', color: CUSTOM_COLOR.Black }}>Product</Text>

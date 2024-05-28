@@ -1,5 +1,20 @@
 const mongoose = require('mongoose');
 
+const TypeSchema = new mongoose.Schema({
+    size: {
+        type: String,
+        required: true
+    },
+    color: {
+        type: String,
+        required: true
+    },
+    quantity: {
+        type: Number,
+        required: true
+    }
+});
+
 const ProductSchema = new mongoose.Schema({
     GiaSP: {
         type: Number,
@@ -13,17 +28,16 @@ const ProductSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    MaSP: {
-        type: String,
-        required: true,
-        unique: true
-    },
     MauSac: {
         type: [String],
         required: true
     },
     Size: {
         type: [String],
+        required: true
+    },
+    Type: {
+        type: [TypeSchema],
         required: true
     },
     SoLuongDaBan: {

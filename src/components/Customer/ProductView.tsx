@@ -30,17 +30,20 @@ const ProductView = (props: any) => {
             }} />
          <View style={{ padding: 10 }}>
              <Text style={{
-            marginVertical: 4,
-            fontFamily: FONT_FAMILY.Light,
-            color: CUSTOM_COLOR.Black,
-         }}>{props.title}</Text>
-         <Text style={{
-            fontSize: 14,
-            marginTop: -5,
-            fontStyle: 'italic',
-            //fontFamily: FONT_FAMILY.Bold,
-            color: CUSTOM_COLOR.Black,
-         }}>{props.price} đ</Text>
+               marginVertical: 4,
+               fontFamily: FONT_FAMILY.Medium,
+               color: CUSTOM_COLOR.Black,
+            }}>{props.title}</Text>
+            <View style={styles.rowContent}>
+               <Text style={{
+                  fontSize: 14,
+                  marginTop: -5,
+                  fontStyle: 'italic',
+                  //fontFamily: FONT_FAMILY.Bold,
+                  color: CUSTOM_COLOR.FlushOrange,
+               }}>đ{props.price}</Text>
+               <Text style={{marginTop: -5, fontSize: 10}}>Đã bán 1,3k</Text>
+            </View>
          </View>
         
 
@@ -48,5 +51,11 @@ const ProductView = (props: any) => {
    )
 
 };
+const styles = StyleSheet.create({
+   rowContent:{
+      flexDirection: 'row',
+      justifyContent: 'space-between'
+   }
+})
 
 export default ProductView

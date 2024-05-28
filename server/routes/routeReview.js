@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const reviewController = require("../controllers/reviewCotroller");
+
 router.post('/addReview', reviewController.addReview);
 router.get('/getReviews', reviewController.getAllReviews);
 router.get('/getReviewById/id=:id', reviewController.getReviewById);

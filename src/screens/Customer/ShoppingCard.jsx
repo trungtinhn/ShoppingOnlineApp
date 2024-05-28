@@ -6,6 +6,7 @@ import { PR_1, PR_2, PR_3, PR_4, PR_5 } from "../../../assets/Customer/images";
 import CUSTOM_COLOR from "../../constants/color";
 import Button from '../../components/Admin/Button'
 import CustomButton from "../../components/Login_SignUp/CustomButton";
+import { BackIcon } from "../../../assets/Customer/svgs";
 const ShoppingCard = ({navigation, route}) => {
     const { idUser } = route.params
     const [items, setItems] = useState([]);
@@ -163,21 +164,13 @@ const ShoppingCard = ({navigation, route}) => {
                 flexDirection: 'row',
                 alignItems: 'center'
             }}>
-                <TouchableOpacity onPress={() => {
-                    navigation.goBack();
-                }}>
-                    <Image
-                        source={IC_Back}
-                        style={{
-                            width: 10,
-                            height: 20,
-                            marginHorizontal: 20,
-                            marginVertical: 15
-                        }}
-                        resizeMode='stretch'
-                    />
+                <TouchableOpacity 
+                    style={{padding: 12}}
+                    onPress={() => {
+                        navigation.goBack();
+                    }}>
+                    <BackIcon width={20} height={20}></BackIcon>
                 </TouchableOpacity>
-
 
                 <Text style={{
                     fontSize: 20,
@@ -186,7 +179,7 @@ const ShoppingCard = ({navigation, route}) => {
                 }}>Shopping Cart</Text>
             </View>
 
-            <View style={{width:'100%', height: 20}}/>
+            <View style={{width:'100%', height: 10}}/>
 
             <FlatList
                 style={{

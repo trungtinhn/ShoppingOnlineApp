@@ -8,12 +8,12 @@ const cokieParser = require("cookie-parser")
 
 const categoryRoutes = require("./routes/routeCategory")
 const productRoutes = require('./routes/routeProduct');
-const reviewRoutes = require("./routes/routeRating");
+const reviewRoutes = require("./routes/routeReview");
 const promotionRoutes = require("./routes/routePromotion");
 const addressRoutes = require("./routes/routeAddress");
 const userRoutes = require("./routes/routeUser");
-
-
+const cartRoutes = require("./routes/routeCart")
+const parameterRoutes = require("./routes/routesParameter")
 dotenv.config()
 const app = express()
 mongoose.connect(process.env.MONGODB_URL.replace("<password>", process.env.MONGODB_PASSWORD)).then(() => {
@@ -32,6 +32,8 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/promotion', promotionRoutes);
 app.use('/api/addresses', addressRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/parameter', parameterRoutes);
 
 
 app.listen(8000, () => {

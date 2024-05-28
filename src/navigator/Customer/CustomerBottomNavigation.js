@@ -3,13 +3,15 @@ import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity } 
 import { getFocusedRouteNameFromRoute, NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-import { IC_Home, IC_Bell, IC_User, IC_Heart } from "../../../assets/Customer/icons";
-
 import CUSTOM_COLOR from "../../constants/color";
 import CustomerNavigation from "./HomeNavigation";
 import NotificationScreen from "../../screens/Customer/NotificationScreen";
 import AccountScreen from "../../screens/Customer/AccountScreen";
 import FollowScreen from "../../screens/Customer/FollowScreen";
+import HeartIcon from '../../../assets/Customer/svgs/Heart.svg'
+import HomeIcon from '../../../assets/Customer/svgs/house.svg'
+import BellIcon from '../../../assets/Customer/svgs/bell-ringing.svg'
+import AccountIcon from '../../../assets/Customer/svgs/user.svg'
 const TabBottom = createBottomTabNavigator()
 
 
@@ -45,16 +47,7 @@ function CustomerBottomTab() {
                     tabBarIcon: ({ focused }) => {
                         return (
                             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                <Image
-                                    source={IC_Home}
-                                    resizeMode='stretch'
-                                    style={{
-                                        width: 25,
-                                        height: 25,
-                                        tintColor: focused ? CUSTOM_COLOR.Carnation : CUSTOM_COLOR.ChathamsBlue
-                                    }}
-
-                                />
+                                <HomeIcon fill={focused ? CUSTOM_COLOR.FlushOrange : CUSTOM_COLOR.Black}/>
 
                             </View>
                         )
@@ -69,16 +62,7 @@ function CustomerBottomTab() {
                     tabBarIcon: ({ focused }) => {
                         return (
                             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                <Image
-                                    source={IC_Bell}
-                                    resizeMode='stretch'
-                                    style={{
-                                        width: 25,
-                                        height: 25,
-                                        tintColor: focused ? CUSTOM_COLOR.Carnation : CUSTOM_COLOR.ChathamsBlue
-                                    }}
-
-                                />
+                                <BellIcon fill={focused ? CUSTOM_COLOR.FlushOrange : CUSTOM_COLOR.Black}></BellIcon>
 
                             </View>
                         )
@@ -95,17 +79,7 @@ function CustomerBottomTab() {
                                 tabBarIcon: ({focused}) =>{
                                     return( 
                                         <View style ={{alignItems: 'center', justifyContent: 'center'}}>
-                                            <Image
-                                            source={IC_Heart}
-                                            resizeMode = 'stretch'
-                                            style = {{
-                                                width: 25,
-                                                height: 25,
-                                                tintColor: focused ? CUSTOM_COLOR.Carnation : CUSTOM_COLOR.ChathamsBlue
-                                            }}
-                                    
-                                        />
-                                        
+                                            <HeartIcon fill={focused ? CUSTOM_COLOR.FlushOrange : CUSTOM_COLOR.Black}/>
                                         </View>
                                 )
                                 
@@ -120,17 +94,7 @@ function CustomerBottomTab() {
                     tabBarIcon: ({focused}) =>{
                         return( 
                             <View style ={{alignItems: 'center', justifyContent: 'center'}}>
-                                <Image
-                                source={IC_User}
-                                resizeMode = 'stretch'
-                                style = {{
-                                    width: 25,
-                                    height: 25,
-                                    tintColor: focused ? CUSTOM_COLOR.Carnation : CUSTOM_COLOR.ChathamsBlue
-                                }}
-                        
-                            />
-                               
+                                <AccountIcon fill={focused ? CUSTOM_COLOR.FlushOrange : CUSTOM_COLOR.Black}/>
                             </View>
                     )           
                     }

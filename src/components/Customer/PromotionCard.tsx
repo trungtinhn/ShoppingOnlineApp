@@ -11,8 +11,7 @@ import CUSTOM_COLOR from "../../constants/color";
 import FONT_FAMILY from "../../constants/font";
 import {IMG_backgroundCard} from '../../../assets/Customer/images';
 
-const PromotionCard = props => {
-  const {navigation} = props;
+const PromotionCard = (props: any) => {
   return (
     <TouchableOpacity style={styles.container} onPress={props.onPress}>
       <View style={styles.accountContainer}>
@@ -24,11 +23,11 @@ const PromotionCard = props => {
             <Image
               source={props.source}
               style={{
-                width: '80%',
-                height: '80%',
+                width: 200,
+                height: 100,
                 aspectRatio: 1,
-                borderRadius: 0,
-                resizeMode: 'center',
+                borderRadius: 20,
+                resizeMode: 'cover',
               }}
             />
           </View>
@@ -37,14 +36,10 @@ const PromotionCard = props => {
 
           <View style={styles.textViewContainer}>
             <Text style={styles.titleStyles}>{props.name}</Text>
-
             <Text style={styles.contentStyles}>
               {props.type === 'GiamGia'
                 ? `Giảm giá ${props.discount}%`
                 : 'Miễn phí vẫn chuyển'}
-            </Text>
-            <Text style={styles.minimumStyles}>
-              Đơn tối thiểu {props.minimum}
             </Text>
             <Text style={styles.timeStyle}>
               {props.start} - {props.end}
@@ -101,8 +96,10 @@ const styles = StyleSheet.create({
   contentStyles: {
     fontFamily: FONT_FAMILY.Medium,
     fontSize: 20,
-    fontWeight: 'bold',
     color: CUSTOM_COLOR.White,
+  },
+  timeStyle:{
+    fontFamily: FONT_FAMILY.CeraPro
   },
   minimumStyles: {
     fontFamily: FONT_FAMILY.Medium,

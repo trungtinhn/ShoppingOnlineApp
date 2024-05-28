@@ -16,5 +16,19 @@ const isValidString = value => {
     }
     return true;
 };
+function formatSoldQuantity(quantityStr) {
+    const quantity = parseInt(quantityStr, 10);
+  
+    if (isNaN(quantity)) {
+      throw new Error("Invalid input: not a number");
+    }
+  
+    if (quantity >= 1000) {
+      const formattedQuantity = (quantity / 1000).toFixed(1).replace(/\.0$/, '');
+      return `${formattedQuantity}k`;
+    }
+    
+    return quantityStr;
+  }
 const avatarDefault = 'https://firebasestorage.googleapis.com/v0/b/shoppingapp-ada07.appspot.com/o/images%2Fusers%2FuserCustomer.png?alt=media&token=16225e3a-c284-4a14-bdc6-710ae891f34b';
-export { isValidEmail, isValidPassword, isValidString, avatarDefault };
+export { isValidEmail, isValidPassword, isValidString, avatarDefault, formatSoldQuantity };

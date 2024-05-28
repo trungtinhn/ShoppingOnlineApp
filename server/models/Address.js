@@ -5,11 +5,6 @@ const addressSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    MaDC: {
-        type: String,
-        required: true,
-        unique: true
-    },
     MaND: {
         type: String,
         required: true
