@@ -6,6 +6,7 @@ const router = require('express').Router()
 router.post('/getCart', verifyToken ,cartController.addProductToCart);
 router.put('/updateCart', verifyToken ,cartController.updateProductInCart);
 router.delete('/deleteCart', verifyToken ,cartController.removeProductFromCart);
+router.delete('/clearCart', verifyToken ,cartController.clearCart);
 router.get('/cart/userId=:userId', verifyToken ,cartController.getCart);
 
 module.exports = router;

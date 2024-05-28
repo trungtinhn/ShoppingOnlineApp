@@ -10,7 +10,6 @@ const registerUser = async({data}) => {
           },
           data: data,
         };
-    
         const res = await api(url, config);
         return res;
       } catch (error) {
@@ -32,7 +31,6 @@ const getUserType = async({MaND}) => {
             Authorization: `Bearer ${idToken}`
           },
         };
-        console.log("Token client " + idToken)
         const res = await api(url, config);
         return res;
       } catch (error) {
@@ -43,5 +41,72 @@ const getUserType = async({MaND}) => {
         }
       }
 }
+const updateUser = async({MaND, data}) => {
+  try {
+      const idToken = await getIdToken();
+      const url = `/user/MaND=${MaND}`;
+      const config = {
+          method: "PUT",
+          headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${idToken}`
+          },
+          data: data,
+      };
+      const res = await api(url, config);
+      return res;
+  } catch (error) {
+      if (error.response) {
+          return error.response;
+      } else {
+          throw error;
+      }
+  }
+};
 
-export {registerUser, getUserType}
+const deleteUser = async({MaND}) => {
+  try {
+      const idToken = await getIdToken();
+      const url = `/user/MaND=${MaND}`;
+      const config = {
+          method: "DELETE",
+          headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${idToken}`
+          },
+      };
+      const res = await api(url, config);
+      return res;
+  } catch (error) {
+      if (error.response) {
+          return error.response;
+      } else {
+          throw error;
+      }
+  }
+};
+
+const getAllUsers = async() => {
+  try {
+      const idToken = await getIdToken();
+      const url = `/user`;
+      const config = {
+          method: "GET",
+          headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${idToken}`
+          },
+      };
+      const res = await api(url, config);
+      return res;
+  } catch (error) {
+      if (error.response) {
+          return error.response;
+      } else {
+          throw error;
+      }
+  }
+};
+
+
+export {registerUser, getUserType, updateUser, deleteUser, getAllUsers}
