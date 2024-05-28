@@ -5,7 +5,6 @@ const dotenv = require("dotenv")
 const mongoose = require("mongoose")
 const cokieParser = require("cookie-parser")
 
-
 const categoryRoutes = require("./routes/routeCategory")
 const productRoutes = require('./routes/routeProduct');
 const reviewRoutes = require("./routes/routeReview");

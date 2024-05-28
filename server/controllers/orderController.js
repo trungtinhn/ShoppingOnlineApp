@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Order = require('../models/Order'); // Adjust the path as needed
 
-const orderController = [{
+const orderController = {
     createOrder : async (req, res) => {
         try {
             const newOrder = new Order(req.body);
@@ -85,4 +85,6 @@ const orderController = [{
             res.status(500).json({ message: error.message });
         }
     }
-}]
+}
+
+module.exports = orderController
