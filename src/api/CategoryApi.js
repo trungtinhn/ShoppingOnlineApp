@@ -4,7 +4,7 @@ import { api } from "./AppApi";
 const addCategory = async ({ data }) => {
   try {
     const idToken = await getIdToken();
-    const url = "/addCategory";
+    const url = "/category/addCategory";
     const config = {
       method: "POST",
       headers: {
@@ -28,7 +28,7 @@ const addCategory = async ({ data }) => {
 const updateCategory = async ({ categoryId, data }) => {
   try {
     const idToken = await getIdToken();
-    const url = `/id=${categoryId}`;
+    const url = `/category/id=${categoryId}`;
     const config = {
       method: "PUT",
       headers: {
@@ -52,7 +52,7 @@ const updateCategory = async ({ categoryId, data }) => {
 const deleteCategory = async ({ categoryId }) => {
   try {
     const idToken = await getIdToken();
-    const url = `/id=${categoryId}`;
+    const url = `/category/id=${categoryId}`;
     const config = {
       method: "DELETE",
       headers: {
@@ -75,7 +75,7 @@ const deleteCategory = async ({ categoryId }) => {
 const getCategory = async () => {
   try {
     const idToken = await getIdToken();
-    const url = "/getCategory";
+    const url = "/category/getCategory";
     const config = {
       method: "GET",
       headers: {

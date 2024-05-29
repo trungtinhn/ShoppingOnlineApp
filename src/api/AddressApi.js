@@ -4,7 +4,7 @@ import { api } from "./AppApi";
 const addAddress = async ({ data }) => {
   try {
     const idToken = await getIdToken();
-    const url = "/addAddress";
+    const url = "/addresses/addAddress";
     const config = {
       method: "POST",
       headers: {
@@ -28,7 +28,7 @@ const addAddress = async ({ data }) => {
 const updateAddress = async ({ addressId, data }) => {
   try {
     const idToken = await getIdToken();
-    const url = `/updateAddress/id=${addressId}`;
+    const url = `/addresses/updateAddress/id=${addressId}`;
     const config = {
       method: "PUT",
       headers: {
@@ -52,7 +52,7 @@ const updateAddress = async ({ addressId, data }) => {
 const deleteAddress = async ({ addressId }) => {
   try {
     const idToken = await getIdToken();
-    const url = `/deleteAddress/id=${addressId}`;
+    const url = `/addresses/deleteAddress/id=${addressId}`;
     const config = {
       method: "DELETE",
       headers: {
@@ -75,7 +75,7 @@ const deleteAddress = async ({ addressId }) => {
 const getAllAddresses = async () => {
   try {
     const idToken = await getIdToken();
-    const url = "/getAddresses";
+    const url = "/addresses/getAddresses";
     const config = {
       method: "GET",
       headers: {
@@ -98,7 +98,7 @@ const getAllAddresses = async () => {
 const getAddressById = async ({ addressId }) => {
   try {
     const idToken = await getIdToken();
-    const url = `/getAddress/id=${addressId}`;
+    const url = `/addresses/getAddress/id=${addressId}`;
     const config = {
       method: "GET",
       headers: {

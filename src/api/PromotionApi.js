@@ -4,7 +4,7 @@ import { api } from "./AppApi";
 const addPromotion = async ({ data }) => {
   try {
     const idToken = await getIdToken();
-    const url = "/addPromotion";
+    const url = "/promotion/addPromotion";
     const config = {
       method: "POST",
       headers: {
@@ -28,7 +28,7 @@ const addPromotion = async ({ data }) => {
 const getAllPromotions = async () => {
   try {
     const idToken = await getIdToken();
-    const url = "/getAllPromotions";
+    const url = "/promotion/getAllPromotions";
     const config = {
       method: "GET",
       headers: {
@@ -51,7 +51,7 @@ const getAllPromotions = async () => {
 const getPromotionById = async ({ id }) => {
   try {
     const idToken = await getIdToken();
-    const url = `/getPromotionById/id=${id}`;
+    const url = `/promotion/getPromotionById/id=${id}`;
     const config = {
       method: "GET",
       headers: {
@@ -74,7 +74,7 @@ const getPromotionById = async ({ id }) => {
 const updatePromotion = async ({ id, data }) => {
   try {
     const idToken = await getIdToken();
-    const url = `/updatePromotion/id=${id}`;
+    const url = `/promotion/updatePromotion/id=${id}`;
     const config = {
       method: "PUT",
       headers: {
@@ -98,7 +98,7 @@ const updatePromotion = async ({ id, data }) => {
 const deletePromotion = async ({ id }) => {
   try {
     const idToken = await getIdToken();
-    const url = `/deletePromotion/id=${id}`;
+    const url = `/promotion/deletePromotion/id=${id}`;
     const config = {
       method: "DELETE",
       headers: {
