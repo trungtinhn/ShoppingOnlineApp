@@ -1,5 +1,16 @@
 const mongoose = require('mongoose');
 
+const ColorSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    code: {
+        type: String,
+        required: true
+    }
+});
+
 const TypeSchema = new mongoose.Schema({
     size: {
         type: String,
@@ -16,9 +27,13 @@ const TypeSchema = new mongoose.Schema({
 });
 
 const ProductSchema = new mongoose.Schema({
-    GiaSP: {
+    GiaGoc: {
         type: Number,
         required: true
+    },
+    GiaGiam:{
+        type: Number,
+        default: 0
     },
     HinhAnhSP: {
         type: [String], // Array of strings for image URLs or paths
@@ -29,7 +44,7 @@ const ProductSchema = new mongoose.Schema({
         required: true
     },
     MauSac: {
-        type: [String],
+        type: [ColorSchema],
         required: true
     },
     Size: {
@@ -39,6 +54,14 @@ const ProductSchema = new mongoose.Schema({
     Type: {
         type: [TypeSchema],
         required: true
+    },
+    SoLuotDanhGia: {
+        type: Number,
+        default: 0
+    },
+    Rating: {
+        type: Number,
+        default: 0
     },
     SoLuongDaBan: {
         type: Number,
@@ -62,11 +85,20 @@ const ProductSchema = new mongoose.Schema({
     },
     TrangThai: {
         type: String,
+        enum: ['available', 'outofstock', 'onwait'],
         required: true
     },
     Trending: {
         type: Boolean,
         default: false
+    },
+    Onsale: {
+        type: Boolean,
+        default: true
+    },
+    TiLeKM: {
+        type: Number,
+        default: 0
     }
 }, { timestamps: true });
 
