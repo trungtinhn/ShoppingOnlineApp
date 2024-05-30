@@ -44,6 +44,72 @@ const productController = {
         } catch (error) {
             res.status(500).json({ message: 'Failed to get product!', error });
         }
+    },
+    getProductTrending: async (req, res) => {
+        try {
+            const products = await Product.find({ Trending: true, TrangThai: "available" });
+            if (!products) {
+                return res.status(404).json('Product not found!');
+            }
+            res.status(200).json(products);
+        } catch (error) {
+            res.status500.json({ message: 'Failed to get products!', error });
+        }
+    },
+    getProductOnsale: async (req, res) => {
+        try {
+            const products = await Product.find({ Onsale: true, TrangThai: "available" });
+            if (!products) {
+                return res.status(404).json('Product not found!');
+            }
+            res.status(200).json(products);
+        } catch (error) {
+            res.status500.json({ message: 'Failed to get products!', error });
+        }
+    },
+    getProductOnwait : async (req, res) => {
+        try {
+            const products = await Product.find({ TrangThai: "onwait" });
+            if (!products) {
+                return res.status(404).json('Product not found!');
+            }
+            res.status(200).json(products);
+        } catch (error) {
+            res.status500.json({ message: 'Failed to get products!', error });
+        }
+    },
+    getProductByCategory: async (req, res) => {
+        try {
+            const products = await Product.find({ MaDM: req.params.MaDM });
+            if (!products) {
+                return res.status(404).json('Product not found!');
+            }
+            res.status(200).json(products);
+        } catch (error) {
+            res.status500.json({ message: 'Failed to get products!', error });
+        }
+    },
+    getProductOutofstock: async (req, res) => {
+        try {
+            const products = await Product.find({ TrangThai: "outofstock" });
+            if (!products) {
+                return res.status(404).json('Product not found!');
+            }
+            res.status(200).json(products);
+        } catch (error) {
+            res.status500.json({ message: 'Failed to get products!', error });
+        }
+    },
+    getProductAvailable: async (req, res) => {
+        try {
+            const products = await Product.find({ TrangThai: "available" });
+            if (!products) {
+                return res.status(404).json('Product not found!');
+            }
+            res.status(200).json(products);
+        } catch (error) {
+            res.status500.json({ message: 'Failed to get products!', error });
+        }
     }
 };
 
