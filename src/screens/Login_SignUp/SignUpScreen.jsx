@@ -27,57 +27,28 @@ export default function SignUpScreen({navigation}) {
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const isValidForm = (
-    fullName,
-    email,
-    password,
-    corfirmPassword,
-    toggleCheckBox,
-  ) => {
-    let isValid = true;
-    if (
-      fullName === '' &&
-      email === '' &&
-      password === '' &&
-      corfirmPassword === ''
-    ) {
-      isValid = false;
-      setErrorMessage('Please enter your information then click sign up');
+  const isValidForm = (fullName, email, password, confirmPassword, toggleCheckBox) => {
+    if (fullName === '' && email === '' && password === '' && confirmPassword === '') {
+      return 'Please enter your information then click sign up';
     } else if (fullName === '') {
-      isValid = false;
-      setErrorMessage('Please enter your full name');
+      return 'Please enter your full name';
     } else if (email === '') {
-      isValid = false;
-      
-      setErrorMessage('Please enter your email');
-    } else if (password === '') {
-      isValid = false;
-     
-      setErrorMessage('Please enter your password');
+      return 'Please enter your email';
     } else if (!isValidEmail(email)) {
-      isValid = false;
-      
-      setErrorMessage('Your email is not valid');
+      return 'Your email is not valid';
+    } else if (password === '') {
+      return 'Please enter your password';
     } else if (!isValidPassword(password)) {
-      isValid = false;
-     
-      setErrorMessage('Your password must be longer than 8 characters');
-    } else if (password != corfirmPassword) {
-      isValid = false;
-      
-      setErrorMessage('Corfirm password not match with password');
-    } else if (corfirmPassword === '') {
-      isValid = false;
-      
-      setErrorMessage('Please enter your corfirm password');
+      return 'Your password must be longer than 8 characters';
+    } else if (password !== confirmPassword) {
+      return 'Confirm password does not match the password';
+    } else if (confirmPassword === '') {
+      return 'Please enter your confirm password';
     } else if (!toggleCheckBox) {
-      isValid = false;
-     
-      setErrorMessage('Please check agree with policy');
+      return 'Please check agree with policy';
     }
-    return isValid;
+    return null;
   };
-
   const handleRegister = () => {
     firebase.auth().createUserWithEmailAndPassword(email, password)
       .then(async(userCredential) => {
@@ -202,18 +173,11 @@ export default function SignUpScreen({navigation}) {
                 type="primary"
                 text="Sign up now"
                 onPress={() => {
-                  if (
-                    isValidForm(
-                      fullName,
-                      email,
-                      password,
-                      confirmPassword,
-                      toggleCheckBox,
-                    )
-                  ) {
-                    handleRegister();
-                  } else {
+                  const errorMessage = isValidForm(fullName, email, password, confirmPassword, toggleCheckBox);
+                  if (errorMessage) {
                     Alert.alert('Error', errorMessage);
+                  } else {
+                    handleRegister();
                   }
                 }}
               />
