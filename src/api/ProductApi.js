@@ -4,7 +4,7 @@ import { api } from "./AppApi";
 const addProduct = async ({ data }) => {
   try {
     const idToken = await getIdToken();
-    const url = "/products";
+    const url = "/products/addProduct";
     const config = {
       method: "POST",
       headers: {
@@ -28,7 +28,7 @@ const addProduct = async ({ data }) => {
 const updateProduct = async ({ productId, data }) => {
   try {
     const idToken = await getIdToken();
-    const url = `/products/${productId}`;
+    const url = `/products/updateProducts/id=${productId}`;
     const config = {
       method: "PUT",
       headers: {
@@ -52,7 +52,7 @@ const updateProduct = async ({ productId, data }) => {
 const deleteProduct = async ({ productId }) => {
   try {
     const idToken = await getIdToken();
-    const url = `/products/${productId}`;
+    const url = `/products/deleteProducts/id=${productId}`;
     const config = {
       method: "DELETE",
       headers: {
@@ -75,7 +75,7 @@ const deleteProduct = async ({ productId }) => {
 const getAllProducts = async () => {
   try {
     const idToken = await getIdToken();
-    const url = "/products";
+    const url = "/products/getProducts";
     const config = {
       method: "GET",
       headers: {
@@ -98,7 +98,7 @@ const getAllProducts = async () => {
 const getProductById = async ({ productId }) => {
   try {
     const idToken = await getIdToken();
-    const url = `/products/${productId}`;
+    const url = `/products/getProduct/id=${productId}`;
     const config = {
       method: "GET",
       headers: {
