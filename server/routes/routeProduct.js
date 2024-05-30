@@ -8,5 +8,10 @@ router.put('/updateProducts/id=:id', verifyToken ,productController.updateProduc
 router.delete('/deleteProducts/id=:id', verifyToken ,productController.deleteProduct);
 router.get('/getProducts', verifyToken ,productController.getAllProducts);
 router.get('/getProduct/id=:id', verifyToken ,productController.getProductById);
-
+router.get('/getProductTrending', verifyToken ,productController.getProductTrending);
+router.get('/getProductOnsale', verifyToken ,productController.getProductOnsale);
+router.get('/getProductByCategory/MaDM=:MaDM', verifyToken ,productController.getProductByCategory);
+router.get('/getProductAvailable', verifyToken ,productController.getProductAvailable);
+router.get('/getProductOnwait', verifyToken ,productController.getProductOnwait);
+router.get('/getProductOutofstock', verifyToken ,productController.getProductOutofstock);
 module.exports = router;
