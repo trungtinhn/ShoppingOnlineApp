@@ -99,6 +99,10 @@ const ProductSchema = new mongoose.Schema({
     TiLeKM: {
         type: Number,
         default: 0
+    },
+    MoTaSP: {
+        type: String,
+        required: true
     }
 }, { timestamps: true });
 
