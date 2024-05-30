@@ -11,29 +11,14 @@ import Swiper from "react-native-swiper";
 import ProductView from "../../components/Customer/ProductView";
 import { ScrollView } from "react-native-gesture-handler";
 import { BackIcon } from "../../../assets/Customer/svgs";
-const dataSanPham = [
-    {
-      TenSP: "Product 1",
-      GiaSP: 100000,
-      MoTaSP: "This is a sample product description.",
-      HinhAnhSP: [
-        'https://via.placeholder.com/300.png/09f/fff', 
-        'https://via.placeholder.com/300.png/021/fff'
-      ],
-      MauSac: [
-        { MaMS: '1', TenMau: 'Red', MaMau: '#ff0000', checked: true },
-        { MaMS: '2', TenMau: 'Green', MaMau: '#00ff00', checked: false },
-        { MaMS: '3', TenMau: 'Blue', MaMau: '#0000ff', checked: true }
-      ],
-      Size: [
-        { title: 'S', checked: true },
-        { title: 'M', checked: true },
-        { title: 'L', checked: false }
-      ]
-    }
-  ];
+import { getProductById } from "../../api/ProductApi";
+import { addYears } from "date-fns";
+import LoadingScreen from "../LoadingScreen";
   
 function ProductDetail({ navigation, route }) {
+    const { id } = route.params;
+    const [dataSanPham, setDataSanPham] = useState([]);
+    const [isLoading, setLoading] = useState(true);
     const [love, setLove] = useState(false);
     const [badgeCart, setBadgeCart] = useState(0);
     const [chooseColor, setChooseColor] = useState('');
@@ -84,12 +69,33 @@ function ProductDetail({ navigation, route }) {
         setBadgeCart(badgeCart + 1);
     };
 
+    const getDataById = async (id) => {
+        console.log(id);
+        const res = await getProductById({productId: id});
+        if(res.status === 200){
+            setDataSanPham(res.data);
+            setLoading(false);
+            console.log(res.data);
+        }else{
+            console.log(res);
+        }
+    }
+
     const setBuyNow = () => {
         // Xử lý logic mua ngay
         navigation.navigate('Checkout')
     };
-    
-    //const { item } = route.params
+
+    useEffect(() => {
+        getDataById(id);
+    })
+
+    if(isLoading){
+        return (
+            <LoadingScreen/>
+        )
+    }
+    else
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={{
@@ -164,7 +170,7 @@ function ProductDetail({ navigation, route }) {
                     loop
                     autoplay
                 >
-                    {dataSanPham[0].HinhAnhSP.map((image, index) => (
+                    {dataSanPham.HinhAnhSP.map((image, index) => (
 
                         <View style={{
                             flexDirection: 'row',
@@ -173,7 +179,7 @@ function ProductDetail({ navigation, route }) {
                             key={index}
                         >
                             <Image
-                                source={PR_1}
+                                source={{ uri: image }}
                                 style={{
                                     width: 300,
                                     height: 300, borderRadius: 20
@@ -201,7 +207,7 @@ function ProductDetail({ navigation, route }) {
                         marginLeft: 40,
                         width: '50%'
 
-                    }}>{dataSanPham[0].TenSP}</Text>
+                    }}>{dataSanPham.TenSP}</Text>
 
                 <Text
                     style={{
@@ -212,7 +218,7 @@ function ProductDetail({ navigation, route }) {
                         width: '30%'
 
                     }}
-                >{dataSanPham[0].GiaSP * numProduct} đ</Text>
+                >{dataSanPham.GiaSP * numProduct} đ</Text>
 
             </View>
 
@@ -228,7 +234,7 @@ function ProductDetail({ navigation, route }) {
                     fill={tb}
                 />
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('Review', { dataSanPham: dataSanPham[0] })}
+                    onPress={() => navigation.navigate('Review', { dataSanPham: dataSanPham })}
                 >
                     <Text style={{
                         marginHorizontal: 40,
@@ -271,16 +277,16 @@ function ProductDetail({ navigation, route }) {
 
 
 
-                    {dataSanPham[0].MauSac.filter(color => color.checked == true).map(color => (
+                    {dataSanPham.MauSac.map(color => (
                         <View style={{
                             ...styles.colorCicle,
                             backgroundColor: color.MaMau,
                             justifyContent: 'center',
                             alignItems: 'center'
                         }}
-                            key={color.MaMS}
+                            key={color.code}
                         >
-                            {chooseColor === color.TenMau ?
+                            {chooseColor === color.name ?
                                 <View style={{
                                     ...styles.colorCicle,
                                     width: 10,
@@ -356,12 +362,12 @@ function ProductDetail({ navigation, route }) {
                     flexDirection: 'row',
 
                 }}>
-                    {dataSanPham[0].Size.filter(size => size.checked == true).map((size, index) => (
+                    {dataSanPham.Size.map((size, index) => (
                         <TouchableWithoutFeedback style={{
                             ...styles.sizeCircle,
                             width: 45,
                             marginHorizontal: 5,
-                            borderWidth: chooseSize === size.title ? 1 : 0
+                            borderWidth: chooseSize === size ? 1 : 0
                         }}
                             key={index}
                         >
@@ -408,7 +414,7 @@ function ProductDetail({ navigation, route }) {
                 <View>
                     <Text style={{
                         marginHorizontal: 35
-                    }}>{dataSanPham[0].MoTaSP}</Text>
+                    }}>{dataSanPham.MoTaSP}</Text>
                 </View>
                 :
                 null}
@@ -483,7 +489,7 @@ function ProductDetail({ navigation, route }) {
                         <View>
 
                             <FlatList
-                                data={dataSanPham[0].MauSac}
+                                data={dataSanPham.MauSac}
                                 keyExtractor={(item, index) => index}
                                 renderItem={({ item }) => {
                                     return item.checked == true ? (
@@ -495,16 +501,16 @@ function ProductDetail({ navigation, route }) {
                                         }}>
                                             <TouchableOpacity style={{
                                                 ...styles.colorCicle,
-                                                backgroundColor: item.MaMau,
+                                                backgroundColor: item.code,
                                                 borderWidth: 1,
 
                                                 justifyContent: 'center',
                                                 alignItems: 'center'
 
                                             }}
-                                                onPress={() => setChooseColor(item.TenMau)}
+                                                onPress={() => setChooseColor(item.name)}
                                             >
-                                                {chooseColor === item.TenMau ?
+                                                {chooseColor === item.name ?
                                                     <View style={{
                                                         ...styles.colorCicle,
                                                         width: 10,
@@ -516,7 +522,7 @@ function ProductDetail({ navigation, route }) {
                                                     </View> : null}
 
                                             </TouchableOpacity>
-                                            <Text style={{ ...styles.textSmall }}>{item.TenMau}</Text>
+                                            <Text style={{ ...styles.textSmall }}>{item.name}</Text>
 
                                         </View>
                                     ) :
@@ -544,7 +550,7 @@ function ProductDetail({ navigation, route }) {
 
                         <View>
                             <FlatList
-                                data={dataSanPham[0].Size}
+                                data={dataSanPham.Size}
                                 numColumns={3}
                                 keyExtractor={(item, index) => index}
                                 renderItem={({ item }) => {
@@ -554,10 +560,10 @@ function ProductDetail({ navigation, route }) {
                                             width: 45,
                                             marginVertical: 5,
 
-                                            borderWidth: chooseSize === item.title ? 1 : 0
+                                            borderWidth: chooseSize === item ? 1 : 0
 
                                         }}
-                                            onPress={() => setChooseSize(item.title)}
+                                            onPress={() => setChooseSize(item)}
                                         >
                                             <Text>{item.title}</Text>
                                         </TouchableOpacity>

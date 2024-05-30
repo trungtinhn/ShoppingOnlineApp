@@ -6,7 +6,6 @@ import CustomerBottomTab from "../../navigator/Customer/CustomerBottomNavigation
 
 
 const Promotion = (props: any) => {
-
     return (
         <View style={{
             paddingHorizontal: 10,
