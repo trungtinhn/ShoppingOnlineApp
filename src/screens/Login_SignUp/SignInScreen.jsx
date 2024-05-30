@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, ImageBackground, TouchableOpacity, StyleSheet, Image } from 'react-native'
+import { View, Text, SafeAreaView, ImageBackground, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { IMG_Rectangle182, IMG_Separator } from '../../../assets/Login_SignUp/images'
 import TextInputCard from '../../components/Login_SignUp/TextInputCard'
@@ -57,7 +57,7 @@ export default function SignInScreen({navigation}) {
       console.log('User signed in successfully!', response.user.uid);
     } catch (error) {
       console.log('Error signing in:', error.message);
-      Alert.alert('Error', error.message);
+      Alert.alert('Error', 'Account does not exist!');
     }
   };
 

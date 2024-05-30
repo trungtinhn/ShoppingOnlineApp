@@ -8,7 +8,7 @@ import MenuIcon from '../../components/Admin/MenuIcon';
 import { IC_Catgory, IC_User, IC_financial, IC_logout, IC_messenger, IC_order, IC_product, IC_promotions, IC_user } from '../../../assets/Admin/icons';
 import ViewNowStatus from '../../components/Admin/ViewNowStatus';
 import { IC_Bell, IC_Order } from '../../../assets/Customer/icons';
-
+import {firebase} from '../../../firebase/firebase';
 export default function OverViewScreen({navigation}) {
 
     const [userData, setUserData] = useState('Tinh');   
@@ -43,7 +43,7 @@ export default function OverViewScreen({navigation}) {
               <View style={{ width: 32, height: 32, marginHorizontal: 5 }}>
                 <MenuIcon
                   onPress={() => {
-                    
+                    firebase.auth().signOut();
                   }}
                   source={IC_logout}
                 />

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import {firebase} from './firebase/firebase'
 import { NavigationContainer } from '@react-navigation/native'
@@ -9,6 +9,7 @@ import AdminNavigation from './src/navigator/Admin/navigation'
 import CustomButton from './src/components/Login_SignUp/CustomButton'
 import { getUserType } from './src/api/UserApi'
 import StaffNavigation from './src/navigator/Staff/navigation'
+import CUSTOM_COLOR from './src/constants/color'
 
 function App() {
   const [userType, setUserType] = useState('');
@@ -39,6 +40,7 @@ function App() {
         getPropertyValue(user.uid);
       } else {
         console.log('User is not signed in');
+        setUserType('');
         setUser(null);
       }
     });
@@ -60,7 +62,11 @@ function App() {
   }
 
   // Default case to avoid returning null
-  return null;
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ActivityIndicator size="large" color={CUSTOM_COLOR.Gray} />
+    </View>
+  );
 }
 
 export default () => {
