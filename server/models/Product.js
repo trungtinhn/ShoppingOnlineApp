@@ -99,6 +99,10 @@ const ProductSchema = new mongoose.Schema({
     TiLeKM: {
         type: Number,
         default: 0
+    },
+    MoTaSP: {
+        type: String,
+        default: "Không có mô tả cho sản phẩm này"
     }
 }, { timestamps: true });
 

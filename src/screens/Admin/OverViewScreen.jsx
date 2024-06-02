@@ -197,7 +197,7 @@ export default function OverViewScreen({navigation}) {
                   <FunctionCard
                     onPress={() => navigation.navigate('ManageUser')}
                     source={IC_order}
-                    text="Manage User"
+                    text="Order"
                   />
                 </View>
                 <View style={styles.unitContainer}>

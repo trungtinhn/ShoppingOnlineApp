@@ -21,7 +21,8 @@ import moment from 'moment';
 import { isBefore } from 'date-fns';
 
 import dayjs from 'dayjs';
-import { IC_Back, border_add } from '../../../assets/Admin/icons';
+import { border_add } from '../../../assets/Admin/images';
+import { IC_Back } from '../../../assets/Admin/icons';
 import CUSTOM_COLOR from '../../constants/color';
 import PromotionButton from '../../components/Admin/PromotionButton';
 import FONT_FAMILY from '../../constants/font';
@@ -163,21 +164,21 @@ function EditPromotion({ navigation, route }) {
       setTpyeOfPromotion(item.Loai);
     }
     setMinimumOrder(item.DonToiThieu.toString());
-    setStartDate(item.NgayBatDau.toDate());
-    setEndDate(item.NgayKetThuc.toDate());
-    setImage(item.HinhAnhKM);
+    setStartDate(item.NgayBatDau);
+    setEndDate(item.NgayKetThuc);
+    setImage(item.HinhAnhKhuyenMai);
 
     setLengthName(item.TenKM.length);
     setLengthDescription(item.ChiTietKM.length);
 
-    const timestampBD = item.NgayBatDau.toDate();
+    const timestampBD = item.NgayBatDau;
     const dateBD = dayjs(timestampBD);
 
     const dayBD = dateBD.date();
     const monthBD = dateBD.month();
     const yearBD = dateBD.year();
 
-    const timestampKT = item.NgayKetThuc.toDate();
+    const timestampKT = item.NgayKetThuc;
     const dateKT = dayjs(timestampKT);
 
     const dayKT = dateKT.date();

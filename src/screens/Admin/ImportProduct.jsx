@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -6,16 +6,17 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Image, Alert
+  Image,
+  Alert,
 } from 'react-native';
 import CustomHeader from '../../components/Admin/CustomHeader';
 import PromotionButton from '../../components/Admin/PromotionButton';
 import CUSTOM_COLOR from '../../constants/color';
 import FONT_FAMILY from '../../constants/font';
+import {FlatList} from 'react-native-gesture-handler';
 
-
-function ImportProduct({ navigation, route }) {
-  const { item } = route.params
+function ImportProduct({navigation, route}) {
+  const {item} = route.params;
   const [name, setName] = useState('');
   const [quanity, setQuanity] = useState(0);
   const [description, setDescription] = useState('');
@@ -27,31 +28,42 @@ function ImportProduct({ navigation, route }) {
     return /^-?\d+$/.test(input);
   };
 
+  const renderItem = ({item}) => (
+    <View style={styles.itemContainer}>
+      <Text>Size: {item.size}</Text>
+      <Text>Color: {item.color}</Text>
+      <TextInput
+        style={styles.input}
+        keyboardType="numeric"
+        value={item.quantity.toString()}
+        onChangeText={text => updateQuantity(item._id, parseInt(text))}
+      />
+    </View>
+  );
 
   const KiemTraNhapLieu = () => {
-    if (isNumeric(quanity)) return true
-    return false
-  }
+    if (isNumeric(quanity)) return true;
+    return false;
+  };
 
   const CapNhatSoLuong = () => {
-
     if (!KiemTraNhapLieu()) {
       Alert.alert(
         'Notification',
         'Please fill in the information accurately!',
-        [{ text: 'OK', style: 'cancel' }],
+        [{text: 'OK', style: 'cancel'}],
       );
       return;
     }
 
     Alert.alert('Notification', 'Successfully added product quanity!', [
-      { text: 'OK', onPress: () => navigation.goBack(), style: 'cancel' },
+      {text: 'OK', onPress: () => navigation.goBack(), style: 'cancel'},
     ]);
-  }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ width: '100%', height: 10 }} />
+      <View style={{width: '100%', height: 10}} />
 
       <>
         <View style={styles.headerContainer}>
@@ -62,43 +74,42 @@ function ImportProduct({ navigation, route }) {
         </View>
       </>
 
-      <View style={{ width: '100%', height: 50 }} />
+      <View style={{width: '100%', height: 50}} />
 
       <>
         <View style={styles.bodyContainer}>
           <>
-            <View style={[styles.comboxContainer, { height: 150 }]}>
-
+            <View style={[styles.comboxContainer, {height: 150}]}>
               <Image
                 style={{
                   height: 140,
-                  width: 140
+                  width: 140,
                 }}
-                source={{ uri: item.HinhAnhSP[0] }}
+                source={{uri: item.HinhAnhSP[0]}}
               />
 
-              <Text style={{
-                marginHorizontal: 20,
-                fontSize: 20,
-                fontWeight: 'bold'
-              }}>{item.TenSP}</Text>
-
+              <Text
+                style={{
+                  marginHorizontal: 20,
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                }}>
+                {item.TenSP}
+              </Text>
             </View>
           </>
 
-          <View style={{ width: '100%', height: 20 }} />
+          <View style={{width: '100%', height: 20}} />
 
-
-
-          <View style={{ width: '100%', height: 20 }} />
+          <View style={{width: '100%', height: 20}} />
 
           <>
-            <View style={[styles.comboxContainer1, { height: 110 }]}>
-              <View style={{ width: '100%', height: 10 }} />
-              <View style={[styles.unitComboContainer, { height: '20%' }]}>
+            <View style={[styles.comboxContainer1, {height: 110}]}>
+              <View style={{width: '100%', height: 10}} />
+              <View style={[styles.unitComboContainer, {height: '20%'}]}>
                 <Text style={styles.titleInputStyle}>Quantiy</Text>
                 <Text
-                  style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}>
+                  style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
                   {' '}
                   *
                 </Text>
@@ -115,13 +126,13 @@ function ImportProduct({ navigation, route }) {
                   style={styles.comboType}
                   onChangeText={text => setQuanity(text)}
                   value={quanity.toString()}
-                  keyboardType='numeric'
+                  keyboardType="numeric"
                 />
               </View>
             </View>
           </>
 
-          <View style={{ width: '100%', height: 50 }} />
+          <View style={{width: '100%', height: 50}} />
 
           <>
             <View style={styles.buttonContainer}>
@@ -129,7 +140,7 @@ function ImportProduct({ navigation, route }) {
                 type="secondary"
                 text="Save"
                 onPress={() => {
-                  CapNhatSoLuong()
+                  CapNhatSoLuong();
                 }}
               />
             </View>
@@ -138,7 +149,7 @@ function ImportProduct({ navigation, route }) {
       </>
     </SafeAreaView>
   );
-};
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -165,7 +176,7 @@ const styles = StyleSheet.create({
     shadowColor: CUSTOM_COLOR.Black,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   comboxContainer1: {
     width: '100%',
@@ -173,7 +184,6 @@ const styles = StyleSheet.create({
     borderRadius: 0.5,
     shadowColor: CUSTOM_COLOR.Black,
     flexDirection: 'column',
-
   },
   unitComboContainer: {
     width: '90%',
@@ -205,6 +215,17 @@ const styles = StyleSheet.create({
     marginHorizontal: '5%',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  itemContainer: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 5,
+    marginTop: 5,
   },
 });
 export default ImportProduct;

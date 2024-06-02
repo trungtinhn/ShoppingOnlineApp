@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-const useSchema = new mongoose.Schema({
+const categorySchema = new mongoose.Schema({
     description: {
         type: String,
         required: true
@@ -14,8 +14,9 @@ const useSchema = new mongoose.Schema({
         required: true
     },
     numProduct: {
-        type: Number
+        type: Number,
+        default: 0,
     }
 }, {timestamps: true})
 
-module.exports = mongoose.model("Category", useSchema)
+module.exports = mongoose.model("Category", categorySchema)
