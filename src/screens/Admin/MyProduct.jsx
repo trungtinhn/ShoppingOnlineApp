@@ -6,7 +6,7 @@ import Status from "../../components/Admin/Status";
 import CUSTOM_COLOR from "../../constants/color";
 import SearchButton from "../../components/Admin/SearchButton";
 import MyProductOne from "../../components/Admin/MyProductOne";
-import { getProductAvailable, getProductOnwait, getProductOutofstock } from "../../api/ProductApi";
+import { getProductAvailable, getProductOnwait, getProductOutofstock, setProductStatus } from "../../api/ProductApi";
 export default function MyProduct({navigation}) {
   const [inventory, setinventory] = useState(true);
   const [Out, setOut] = useState(false);
@@ -16,7 +16,6 @@ export default function MyProduct({navigation}) {
   const [dataOutOfStock, setDataOutOfStock] = useState([]);
   const [dataInventory, setDataInventory] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
-
   const handleSearch = (searchTerm, data) => {
     
   };
@@ -24,11 +23,21 @@ export default function MyProduct({navigation}) {
     
   };
 
-  const HideSanPham = item => {
-    
+  const HideSanPham = async item => {
+    const res = await setProductStatus({productId: item._id, status: "onwait"});
+    if(res.status === 200){
+     getDadaOnWait();
+    }else{
+      console.log(res);
+    }
   };
-  const ShowSanPham = item => {
-    
+  const ShowSanPham = async item => {
+    const res = await setProductStatus({productId: item._id, status: "available"});
+    if(res.status === 200){
+      getDadaInventory();
+    }else{
+      console.log(res);
+    }
   };
 
   const getDadaOnWait = async () => {

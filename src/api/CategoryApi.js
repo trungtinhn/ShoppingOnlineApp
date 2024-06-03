@@ -95,4 +95,27 @@ const getCategory = async () => {
   }
 };
 
-export { addCategory, updateCategory, deleteCategory, getCategory };
+const updateProductAmount = async ({categoryId, numProduct}) => {
+  try {
+    const idToken = await getIdToken();
+    const url = `/category/updateProductAmount/${categoryId}`;
+    const config = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${idToken}`
+      },
+      data: {productAmount: numProduct}
+    };
+
+    const res = await api(url, config);
+    return res;
+  } catch (error) {
+    if (error.response) {
+      return error.response.data;
+    } else {
+      throw error;
+    }
+  }
+};
+export { addCategory, updateCategory, deleteCategory, getCategory, updateProductAmount };

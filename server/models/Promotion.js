@@ -5,6 +5,10 @@ const promotionSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    TiLe:{
+        type: Number,
+        default: 0,
+    },
     DonToiThieu: {
         type: Number,
         required: false

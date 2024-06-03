@@ -130,7 +130,7 @@ function Promotion({navigation}){
                 <PromotionCard
                   source={item.HinhAnhKhuyenMai}
                   name={item.TenKM}
-                  discount={item.SoLuong * 100}
+                  discount={item.TiLe * 100}
                   minimum={item.DonToiThieu}
                   start={`${dayBD}/${monthBD}/${yearBD}`}
                   end={`${dayKT}/${monthKT}/${yearKT}`}

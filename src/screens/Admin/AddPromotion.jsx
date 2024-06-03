@@ -133,8 +133,9 @@ function AddPromotion({navigation}) {
       NgayKetThuc: Date(endDate),
       TenKM: name,
       HinhAnhKhuyenMai: imageUri,
-      Soluotdung: discount/100,
-      SoLuong: 0,
+      TiLe: discount/100,
+      Soluotdung: 1,
+      SoLuong: 1,
     }
     const res = await addPromotion({data: newPromotion});
     if(res === 200){

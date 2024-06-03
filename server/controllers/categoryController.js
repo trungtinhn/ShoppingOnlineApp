@@ -50,7 +50,27 @@ const categoryController = {
     } catch (error) {
       res.status(500).json({ message: 'Failed to get categories!', error: error.message });
     }
-  }
+  },
+  updateProductAmountInCategory: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { productAmount } = req.body;
+
+      const updatedCategory = await Category.findByIdAndUpdate(
+        id,
+        { $set: { numProduct: productAmount } },
+        { new: true }
+      );
+
+      if (!updatedCategory) {
+        return res.status(404).json({ message: 'Category not found!' });
+      }
+
+      res.status(200).json(updatedCategory);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to update product amount!', error: error.message });
+    }
+  },
 };
 
 module.exports = categoryController;

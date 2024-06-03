@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -6,47 +6,37 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Image,
   Alert,
+  FlatList,
 } from 'react-native';
 import CustomHeader from '../../components/Admin/CustomHeader';
 import PromotionButton from '../../components/Admin/PromotionButton';
 import CUSTOM_COLOR from '../../constants/color';
 import FONT_FAMILY from '../../constants/font';
-import {FlatList} from 'react-native-gesture-handler';
+import {Image} from 'react-native-elements';
+import {updateProduct} from '../../api/ProductApi';
 
 function ImportProduct({navigation, route}) {
   const {item} = route.params;
-  const [name, setName] = useState('');
-  const [quanity, setQuanity] = useState(0);
-  const [description, setDescription] = useState('');
-  const [isFocus, setIsFocus] = useState(false);
-  const [danhMuc, setDanhMuc] = useState([]);
-  const [value, setValue] = useState(null);
+  const [quantity, setQuantity] = useState(0);
+  const [types, setTypes] = useState(item.Type);
 
   const isNumeric = input => {
     return /^-?\d+$/.test(input);
   };
 
-  const renderItem = ({item}) => (
-    <View style={styles.itemContainer}>
-      <Text>Size: {item.size}</Text>
-      <Text>Color: {item.color}</Text>
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        value={item.quantity.toString()}
-        onChangeText={text => updateQuantity(item._id, parseInt(text))}
-      />
-    </View>
-  );
-
   const KiemTraNhapLieu = () => {
-    if (isNumeric(quanity)) return true;
+    if (isNumeric(quantity)) return true;
     return false;
   };
-
-  const CapNhatSoLuong = () => {
+  const getNewAmount = () => {
+    let totalQuantity = 0;
+    types.forEach(item => {
+      totalQuantity += item.quantity;
+    });
+    setQuantity(totalQuantity);
+  };
+  const CapNhatSoLuong = async () => {
     if (!KiemTraNhapLieu()) {
       Alert.alert(
         'Notification',
@@ -55,119 +45,151 @@ function ImportProduct({navigation, route}) {
       );
       return;
     }
-
-    Alert.alert('Notification', 'Successfully added product quanity!', [
-      {text: 'OK', onPress: () => navigation.goBack(), style: 'cancel'},
-    ]);
+    getNewAmount();
+    const productData = {
+      GiaGoc: item.GiaGoc,
+      GiaGiam: item.GiaGiam,
+      HinhAnhSP: item.HinhAnhSP,
+      MaDM: item.MaDM,
+      MauSac: item.MauSac,
+      Size: item.Size,
+      Type: types,
+      SoLuongSP: quantity,
+      TenSP: item.TenSP,
+      MoTaSP: item.MoTaSP,
+      TrangThai: item.TrangThai,
+      Trending: item.Trending,
+      Onsale: item.Onsale,
+      TiLeKM: item.TiLeKM,
+    };
+    const res = await updateProduct({productId: item._id, data: productData});
+    if (res.status === 200) {
+      Alert.alert('Notification', 'Successfully added product quanity!', [
+        {text: 'OK', onPress: () => navigation.goBack(), style: 'cancel'},
+      ]);
+    } else {
+      console.log(res.error);
+    }
   };
-
+  const updateQuantity = (itemToUpdate, newQuantity) => {
+    if (newQuantity) {
+      setTypes(prevTypes =>
+        prevTypes.map(item =>
+          item._id === itemToUpdate._id
+            ? {...item, quantity: newQuantity}
+            : item,
+        ),
+      );
+    } else {
+      setTypes(prevTypes =>
+        prevTypes.map(item =>
+          item._id === itemToUpdate._id ? {...item, quantity: 0} : item,
+        ),
+      );
+    }
+  };
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={{width: '100%', height: 10}} />
-
-      <>
-        <View style={styles.headerContainer}>
-          <CustomHeader
-            onPress={() => navigation.goBack()}
-            title="Add product quantity"
-          />
+    <View style={styles.container}>
+      <View style={{width: '100%', height: 60}}>
+        <CustomHeader
+          onPress={() => navigation.goBack()}
+          title="Product/ Add product"
+        />
+      </View>
+      <View style={[styles.comboxContainer, {height: 150}]}>
+        <Image
+          style={{
+            height: 140,
+            width: 140,
+          }}
+          source={{uri: item.HinhAnhSP[0]}}
+        />
+        <View>
+          <Text
+            style={{
+              fontSize: 20,
+              padding: 8,
+              fontWeight: 'bold',
+            }}
+            adjustsFontSizeToFit
+            numberOfLines={4}>
+            {item.TenSP}
+          </Text>
         </View>
-      </>
-
-      <View style={{width: '100%', height: 50}} />
-
-      <>
-        <View style={styles.bodyContainer}>
-          <>
-            <View style={[styles.comboxContainer, {height: 150}]}>
-              <Image
-                style={{
-                  height: 140,
-                  width: 140,
-                }}
-                source={{uri: item.HinhAnhSP[0]}}
-              />
-
-              <Text
-                style={{
-                  marginHorizontal: 20,
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                }}>
-                {item.TenSP}
-              </Text>
-            </View>
-          </>
-
-          <View style={{width: '100%', height: 20}} />
-
-          <View style={{width: '100%', height: 20}} />
-
-          <>
-            <View style={[styles.comboxContainer1, {height: 110}]}>
-              <View style={{width: '100%', height: 10}} />
-              <View style={[styles.unitComboContainer, {height: '20%'}]}>
-                <Text style={styles.titleInputStyle}>Quantiy</Text>
-                <Text
-                  style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
-                  {' '}
-                  *
-                </Text>
-              </View>
-              <View
-                style={[
-                  styles.unitComboContainer,
-                  {
-                    justifyContent: 'center',
-                    height: '70%',
-                  },
-                ]}>
-                <TextInput
-                  style={styles.comboType}
-                  onChangeText={text => setQuanity(text)}
-                  value={quanity.toString()}
-                  keyboardType="numeric"
+      </View>
+      <FlatList
+        data={types}
+        keyExtractor={item => item._id}
+        renderItem={({item}) => (
+          <View style={styles.itemContainer}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 10,
+              }}>
+              <View style={{flexDirection: 'row', j: 'center'}}>
+                <Text style={styles.text}> Màu sắc: </Text>
+                <View
+                  style={[styles.colorBox, {backgroundColor: item.color}]}
                 />
               </View>
+              <Text style={styles.text}>Kích thước: {item.size}</Text>
             </View>
-          </>
-
-          <View style={{width: '100%', height: 50}} />
-
-          <>
-            <View style={styles.buttonContainer}>
-              <PromotionButton
-                type="secondary"
-                text="Save"
-                onPress={() => {
-                  CapNhatSoLuong();
-                }}
-              />
-            </View>
-          </>
-        </View>
-      </>
-    </SafeAreaView>
+            <TextInput
+              style={styles.input}
+              value={String(item.quantity)}
+              onChangeText={text => updateQuantity(item, parseInt(text, 10))}
+              keyboardType="numeric"
+            />
+          </View>
+        )}
+      />
+      <View style={styles.buttonContainer}>
+        <PromotionButton
+          type="secondary"
+          text="Save"
+          onPress={() => {
+            CapNhatSoLuong();
+          }}
+        />
+      </View>
+    </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: CUSTOM_COLOR.White,
+    padding: 20,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
   },
-  headerContainer: {
-    width: '90%',
-    height: 70,
-    marginHorizontal: '5%',
+  itemContainer: {
+    padding: 10,
+    marginVertical: 5,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 5,
+    borderColor: '#ddd',
+    borderWidth: 1,
   },
-  bodyContainer: {
-    width: '90%',
-    height: '85%',
-    marginHorizontal: '5%',
+  colorBox: {
+    width: 30,
+    height: 30,
+    marginBottom: 10,
+    borderRadius: 5,
   },
-  titleInputStyle: {
-    fontFamily: FONT_FAMILY.Medium,
-    fontSize: 17,
+  text: {
+    fontSize: 16,
+    marginVertical: 5,
+  },
+  input: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    marginTop: 10,
+    paddingHorizontal: 10,
   },
   comboxContainer: {
     width: '100%',
@@ -175,39 +197,8 @@ const styles = StyleSheet.create({
     borderRadius: 0.5,
     shadowColor: CUSTOM_COLOR.Black,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  comboxContainer1: {
-    width: '100%',
-    elevation: 1.5,
-    borderRadius: 0.5,
-    shadowColor: CUSTOM_COLOR.Black,
-    flexDirection: 'column',
-  },
-  unitComboContainer: {
-    width: '90%',
-    marginHorizontal: '5%',
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  comboType: {
-    width: '100%',
-    height: '70%',
-    borderColor: CUSTOM_COLOR.MineShaft,
-    borderWidth: 0.5,
-    borderRadius: 1,
-    paddingHorizontal: '5%',
-  },
-  placeholderStyle: {
-    fontSize: 16,
-  },
-  selectedTextStyle: {
-    fontSize: 16,
-  },
-  iconStyle: {
-    width: 20,
-    height: 20,
   },
   buttonContainer: {
     width: '90%',
@@ -216,16 +207,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  itemContainer: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderColor: '#ccc',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 5,
-    marginTop: 5,
-  },
 });
+
 export default ImportProduct;

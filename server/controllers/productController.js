@@ -110,7 +110,15 @@ const productController = {
         } catch (error) {
             res.status500.json({ message: 'Failed to get products!', error });
         }
-    }
+    },
+    setProductStatus: async (req, res) => {
+        try {
+            const updatedProduct = await Product.findByIdAndUpdate(req.params.id, { TrangThai: req.body.TrangThai }, { new: true });
+            res.status(200).json(updatedProduct);
+        } catch (error) {
+            res.status(500).json({ message: 'Failed to set product status!', error });
+        }
+    },
 };
 
 module.exports = productController;
