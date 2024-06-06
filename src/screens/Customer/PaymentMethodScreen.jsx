@@ -4,6 +4,7 @@ import { IC_Back, IC_Banking, IC_HandMoney, IC_Location, IC_Momo, IC_MyLocation 
 import Button from "../../components/Customer/Button";
 import InputData from "../../components/Customer/InputData";
 import CUSTOM_COLOR from "../../constants/color";
+import { BackIcon } from "../../../assets/Customer/svgs";
 
 function PaymentMethodScreen({ navigation, route }) {
 
@@ -22,19 +23,12 @@ function PaymentMethodScreen({ navigation, route }) {
                 backgroundColor: CUSTOM_COLOR.White,
                 height: 40
             }}>
-                <TouchableOpacity onPress={() => {
-                    navigation.goBack();
+                <TouchableOpacity
+                    style={{ padding: 20 }} 
+                    onPress={() => {
+                        navigation.goBack();
                 }}>
-                    <Image
-                        source={IC_Back}
-                        style={{
-                            width: '20%',
-                            height: '40%',
-                            marginHorizontal: 20,
-                            marginVertical: 15
-                        }}
-                        resizeMode='stretch'
-                    />
+                    <BackIcon/>
                 </TouchableOpacity>
 
 

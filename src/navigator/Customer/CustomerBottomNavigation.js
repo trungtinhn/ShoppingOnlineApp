@@ -4,7 +4,7 @@ import { getFocusedRouteNameFromRoute, NavigationContainer } from '@react-naviga
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 import CUSTOM_COLOR from "../../constants/color";
-import CustomerNavigation from "./HomeNavigation";
+import CustomerNavigation from "./HomeStack";
 import NotificationScreen from "../../screens/Customer/NotificationScreen";
 import AccountScreen from "../../screens/Customer/AccountScreen";
 import FollowScreen from "../../screens/Customer/FollowScreen";
@@ -12,6 +12,11 @@ import HeartIcon from '../../../assets/Customer/svgs/Heart.svg'
 import HomeIcon from '../../../assets/Customer/svgs/house.svg'
 import BellIcon from '../../../assets/Customer/svgs/bell-ringing.svg'
 import AccountIcon from '../../../assets/Customer/svgs/user.svg'
+import HomeNavigation from "./HomeStack";
+import NotificationNavigation from "./NotificationStack";
+import LoveNavigation from "./LoveStack";
+import AccountNavigation from "./AccountStack";
+import { BellFillIcon, HeartFillIcon, HomeFillIcon, UserFillIcon } from "../../../assets/Customer/svgs";
 const TabBottom = createBottomTabNavigator()
 
 
@@ -40,65 +45,66 @@ function CustomerBottomTab() {
 
 
             >
-                <TabBottom.Screen name='CustomerNavigation' component={CustomerNavigation} options={({ route }) => ({
+                <TabBottom.Screen name='HomeNavigation' component={HomeNavigation} options={({ route }) => ({
 
                     tabBarLabel: 'Home',
                     tabBarStyle: { display: getTabBarVisibility(route) },
                     tabBarIcon: ({ focused }) => {
                         return (
                             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                <HomeIcon fill={focused ? CUSTOM_COLOR.FlushOrange : CUSTOM_COLOR.Black}/>
-
+                                {focused ? <HomeFillIcon fill={CUSTOM_COLOR.FlushOrange} /> : <HomeIcon fill={CUSTOM_COLOR.Black}/>}
                             </View>
                         )
-
 
                     }
 
                 })} />
 
-                <TabBottom.Screen name='Notification' component={NotificationScreen} options={{
+                <TabBottom.Screen name='NotificationNavigation' component={NotificationNavigation} options={({ route }) => ({
+                    
                     tabBarLabel: 'Notification',
+                    tabBarStyle: { display: getTabBarVisibility(route) },
                     tabBarIcon: ({ focused }) => {
                         return (
                             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                <BellIcon fill={focused ? CUSTOM_COLOR.FlushOrange : CUSTOM_COLOR.Black}></BellIcon>
-
+                                {focused ? <BellFillIcon fill={CUSTOM_COLOR.FlushOrange} /> : <BellIcon fill={CUSTOM_COLOR.Black}/>}
                             </View>
                         )
 
 
                     }
-                }}
+                })}
 
                 />
 
-                <TabBottom.Screen name = 'FollowScreen' component={FollowScreen} 
-                            options = {{
+                <TabBottom.Screen name = 'FollowNavigation' component={LoveNavigation} 
+                            options = {({ route }) => ({
                                 tabBarLabel: 'Follow',
+                                tabBarStyle: { display: getTabBarVisibility(route) },
                                 tabBarIcon: ({focused}) =>{
                                     return( 
                                         <View style ={{alignItems: 'center', justifyContent: 'center'}}>
-                                            <HeartIcon fill={focused ? CUSTOM_COLOR.FlushOrange : CUSTOM_COLOR.Black}/>
+                                            {focused ? <HeartFillIcon fill={CUSTOM_COLOR.FlushOrange} /> : <HeartIcon fill={CUSTOM_COLOR.Black}/>}
                                         </View>
                                 )
                                 
                                     
                                 }
-                            }}
+                            })}
                     />
 
-                <TabBottom.Screen name = 'AccountScreen' component={AccountScreen} 
-                options = {{
-                    tabBarLabel: 'Account',
-                    tabBarIcon: ({focused}) =>{
-                        return( 
-                            <View style ={{alignItems: 'center', justifyContent: 'center'}}>
-                                <AccountIcon fill={focused ? CUSTOM_COLOR.FlushOrange : CUSTOM_COLOR.Black}/>
-                            </View>
-                    )           
-                    }
-                }}
+                <TabBottom.Screen name = 'AccountNavigation' component={AccountNavigation} 
+                    options = {({ route }) => ({
+                        tabBarLabel: 'Account',
+                        tabBarStyle: { display: getTabBarVisibility(route) },
+                        tabBarIcon: ({focused}) =>{
+                            return( 
+                                <View style ={{alignItems: 'center', justifyContent: 'center'}}>
+                                    {focused ? <UserFillIcon fill={CUSTOM_COLOR.FlushOrange} /> : <AccountIcon fill={CUSTOM_COLOR.Black}/>}
+                                </View>
+                        )           
+                        }
+                })}
             />
 
             </TabBottom.Navigator>
@@ -111,7 +117,7 @@ function CustomerBottomTab() {
 const getTabBarVisibility = (route) => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Feed'
 
-    if (routeName == 'CustomerHomeScreen' || routeName == 'Feed') {
+    if (routeName == 'CustomerHomeScreen' || routeName == 'NotificationScreen' || routeName == 'FollowScreen' || routeName == 'AccountScreen' || routeName == 'Feed') {
         return 'flex'
     }
     return 'none'

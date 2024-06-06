@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const reviewSchema = new mongoose.Schema({
     AnhDG: {
-        type: String,
+        type: [String],
     },
     MaND: {
         type: String,
@@ -17,10 +17,10 @@ const reviewSchema = new mongoose.Schema({
         required: true
     },
     NgayDG: {
-        type: String,
+        type: Date,
         required: true
     },
-    Ratting: {
+    Rating: {
         type: Number,
         required: true
     }

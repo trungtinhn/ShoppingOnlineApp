@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet,FlatList, TouchableOpacity, Image } from "react-native";
+import React, { useEffect, useState, useCallback } from "react";
+import { View, Text, StyleSheet,FlatList, TouchableOpacity, Image, ScrollView, RefreshControl, Alert } from "react-native";
 import ProductCheckOut from "../../components/Customer/ProductCheckout";
 import { IC_Back } from "../../../assets/Customer/icons";
 import { PR_1, PR_2, PR_3, PR_4, PR_5 } from "../../../assets/Customer/images";
@@ -7,47 +7,34 @@ import CUSTOM_COLOR from "../../constants/color";
 import Button from '../../components/Admin/Button'
 import CustomButton from "../../components/Login_SignUp/CustomButton";
 import { BackIcon } from "../../../assets/Customer/svgs";
-const ShoppingCard = ({navigation, route}) => {
-    const { idUser } = route.params
+import { getCartByUser, removeProductFromCart, updateProductInCart } from "../../api/CartApi";
+import {firebase} from "../../../firebase/firebase"
+import LoadingScreen from "../LoadingScreen";
+import { id } from "date-fns/locale";
+const ShoppingCard = ({navigation}) => {
+    const idUser = firebase.auth().currentUser.uid;
     const [items, setItems] = useState([]);
-
+    const [isLoading, setLoading] = useState(true)
     const [checkChooseAll, setCheckChooseAll] = useState(false)
     const [totalMoney, setTotalMoney] = useState(0)
     const [itemsCheckout, setItemsCheckout] = useState([])
+    const [refreshing, setRefreshing] = useState(false);
     
-    function getData(){
-        const data = [
-            {
-              MaSP: 1,
-              TenSP: 'San Pham 1',
-              HinhAnhSP: PR_1,
-              GiaSP: 10000
-            },
-            {
-              MaSP: 2,
-              TenSP: 'San Pham 2',
-              HinhAnhSP: PR_2,
-              GiaSP: 10000
-            },
-            {
-              MaSP: 3,
-              TenSP: 'San Pham 3',
-              HinhAnhSP: PR_3,
-              GiaSP: 10000
-            },
-            {
-              MaSP: 4,
-              TenSP: 'San Pham 4',
-              HinhAnhSP: PR_4,
-              GiaSP: 10000
-            },
-          ];
-          setItems(data)
+    const getData = async () =>{
+        const res = await getCartByUser(idUser)
+        if(res.status === 200){
+            const productsWithCheck = res.data.products.map((product) => {
+                return { ...product, checkSelect: false }
+            })
+            setItems(productsWithCheck)
+            setLoading(false)
+        }else{
+            console.log(res)
+        }
     }
     const updateCheck = (item) => {
-
         const updateItem = items.map((product) => {
-            if (product.MaGH === item.MaGH) {
+            if (product._id === item._id) {
                 product.checkSelect = !item.checkSelect;
             }
             if (product.checkSelect == false) setCheckChooseAll(false)
@@ -56,13 +43,8 @@ const ShoppingCard = ({navigation, route}) => {
 
         const chooseSelectFull = items.filter((product) => (product.checkSelect == true))
         if (chooseSelectFull.length == items.length) setCheckChooseAll(true)
-
-        const sum = items.reduce((total, product) => {
-            if (product.checkSelect) return total + product.GiaTien
-            else return total
-        }, 0)
-
-        setTotalMoney(sum)
+        
+        resetTotalMoney()
 
         setItems(updateItem)
 
@@ -74,23 +56,16 @@ const ShoppingCard = ({navigation, route}) => {
         const updateItem = items.map((product) => {
             if (checkChooseAll) {
                 product.checkSelect = false
-                setTotalMoney(0)
             }
             else {
                 product.checkSelect = true
-                const sum = items.reduce((total, product) => {
-                    return total + product.GiaTien
-                }, 0)
-
-                setTotalMoney(sum)
             }
-
-
             return product
         })
 
-        setCheckChooseAll(!checkChooseAll)
+        resetTotalMoney()
 
+        setCheckChooseAll(!checkChooseAll)
 
         setItems(updateItem)
 
@@ -99,52 +74,75 @@ const ShoppingCard = ({navigation, route}) => {
 
     const resetTotalMoney = () => {
         const sum = items.reduce((total, product) => {
-            if (product.checkSelect) return total + product.GiaTien
+            if (product.checkSelect) return total + product.totalPrice
             else return total
         }, 0)
-
         setTotalMoney(sum)
     }
 
-
     const GoToProduct = (sanPham) => {
-        // const unsub = onSnapshot(doc(Firestore, "SANPHAM", sanPham.MaSP), (doc) => {
-        //     const item = doc.data();
-        //     console.log("Current data: ", doc.data());
-        //     navigation.navigate('DetailProduct', { item })
-        // });
+        navigation.navigate('ProductDetail', {id: sanPham.productId._id})
     }
 
-    
-
+    const DeleteProduct = (item) => {
+        const updateItem = items.filter((product) => product._id !== item._id)
+        deleteItemDB(item)
+        setItems(updateItem)
+    }
 
     const UpNumber = (item) => {
-
         const updateItem = items.map((product) => {
-            if (item.MaGH === product.MaGH) {
-                product.SoLuong += 1
-                product.GiaTien = product.SoLuong * product.GiaSP
-                updateNumber(item)
+            if (item._id === product._id) {
+                product.quantity += 1
+                product.totalPrice = product.quantity * product.price
+                updateNumberDB(product)
             }
-
             return product
         })
-
         setItems(updateItem)
         resetTotalMoney()
+    }
+    const deleteItemDB = async (item) => {
+        const data = {
+            userId: idUser,
+            productId: item.productId._id,
+            size: item.size,
+            color: item.color
+        }
+        const res = await removeProductFromCart({data: data});
+        if(res === 200){
+            console.log('success')
+        }else{
+            console.log(res.status)
+        }
+    }
+
+    const updateNumberDB = async (item) => {
+        const data = {
+            userId: idUser,
+            productId: item.productId._id,
+            size: item.size,
+            color: item.color,
+            quantity: item.quantity,
+            price: item.price
+        }
+        const res = await updateProductInCart({data: data});
+        if(res === 200){
+            console.log('success')
+        }else{
+            console.log(res.status)
+        }
     }
 
     const DownNumber = (item) => {
         const updateItem = items.map((product) => {
-            if (item.MaGH === product.MaGH && item.SoLuong > 1) {
-                product.SoLuong -= 1
-                product.GiaTien = product.SoLuong * product.GiaSP
-                updateNumber(item)
+            if (item._id === product._id && item.quantity > 1) {
+                product.quantity -= 1
+                product.totalPrice = product.quantity * product.price
+                updateNumberDB(product)
             }
-
             return product
         })
-
         setItems(updateItem)
         resetTotalMoney()
     }
@@ -153,9 +151,25 @@ const ShoppingCard = ({navigation, route}) => {
         setItemsCheckout(data)
     }
 
+    
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        Promise.all([getData()])
+          .then(() => setRefreshing(false))
+          .catch(() => setRefreshing(false));
+    }, []);
+
     useEffect(() => {
         getData();
     }, [])
+
+    if(isLoading){
+        return(
+            <LoadingScreen/>
+        )
+    }
+    else
     return(
         <View style={styles.container}>
 
@@ -165,11 +179,11 @@ const ShoppingCard = ({navigation, route}) => {
                 alignItems: 'center'
             }}>
                 <TouchableOpacity 
-                    style={{padding: 12}}
+                    style={{padding: 12, widthq: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 10}}
                     onPress={() => {
                         navigation.goBack();
                     }}>
-                    <BackIcon width={20} height={20}></BackIcon>
+                    <BackIcon></BackIcon>
                 </TouchableOpacity>
 
                 <Text style={{
@@ -181,37 +195,31 @@ const ShoppingCard = ({navigation, route}) => {
 
             <View style={{width:'100%', height: 10}}/>
 
-            <FlatList
-                style={{
-                    height: 750,
-                    flexGrow: 0
-                }}
-                data={items}
-                renderItem={({ item }) => {
+            <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+                {items.map((item) => (
+                    <ProductCheckOut
+                        key={item._id}
+                        style={{
+                            marginVertical: 10
+                        }}
+                        source={item.image[0]}
+                        title={item.name}
+                        color={item.color}
+                        size={item.size}
+                        price={item.price}
+                        number={item.quantity}
+                        check={true}
+                        show={true}
+                        onPress={() => updateCheck(item)}
+                        checkSelect={item.checkSelect}
+                        onPressUp={() => UpNumber(item)}
+                        onPressDown={() => DownNumber(item)}
+                        onPressDelete={() => DeleteProduct(item)}
+                        onPressProduct={() => { GoToProduct(item) }}
+                    />
+                ))}
+            </ScrollView>
 
-                    return (
-
-                        <ProductCheckOut
-                            style={{
-                                marginVertical: 10
-                            }}
-                            source={item.HinhAnhSP}
-                            title={item.TenSP}
-                            color={item.MauSac}
-                            size={item.Size}
-                            price={item.GiaTien}
-                            number={item.SoLuong}
-                            show={true}
-                            onPress={() => updateCheck(item)}
-                            checkSelect={item.checkSelect}
-                            onPressUp={() => UpNumber(item)}
-                            onPressDown={() => DownNumber(item)}
-                            onPressDelete={() => DeleteProduct(item)}
-                            onPressProduct={() => { GoToProduct(item) }}
-                        />
-                    )
-                }}
-            />
             <View style={styles.bottomView}>
                 <View style={{
                     flexDirection: 'row',
@@ -250,7 +258,8 @@ const ShoppingCard = ({navigation, route}) => {
 
                         <Text style={{
                             fontSize: 17,
-                            fontWeight: 'bold'
+                            fontWeight: 'bold',
+                            color: CUSTOM_COLOR.Black
                         }}>Choose all</Text>
                     </View>
 
@@ -258,7 +267,8 @@ const ShoppingCard = ({navigation, route}) => {
                     <Text style={{
                         marginHorizontal: 20,
                         fontSize: 17,
-                        fontWeight: 'bold'
+                        fontWeight: 'bold',
+                        color: CUSTOM_COLOR.Black
                     }}>Total</Text>
                 </View>
 
@@ -269,8 +279,8 @@ const ShoppingCard = ({navigation, route}) => {
 
                 }}>
                     <Text style={{
-                        fontSize: 17, marginHorizontal: 15
-                    }}>1.000.000 đ</Text>
+                        fontSize: 17, marginHorizontal: 15, color: CUSTOM_COLOR.FlushOrange
+                    }}>{totalMoney}</Text>
                 </View>
 
                 <View style={styles.buttonContainer}>
@@ -278,28 +288,18 @@ const ShoppingCard = ({navigation, route}) => {
                     type="primary"
                     text="CHECK OUT"
                     onPress={() => {
-                        
+                        if(itemsCheckout.length > 0){
+                            navigation.navigate('Checkout', {itemsCheckout: itemsCheckout})
+                            //setItemsCheckout([])
+                            //ResetProduct()
+                        }
+                        else{
+                            Alert.alert('Warning', 'Please choose product')
+                        }
                     }}
                  />
                         
                 </View>
-                {/* <View style={{
-                    height: 60,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginVertical: '2%',
-                }}>
-                    <Button
-                    style={{width: 300, height: 50}}
-                        title='CHECK OUT'
-                        color={CUSTOM_COLOR.FlushOrange}
-                        onPress={() => {
-
-                            if (itemsCheckout.length > 0)
-                                navigation.navigate('Checkout', { itemsCheckout, totalMoney })
-                        }}
-                    />
-                </View> */}
             </View>
         </View>
     );
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-        height: 150,
+        height: 130,
         backgroundColor: CUSTOM_COLOR.White,
     },
     buttonContainer: {

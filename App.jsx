@@ -3,13 +3,14 @@ import React, { useState, useEffect } from 'react'
 import {firebase} from './firebase/firebase'
 import { NavigationContainer } from '@react-navigation/native'
 import MainNavigation from './src/navigator/Login_SignUp/navigation'
-import CustomerNavigation from './src/navigator/Customer/HomeNavigation'
+import CustomerNavigation from './src/navigator/Customer/HomeStack'
 import CustomerBottomTab from './src/navigator/Customer/CustomerBottomNavigation'
 import AdminNavigation from './src/navigator/Admin/navigation'
 import CustomButton from './src/components/Login_SignUp/CustomButton'
 import { getUserType } from './src/api/UserApi'
 import StaffNavigation from './src/navigator/Staff/navigation'
 import CUSTOM_COLOR from './src/constants/color'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 function App() {
   const [userType, setUserType] = useState('');
@@ -35,13 +36,13 @@ function App() {
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        console.log('User is signed in:', user.uid);
-        setUser(user);
-        getPropertyValue(user.uid);
+        console.log('User is signed in:', user.uid)
+        setUser(user)
+        getPropertyValue(user.uid)
       } else {
-        console.log('User is not signed in');
-        setUserType('');
-        setUser(null);
+        console.log('User is not signed in')
+        setUserType('')
+        setUser(null)
       }
     });
 
@@ -70,5 +71,5 @@ function App() {
 }
 
 export default () => {
-  return <App />;
+  return <GestureHandlerRootView style={{ flex: 1 }}><App /></GestureHandlerRootView>
 };

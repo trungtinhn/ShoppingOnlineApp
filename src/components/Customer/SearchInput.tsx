@@ -36,7 +36,6 @@ const SearchInput: React.FC<SearchInputProps> = ({onSearch}) => {
           resizeMode="center"
         />
         <View style={{width: 5, height: '100%'}} />
-        {/* <Text style={styles.buttonText}>Tìm kiếm</Text> */}
       </TouchableOpacity>
     </View>
     // </View>

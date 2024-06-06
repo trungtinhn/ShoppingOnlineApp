@@ -3,9 +3,10 @@ import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react
 import { IC_Back } from "../../../assets/Customer/icons";
 import Promotion from "../../components/Customer/Promotion";
 import CUSTOM_COLOR from "../../constants/color";
+import { BackIcon } from "../../../assets/Customer/svgs";
 
 
-
+const url = "https://www.leadup.vn/wp-content/uploads/2019/07/leadup-khuyenmai.jpg"
 function PromotionScreen({ navigation, route }) {
 
     const { itemsCheckout, totalMoney, delivery, choosePayment } = route.params
@@ -25,7 +26,7 @@ function PromotionScreen({ navigation, route }) {
             {
               id: 1,
               TenKM: "Giảm giá 20%",
-              HinhAnhKM: "https://example.com/khuyenmai1.jpg",
+              HinhAnhKM: url,
               DonToiThieu: 500000, // Số tiền tối thiểu để được giảm giá
               NgayBatDau: new Date("2024-05-01"), // Ngày bắt đầu khuyến mãi
               NgayKetThuc: new Date("2024-05-31"), // Ngày kết thúc khuyến mãi
@@ -34,7 +35,7 @@ function PromotionScreen({ navigation, route }) {
             {
               id: 2,
               TenKM: "Giảm 50k cho đơn hàng trên 300k",
-              HinhAnhKM: "https://example.com/khuyenmai2.jpg",
+              HinhAnhKM: url,
               DonToiThieu: 300000,
               NgayBatDau: new Date("2024-06-10"),
               NgayKetThuc: new Date("2024-06-30"),
@@ -43,7 +44,7 @@ function PromotionScreen({ navigation, route }) {
             {
               id: 3,
               TenKM: "Mua 1 tặng 1",
-              HinhAnhKM: "https://example.com/khuyenmai3.jpg",
+              HinhAnhKM: url,
               DonToiThieu: 0,
               NgayBatDau: new Date("2024-07-01"),
               NgayKetThuc: new Date("2024-07-15"),
@@ -85,25 +86,18 @@ function PromotionScreen({ navigation, route }) {
                 justifyContent: 'space-between',
                 alignItems: 'center'
             }}>
-
+            
                 <View style={{
                     flexDirection: 'row',
 
                     alignItems: 'center'
                 }}>
-                    <TouchableOpacity onPress={() => {
-                        navigation.goBack();
+                    <TouchableOpacity
+                        style={{ padding: 20 }}
+                        onPress={() => {
+                            navigation.goBack();
                     }}>
-                        <Image
-                            source={IC_Back}
-                            style={{
-                                width: '20%',
-                                height: '40%',
-                                marginHorizontal: 20,
-                                marginVertical: '20%'
-                            }}
-                            resizeMode='stretch'
-                        />
+                        <BackIcon/>
                     </TouchableOpacity>
 
 

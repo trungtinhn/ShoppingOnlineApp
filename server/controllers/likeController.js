@@ -1,4 +1,4 @@
-const Like = require('../models/Like')
+const Like = require('../models/Like');
 const likeController = {
     addLike: async (req, res) => {
         const { MaND, MaSP } = req.body;

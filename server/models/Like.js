@@ -13,6 +13,6 @@ const LikeSchema = new mongoose.Schema({
 });
 
 // Tạo model từ schema
-const YeuThich = mongoose.model('YeuThich', YeuThichSchema);
+const Like = mongoose.model('Like', LikeSchema);
 
-module.exports = YeuThich;
+module.exports = Like;
