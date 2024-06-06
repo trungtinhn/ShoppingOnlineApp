@@ -129,8 +129,8 @@ function AddPromotion({navigation}) {
       DonToiThieu: minimumOrder,
       HinhAnhKM: imageUri,
       Loai: typeOfPromotion,
-      NgayBatDau: Date(startDate),
-      NgayKetThuc: Date(endDate),
+      NgayBatDau: startDate,
+      NgayKetThuc: endDate,
       TenKM: name,
       HinhAnhKhuyenMai: imageUri,
       TiLe: discount/100,
@@ -139,8 +139,10 @@ function AddPromotion({navigation}) {
     }
     const res = await addPromotion({data: newPromotion});
     if(res === 200){
-      console.log("Đã thêm thành công")
-    }else{
+      console.log("Đã thêm thành công");
+      Alert.alert('Notification', 'Successfully added new Promotion!', [
+        {text: 'OK', onPress: () => navigation.goBack(), style: 'cancel'},
+      ]);    }else{
       console.log(res.error);
     }
   };

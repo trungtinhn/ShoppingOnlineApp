@@ -7,12 +7,30 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React from 'react';
-import { IMG_backgroundCard } from '../../../assets/Admin/images';
+import {IMG_backgroundCard} from '../../../assets/Admin/images';
 import CUSTOM_COLOR from '../../constants/color';
 import FONT_FAMILY from '../../constants/font';
 
 const PromotionCard = (props: any) => {
   const {navigation} = props;
+
+  // Function to parse date strings and determine the promotion status
+  const getPromotionStatus = (start: string, end: string) => {
+    const currentDate = new Date();
+    const startDate = new Date(start.split('/').reverse().join('-'));
+    const endDate = new Date(end.split('/').reverse().join('-'));
+
+    if (currentDate < startDate) {
+      return 'Sắp diễn ra'; // Upcoming
+    } else if (currentDate > endDate) {
+      return 'Đã hết hạn'; // Expired
+    } else {
+      return 'Đang diễn ra'; // Ongoing
+    }
+  };
+
+  const status = getPromotionStatus(props.start, props.end);
+
   return (
     <TouchableOpacity style={styles.container} onPress={props.onPress}>
       <View style={styles.accountContainer}>
@@ -41,7 +59,7 @@ const PromotionCard = (props: any) => {
             <Text style={styles.contentStyles}>
               {props.type === 'GiamGia'
                 ? `Giảm giá ${props.discount}%`
-                : 'Miễn phí vẫn chuyển'}
+                : 'Miễn phí vận chuyển'}
             </Text>
             <Text style={styles.minimumStyles}>
               Đơn tối thiểu {props.minimum}
@@ -51,6 +69,9 @@ const PromotionCard = (props: any) => {
             </Text>
           </View>
         </ImageBackground>
+      </View>
+      <View style={styles.statusContainer}>
+        <Text style={styles.statusText}>{status}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -65,12 +86,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   accountContainer: {
-    //width: '90%',
+    width: '90%',
     height: '80%',
     alignItems: 'center',
     marginHorizontal: 20,
     borderRadius: 20,
     overflow: 'hidden',
+    position: 'relative', // Required to position the status container
   },
   image: {
     flex: 1,
@@ -79,11 +101,8 @@ const styles = StyleSheet.create({
   },
   avataContainer: {
     width: '40%',
-    //height: '80%',
     justifyContent: 'center',
     alignItems: 'center',
-    //backgroundColor: CUSTOM_COLOR.Alto
-    //left: -15,
   },
   textViewContainer: {
     width: '60%',
@@ -116,6 +135,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontStyle: 'italic',
     color: CUSTOM_COLOR.LightGray,
+  },
+  statusContainer: {
+    position: 'absolute',
+    top: 15,
+    left: 0,
+    backgroundColor: CUSTOM_COLOR.Red, // Color for status label background
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+    borderRadius: 10,
+    transform: [{rotate: '-30deg'}],
+  },
+  statusText: {
+    fontFamily: FONT_FAMILY.Semibold,
+    fontSize: 15,
+    color: CUSTOM_COLOR.White,
   },
 });
 

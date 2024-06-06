@@ -115,14 +115,14 @@ function Promotion({navigation}){
               const dateBD = dayjs(timestampBD);
 
               const dayBD = dateBD.date();
-              const monthBD = dateBD.month();
+              const monthBD = dateBD.month() + 1;
               const yearBD = dateBD.year();
 
               const timestampKT = item.NgayKetThuc;
               const dateKT = dayjs(timestampKT);
 
               const dayKT = dateKT.date();
-              const monthKT = dateKT.month();
+              const monthKT = dateKT.month() + 1;
               const yearKT = dateKT.year();
 
               console.log(item);

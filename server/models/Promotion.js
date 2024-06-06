@@ -34,11 +34,11 @@ const promotionSchema = new mongoose.Schema({
         required: true
     },
     NgayBatDau: {
-        type: Date,
+        type: String,
         required: true
     },
     NgayKetThuc: {
-        type: Date,
+        type: String,
         required: true
     },
     TenKM: {
