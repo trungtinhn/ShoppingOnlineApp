@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -8,22 +8,28 @@ import {
   TouchableOpacity,
   TextInput,
   ImageBackground,
-  Platform,
   Image,
   Alert,
 } from 'react-native';
-
-import DateTimePicker from '@react-native-community/datetimepicker';
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+} from 'firebase/storage';
+import { Storage } from '../../../firebase/firebase';
+import { launchImageLibrary } from 'react-native-image-picker';
 import CUSTOM_COLOR from '../../constants/color';
 import { border_add } from '../../../assets/Admin/images';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import CustomHeader from '../../components/Admin/CustomHeader';
 import FONT_FAMILY from '../../constants/font';
 import ButtonDetail from '../../components/Admin/ButtonDetail';
-function AddNewCategory({navigation}) {
+import { addCategory } from '../../api/CategoryApi';
+
+function AddNewCategory({ navigation }) {
   const [image, setImage] = useState();
-  const [name, setName] = useState();
+  const [name, setName] = useState('');
   const [lengthName, setLengthName] = useState(0);
+  const [description, setDescription] = useState('');
 
   const selectImage = () => {
     const options = {
@@ -32,7 +38,6 @@ function AddNewCategory({navigation}) {
         skipBackup: true,
         path: 'images',
       },
-
       selectionLimit: 5,
       quality: 1,
     };
@@ -51,6 +56,25 @@ function AddNewCategory({navigation}) {
 
   const UploadFile = async () => {
     try {
+      const blob = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          resolve(xhr.response);
+        };
+        xhr.onerror = function (e) {
+          console.log(e);
+          reject(new TypeError('Network request failed'));
+        };
+        xhr.responseType = 'blob';
+        xhr.open('GET', image.uri, true);
+        xhr.send(null);
+      });
+      const storageRef = ref(Storage, `images/categories/image-${Date.now()}`);
+      const snapshot = await uploadBytes(storageRef, blob);
+      console.log('Upload successfully!');
+      const url = await getDownloadURL(snapshot.ref);
+      console.log('Get URL successfully');
+      return url;
     } catch (error) {
       console.log(error);
     }
@@ -61,148 +85,185 @@ function AddNewCategory({navigation}) {
       Alert.alert(
         'Notification',
         'Please fill in the information completely and accurately!',
-        [{text: 'OK', style: 'cancel'}],
+        [{ text: 'OK', style: 'cancel' }],
       );
       return;
     }
     const imageUri = await UploadFile();
+    const dataCategory = {
+      name: name,
+      image: imageUri,
+      description: description || "not have yet",
+    };
+    console.log(dataCategory)
+    const res = await addCategory({ data: dataCategory });
+    if (res.status === 200) {
+    } else {
+      console.log(res);
+      Alert.alert("Error", 'Cant add new product');
+    }
 
-    const currentTime = new Date();
     Alert.alert('Notification', 'Successfully added new category!', [
-      {text: 'OK', onPress: () => navigation.goBack(), style: 'cancel'},
+      { text: 'OK', onPress: () => navigation.goBack(), style: 'cancel' },
     ]);
   };
 
   const KiemTraNhapLieu = () => {
-    if (!image || !name) {
+    if (!image || !name || !description) {
       return false;
     }
     return true;
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{width: '100%', height: 10}} />
+      <View style={{ width: '100%', height: 10 }} />
 
-      <>
-        <View style={styles.headerContainer}>
-          <CustomHeader
-            onPress={() => navigation.goBack()}
-            title="Add new Category"
-          />
-        </View>
-      </>
-      <>
-        <View style={styles.bodyContainer}>
-          <ScrollView style={{width: '100%', height: '100%'}}>
-            <>
-              <View style={styles.addImageContainer}>
-                <View style={{width: 25, height: '100%'}} />
-                <TouchableOpacity
-                  style={{width: 75, height: 75}}
-                  onPress={selectImage}>
-                  <ImageBackground
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                    source={border_add}
-                    resizeMode="cover">
-                    <Text style={styles.icAddStyle}>+</Text>
-                  </ImageBackground>
-                </TouchableOpacity>
-                <View style={{width: 25, height: '100%'}} />
+      <View style={styles.headerContainer}>
+        <CustomHeader
+          onPress={() => navigation.goBack()}
+          title="Add new Category"
+        />
+      </View>
 
-                {image ? (
-                  <Image
-                    source={image}
-                    style={{
-                      height: 75,
-                      width: 75,
-                    }}
-                  />
-                ) : (
-                  <Text style={styles.addImageTextStyles}>
-                    (Add picture or video)
-                  </Text>
-                )}
+      <View style={styles.bodyContainer}>
+        <ScrollView style={{ width: '100%', height: '100%' }}>
+          <View style={styles.addImageContainer}>
+            <View style={{ width: 25, height: '100%' }} />
+            <TouchableOpacity
+              style={{ width: 75, height: 75 }}
+              onPress={selectImage}>
+              <ImageBackground
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                source={border_add}
+                resizeMode="cover">
+                <Text style={styles.icAddStyle}>+</Text>
+              </ImageBackground>
+            </TouchableOpacity>
+            <View style={{ width: 25, height: '100%' }} />
+
+            {image ? (
+              <Image
+                source={image}
+                style={{
+                  height: 75,
+                  width: 75,
+                }}
+              />
+            ) : (
+              <Text style={styles.addImageTextStyles}>
+                (Add picture or video)
+              </Text>
+            )}
+          </View>
+
+          <View style={styles.spaceContainer} />
+
+          <View style={[styles.inputContainer, { height: 90 }]}>
+            <View style={{ width: '100%', height: 10 }} />
+            <View style={{ flex: 1, flexDirection: 'row' }}>
+              <View
+                style={[
+                  styles.unitTitleContainer,
+                  { justifyContent: 'flex-start' },
+                ]}>
+                <View style={{ width: '10%', height: '100%' }} />
+                <Text style={styles.titleInputStyle}>Name Of Category</Text>
+                <Text
+                  style={[
+                    styles.titleInputStyle,
+                    { color: CUSTOM_COLOR.Red },
+                  ]}>
+                  {' '}
+                  *
+                </Text>
               </View>
-            </>
-
-            <View style={styles.spaceContainer} />
-
-            <>
-              <View style={[styles.inputContainer, {height: 90}]}>
-                <View style={{width: '100%', height: 10}} />
-                <View style={{flex: 1, flexDirection: 'row'}}>
-                  <View
-                    style={[
-                      styles.unitTitleContainer,
-                      {justifyContent: 'flex-start'},
-                    ]}>
-                    <View style={{width: '10%', height: '100%'}} />
-                    <Text style={styles.titleInputStyle}>Name Of Category</Text>
-                    <Text
-                      style={[
-                        styles.titleInputStyle,
-                        {color: CUSTOM_COLOR.Red},
-                      ]}>
-                      {' '}
-                      *
-                    </Text>
-                  </View>
-                  <View
-                    style={[
-                      styles.unitTitleContainer,
-                      {justifyContent: 'flex-end'},
-                    ]}>
-                    <Text style={styles.titleInputStyle}>{lengthName}/100</Text>
-                    <View style={{width: '10%', height: '100%'}} />
-                  </View>
-                </View>
-                {/* <View style={{width: '100%', height: 5}} /> */}
-                <View style={{flex: 2, flexDirection: 'row'}}>
-                  <View style={{width: '5%', height: '100%'}} />
-                  <TextInput
-                    style={{flex: 1, fontSize: 17}}
-                    onChangeText={text => {
-                      if (text.length < 100) {
-                        setName(text);
-                        setLengthName(text.length);
-                      }
-                    }}
-                    value={name}
-                  />
-                  <View style={{width: '5%', height: '100%'}} />
-                </View>
+              <View
+                style={[
+                  styles.unitTitleContainer,
+                  { justifyContent: 'flex-end' },
+                ]}>
+                <Text style={styles.titleInputStyle}>{lengthName}/100</Text>
+                <View style={{ width: '10%', height: '100%' }} />
               </View>
-            </>
+            </View>
+            <View style={{ flex: 2, flexDirection: 'row' }}>
+              <View style={{ width: '5%', height: '100%' }} />
+              <TextInput
+                style={{ flex: 1, fontSize: 17 }}
+                onChangeText={text => {
+                  if (text.length < 100) {
+                    setName(text);
+                    setLengthName(text.length);
+                  }
+                }}
+                value={name}
+              />
+              <View style={{ width: '5%', height: '100%' }} />
+            </View>
+          </View>
 
-            <View style={styles.spaceContainer} />
-            <View style={styles.spaceContainer} />
+          <View style={styles.spaceContainer} />
 
-            <>
-              <View style={styles.buttonContainer}>
-                <ButtonDetail
-                  style={{width: '100%', height: 50}}
-                  title={'Save'}
-                  color={CUSTOM_COLOR.DarkOrange}
-                  onPress={() => setData()}
-                />
+          <View style={[styles.inputContainer, { height: 120 }]}>
+            <View style={{ width: '100%', height: 10 }} />
+            <View style={{ flex: 1, flexDirection: 'row' }}>
+              <View
+                style={[
+                  styles.unitTitleContainer,
+                  { justifyContent: 'flex-start' },
+                ]}>
+                <View style={{ width: '10%', height: '100%' }} />
+                <Text style={styles.titleInputStyle}>Description</Text>
+                <Text
+                  style={[
+                    styles.titleInputStyle,
+                    { color: CUSTOM_COLOR.Red },
+                  ]}>
+                  {' '}
+                  *
+                </Text>
               </View>
-            </>
+            </View>
+            <View style={{ flex: 2, flexDirection: 'row' }}>
+              <View style={{ width: '5%', height: '100%' }} />
+              <TextInput
+                style={{ flex: 1, fontSize: 17, height: '100%' }}
+                multiline
+                numberOfLines={4}
+                onChangeText={text => setDescription(text)}
+                value={description}
+              />
+              <View style={{ width: '5%', height: '100%' }} />
+            </View>
+          </View>
 
-            <View style={{width: '100%', height: 10}} />
-          </ScrollView>
-        </View>
-      </>
+          <View style={styles.spaceContainer} />
+          <View style={styles.spaceContainer} />
+
+          <View style={styles.buttonContainer}>
+            <ButtonDetail
+              style={{ width: '100%', height: 50 }}
+              title={'Save'}
+              color={CUSTOM_COLOR.DarkOrange}
+              onPress={() => setData()}
+            />
+          </View>
+
+          <View style={{ width: '100%', height: 10 }} />
+        </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -309,7 +370,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: '100%',
     height: 55,
-    // marginHorizontal: '5%',
     justifyContent: 'center',
     alignItems: 'center',
   },

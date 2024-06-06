@@ -14,6 +14,7 @@ import dayjs from 'dayjs';
 import PromotionButton from '../../components/Admin/PromotionButton';
 import CUSTOM_COLOR from '../../constants/color';
 import PromotionCard from '../../components/Admin/PromotionCard';
+import { getAllPromotions } from '../../api/PromotionApi';
 const sampleDataPromotion = [
   {
     NgayBatDau: new Date('2023-01-01T00:00:00Z'),
@@ -48,7 +49,8 @@ function Promotion({navigation}){
   const [dataPromotion, setDataPromotion] = useState([]);
 
   const getDataPromotion = async () => {
-    setDataPromotion(sampleDataPromotion);
+    const dataPromotion = await getAllPromotions();
+    setDataPromotion(dataPromotion.data);
     // const q = query(collection(Firestore, 'KHUYENMAI'));
 
     // const unsubscribe = onSnapshot(q, querySnapshot => {
@@ -126,7 +128,7 @@ function Promotion({navigation}){
               console.log(item);
               return (
                 <PromotionCard
-                  source={item.HinhAnhKM}
+                  source={item.HinhAnhKhuyenMai}
                   name={item.TenKM}
                   discount={item.TiLe * 100}
                   minimum={item.DonToiThieu}

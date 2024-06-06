@@ -6,6 +6,7 @@ import Status from "../../components/Admin/Status";
 import CUSTOM_COLOR from "../../constants/color";
 import SearchButton from "../../components/Admin/SearchButton";
 import MyProductOne from "../../components/Admin/MyProductOne";
+import { getProductAvailable, getProductOnwait, getProductOutofstock, setProductStatus } from "../../api/ProductApi";
 export default function MyProduct({navigation}) {
   const [inventory, setinventory] = useState(true);
   const [Out, setOut] = useState(false);
@@ -15,7 +16,6 @@ export default function MyProduct({navigation}) {
   const [dataOutOfStock, setDataOutOfStock] = useState([]);
   const [dataInventory, setDataInventory] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
-
   const handleSearch = (searchTerm, data) => {
     
   };
@@ -23,65 +23,49 @@ export default function MyProduct({navigation}) {
     
   };
 
-  const HideSanPham = item => {
-    
+  const HideSanPham = async item => {
+    const res = await setProductStatus({productId: item._id, status: "onwait"});
+    if(res.status === 200){
+     getDadaOnWait();
+    }else{
+      console.log(res);
+    }
   };
-  const ShowSanPham = item => {
-    
+  const ShowSanPham = async item => {
+    const res = await setProductStatus({productId: item._id, status: "available"});
+    if(res.status === 200){
+      getDadaInventory();
+    }else{
+      console.log(res);
+    }
   };
 
   const getDadaOnWait = async () => {
-    // const q = query(
-    //   collection(Firestore, 'SANPHAM'),
-    //   where('TrangThai', '==', 'Hidden'),
-    // );
-
-    // const unsubscribe = onSnapshot(q, querySnapshot => {
-    //   const data = [];
-    //   querySnapshot.forEach(doc => {
-    //     data.push(doc.data());
-    //   });
-
-    //   setDataOnWait(data);
-    // });
+    const res = await getProductOnwait();
+    setDataOnWait(res.data);
   };
 
   const getDadaOutOfStock = async () => {
-    // const q = query(
-    //   collection(Firestore, 'SANPHAM'),
-    //   where('TrangThai', '==', 'OutOfStock'),
-    // );
-    // const unsubscribe = onSnapshot(q, querySnapshot => {
-    //   const data = [];
-    //   querySnapshot.forEach(doc => {
-    //     data.push(doc.data());
-    //   });
-
-    //   setDataOutOfStock(data);
-    // });
+    const res = await getProductOutofstock();
+    setDataOutOfStock(res.data);
   };
 
   const getDadaInventory = async () => {
-    // const q = query(
-    //   collection(Firestore, 'SANPHAM'),
-    //   where('TrangThai', '==', 'Inventory'),
-    // );
-    // const unsubscribe = onSnapshot(q, querySnapshot => {
-    //   const data = [];
-    //   querySnapshot.forEach(doc => {
-    //     data.push(doc.data());
-    //   });
-
-    //   setDataInventory(data);
-    // });
+    const res = await getProductAvailable();
+    setDataInventory(res.data);
+    if(res.status === 200){
+      
+    }else{
+      console.log(res.err)
+    }
   };
 
   useEffect(() => {
+    getDadaInventory()
+    getDadaOnWait()
+    getDadaOutOfStock();
+  }, [dataOnWait.length, dataInventory.length, dataOutOfStock.length, searchTerm]);
 
-  }, [dataOnWait.length, dataInventory.length, dataOutOfStock.length]);
-  useEffect(() => {
-    getDadaInventory();
-  }, [searchTerm]);
   if (inventory == true) {
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: CUSTOM_COLOR.White}}>

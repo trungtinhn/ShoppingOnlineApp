@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Image,
   SafeAreaView,
@@ -13,42 +13,13 @@ import ButtonDetail from '../../components/Admin/ButtonDetail';
 import { id } from 'date-fns/locale';
 import { IC_Back } from '../../../assets/Admin/icons';
 import BackTo from '../../components/Admin/BackTo';
-
-
-export default function Categories({navigation}) {
+import { getCategory } from '../../api/CategoryApi';
+export default function Categories({ navigation }) {
   const [dataCategories, setDataCategories] = useState([]);
 
-  const getDataCategories = () => {
-    const dataCategories = [
-      {
-        id  : 1,
-        AnhDM: 'https://example.com/category1.jpg',
-        TenDM: 'Áo nam',
-        SoLuongSP: 10,
-      },
-      {
-        id  : 2,
-        AnhDM: 'https://example.com/category2.jpg',
-        TenDM: 'Áo nữ',
-        SoLuongSP: 15,
-      },
-      {
-        id  : 3,
-        AnhDM: 'https://example.com/category3.jpg',
-        TenDM: 'Giày dép',
-        SoLuongSP: 8,
-      },
-      {
-        id  : 4,
-        AnhDM: 'https://example.com/category4.jpg',
-        TenDM: 'Phụ kiện',
-        SoLuongSP: 12,
-      },
-    ];
-    
-  
-  setDataCategories(dataCategories);
-  
+  const getDataCategories = async () => {
+    const dataCategories = await getCategory();
+    setDataCategories(dataCategories.data);
   };
 
   useEffect(() => {
@@ -56,7 +27,7 @@ export default function Categories({navigation}) {
   }, []);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <View
         style={{
           flexDirection: 'row',
@@ -75,10 +46,11 @@ export default function Categories({navigation}) {
           return (
             <ItemList
               key={index}
-              source={category.AnhDM}
-              namelist={category.TenDM}
-              numberitem={category.SoLuongSP}
-              onPress={() => navigation.navigate('DetailsCategory', {category})}
+              source={category.image}
+              namelist={category.name}
+              numberitem={category.numProduct}
+              onPress={() => navigation.navigate('DetailsCategory', { category })}
+              onEditPress={() => navigation.navigate('EditCategory', { category })}
             />
           );
         })}
@@ -101,7 +73,7 @@ export default function Categories({navigation}) {
             marginVertical: 10,
             padding: 10,
           }}
-        />  
+        />
       </View>
 
     </SafeAreaView>

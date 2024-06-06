@@ -12,6 +12,11 @@ import {
   Image,
   Alert,
 } from 'react-native';
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+} from 'firebase/storage';
 import { launchImageLibrary } from 'react-native-image-picker';
 import CUSTOM_COLOR from '../../constants/color';
 import { border_add } from '../../../assets/Admin/images';
@@ -22,6 +27,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import IC_Back from '../../../assets/Admin/icons';
 import moment from 'moment';
 import { isBefore } from 'date-fns';
+import { addPromotion } from '../../api/PromotionApi';
+import { Storage } from '../../../firebase/firebase';
 function AddPromotion({navigation}) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -37,7 +44,10 @@ function AddPromotion({navigation}) {
   const [discount, setDiscount] = useState();
   const [pickerType, setPickerType] = useState('');
   const [minimumOrder, setMinimumOrder] = useState();
-
+  const [startDate, setStartDate] = useState(new Date());
+  const [startDateValues, setStartDateValuse] = useState('01/01/2023');
+  const [endDate, setEndDate] = useState(new Date());
+  const [endDateValues, setEndDateValues] = useState('01/01/2023');
   const dataTypePromotion = [
     {
       id: 'GiamGia',
@@ -77,11 +87,31 @@ function AddPromotion({navigation}) {
     });
   };
 
-  const UploadFile = async () => {
-    try {
-    } catch (error) {
-      console.log(error);
-    }
+  const UploadFile = async () => {   
+      try {
+        const blob = await new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.onload = function () {
+            resolve(xhr.response);
+          };
+          xhr.onerror = function (e) {
+            console.log(e);
+            reject(new TypeError("Network request failed"));
+          };
+          xhr.responseType = "blob";
+          xhr.open("GET", image.uri, true);
+          xhr.send(null);
+        });
+        const storageRef = ref(Storage, `images/promotion/image-${Date.now()}`);
+        const snapshot = await uploadBytes(storageRef, blob);
+        console.log("Upload successfully!");
+        const url = await getDownloadURL(snapshot.ref);
+        console.log("Get URL successfully");
+        return url;
+      } catch (error) {
+        console.log(error);
+      }
+    return '';
   };
 
   const setData = async () => {
@@ -93,10 +123,26 @@ function AddPromotion({navigation}) {
       );
       return;
     }
-
-    Alert.alert('Notification', 'Successfully added new promotions!', [
-      { text: 'OK', onPress: () => navigation.goBack(), style: 'cancel' },
-    ]);
+    const imageUri = await UploadFile();
+    const newPromotion = {
+      ChiTietKM: description,
+      DonToiThieu: minimumOrder,
+      HinhAnhKM: imageUri,
+      Loai: typeOfPromotion,
+      NgayBatDau: Date(startDate),
+      NgayKetThuc: Date(endDate),
+      TenKM: name,
+      HinhAnhKhuyenMai: imageUri,
+      TiLe: discount/100,
+      Soluotdung: 1,
+      SoLuong: 1,
+    }
+    const res = await addPromotion({data: newPromotion});
+    if(res === 200){
+      console.log("Đã thêm thành công")
+    }else{
+      console.log(res.error);
+    }
   };
 
   const isNumeric = input => {
@@ -129,11 +175,6 @@ function AddPromotion({navigation}) {
     }
     return true;
   };
-
-  const [startDate, setStartDate] = useState(new Date());
-  const [startDateValues, setStartDateValuse] = useState('01/01/2023');
-  const [endDate, setEndDate] = useState(new Date());
-  const [endDateValues, setEndDateValues] = useState('01/01/2023');
 
   useEffect(() => {
     const getCurrentDate = () => {

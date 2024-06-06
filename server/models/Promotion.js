@@ -5,21 +5,25 @@ const promotionSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    TiLe:{
+        type: Number,
+        default: 0,
+    },
     DonToiThieu: {
         type: Number,
-        required: true
+        required: false
     },
     HinhAnhKM: {
         type: String,
-        required: true
+        required: false
     },
     SoLuotSuDung: {
         type: Number,
-        required: true,
+        required: false,
     },
     SoLuong: {
         type: Number,
-        required: true,
+        required: false,
     },
     HinhAnhKhuyenMai: {
         type: String,
@@ -39,7 +43,7 @@ const promotionSchema = new mongoose.Schema({
     },
     TenKM: {
         type: String,
-        required: true
+        required: false
     },
     ThoiGianTao: {
         type: Date,

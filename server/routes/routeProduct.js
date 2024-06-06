@@ -14,4 +14,6 @@ router.get('/getProductByCategory/MaDM=:MaDM', verifyToken ,productController.ge
 router.get('/getProductAvailable', verifyToken ,productController.getProductAvailable);
 router.get('/getProductOnwait', verifyToken ,productController.getProductOnwait);
 router.get('/getProductOutofstock', verifyToken ,productController.getProductOutofstock);
+router.put('/setProductStatus/status/:id',verifyToken, productController.setProductStatus);
+
 module.exports = router;
