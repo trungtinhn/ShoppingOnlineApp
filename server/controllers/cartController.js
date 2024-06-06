@@ -48,6 +48,7 @@ const cartController = {
             if (!cart) {
                 return res.status(404).json({ message: 'Cart not found' });
             }
+            console.log(userId + " " + productId + " " + size + " " + color + " " + quantity + " " + price)
 
             // Find the product with the same color and size in the cart
             const productIndex = cart.products.findIndex(product => 

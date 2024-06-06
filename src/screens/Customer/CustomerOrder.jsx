@@ -10,8 +10,11 @@ import CUSTOM_COLOR from '../../constants/color'
 import PerSon from '../../components/Admin/PerSon'
 //import { IM_MauAo } from '../assets/images'
 import OneOrder from '../../components/Admin/OneOrder'
+import { BackIcon } from '../../../assets/Customer/svgs'
+import FONT_FAMILY from '../../constants/font'
+import Button from '../../components/Customer/Button'
 
-
+const url = 'https://firebasestorage.googleapis.com/v0/b/shoppingapp-a20a4.appspot.com/o/images%2Fproducts%2Fproduct_2.jpg?alt=media&token=3d347bb8-2e49-49c5-b8c7-5ea6f7168f89'
 export default function CustomerOrder({navigation, route}) {
     const [confirm, setConfirm] = useState(true)
     const [onWait, setOnWait] = useState(false)
@@ -19,11 +22,64 @@ export default function CustomerOrder({navigation, route}) {
     const [delivered, setDelivered] = useState(false)
     const [cancel, setCancel] = useState(false)
 
-    const [donHangConfirm, setDonHangConfirm] = useState([])
+    //const [donHangConfirm, setDonHangConfirm] = useState([])
     const [donHangOnWait, setDonHangOnWait] = useState([])
     const [donHangDelivering, setDonHangDelivering] = useState([])
     const [donHangDelivered, setDonHangDelivered] = useState([])
     const [donHangCancel, setDonHangCancel] = useState([])
+    const donHangConfirm = [
+        {
+            Avatar: url,
+            TenND: 'John Doe',
+            DatHang: [
+                {
+                    SanPham: {
+                        HinhAnhSP: [url],
+                        TenSP: 'Product 1',
+                        GiaSP: 100,
+                    },
+                    SoLuong: 2,
+                    ThanhTien: 200,
+                    MauSac: 'Red',
+                    Size: 'M',
+                    MaDH: 'DH001'
+                },
+                {
+                    SanPham: {
+                        HinhAnhSP: [url],
+                        TenSP: 'Product 2',
+                        GiaSP: 150,
+                    },
+                    SoLuong: 1,
+                    ThanhTien: 150,
+                    MauSac: 'Blue',
+                    Size: 'L',
+                    MaDH: 'DH002'
+                }
+            ],
+            MaDH: 'DH001'
+        },
+        {
+            Avatar: url,
+            TenND: 'Jane Smith',
+            DatHang: [
+                {
+                    SanPham: {
+                        HinhAnhSP: [url],
+                        TenSP: 'Product 3',
+                        GiaSP: 200,
+                    },
+                    SoLuong: 3,
+                    ThanhTien: 600,
+                    MauSac: 'Green',
+                    Size: 'S',
+                    MaDH: 'DH003'
+                }
+            ],
+            MaDH: 'DH002'
+        }
+    ];
+    
     const CancelDonHang = async (item) => {
     //     const confirmRef = doc(Firestore, "DONHANG", item.MaDH)
 
@@ -403,13 +459,18 @@ export default function CustomerOrder({navigation, route}) {
     if (confirm == true) {
         return (
             <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White }}>
-                <View style={{ width: '100%', height: 30, flexDirection: 'row', marginTop: 5 }}>
-                    <BackTo
-                        onPress={() => navigation.goBack()}
-                        Info='My Order'
-                    ></BackTo>
+                 <View style={{ flexDirection: "row", alignItems: 'center', }}>
+                    <TouchableOpacity 
+                        style={{padding: 12}}
+                        onPress={() => {
+                            navigation.goBack();
+                        }}>
+                        <BackIcon></BackIcon>
+                    </TouchableOpacity>
+
+                    <Text style={{ height: 40, padding: 7, fontSize: 20, color: CUSTOM_COLOR.Black, fontFamily: FONT_FAMILY.Bold, fontWeight: 'bold',  }}>Product</Text>
                 </View>
-                <View style={{ width: '100%', height: 50, flexDirection: 'row', justifyContent: 'space-around', marginTop: 15 }}>
+                <View style={{ width: '100%', height: 50, flexDirection: 'row', justifyContent: 'space-around'}}>
                     <Status
                         title='Confirm'
                         Color={CUSTOM_COLOR.DarkOrange}
@@ -453,7 +514,8 @@ export default function CustomerOrder({navigation, route}) {
                         renderItem={({ item }) => {
                             //console.log(item)
                             return (
-                                <View>
+                                <View style={styles.background}>
+                                    <View style={{margin: 10}}>
                                     <PerSon
                                         avartar={item.Avatar}
                                         name={item.TenND}
@@ -484,41 +546,23 @@ export default function CustomerOrder({navigation, route}) {
                                             )
                                         }}
                                     ></FlatList>
-
-                                    <TouchableOpacity
-                                        onPress={() => { navigation.navigate('DetailsDelivery', { item })}}
-                                        style={{
-                                            backgroundColor: CUSTOM_COLOR.DarkOrange, width: 100, marginLeft: 160,
-                                            marginTop: 10, height: 30, alignItems: 'center', justifyContent: 'center', marginBottom: 10
+                                    <View style={{width: '40%', alignSelf: 'flex-end'}}>
+                                    <Button
+                                        title='Detail'
+                                        color={CUSTOM_COLOR.FlushOrange}
+                                        onPress={() => {
+                                            navigation.navigate('DeliveryDetail')
                                         }}
-                                    >
-                                        <Text style={{ color: CUSTOM_COLOR.White }}>Details</Text>
-                                    </TouchableOpacity>
-
+                                        />
+                                    </View>
                                     <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={{color: CUSTOM_COLOR.Black, marginLeft: 35 ,fontWeight: 'bold'}}>Item Code</Text>
                                         <Text style={{color: CUSTOM_COLOR.Black, marginRight: 35 }}>#{item.MaDH}</Text>
                                     </View>
-                                    <View style={{ width: '100%', height: 30, alignItems: 'center' }}>
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                CancelDonHang(item)
-                                            }}
-                                            style={{
-                                                width: '100%',
-                                                height: '100%',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                backgroundColor: CUSTOM_COLOR.DarkOrange,
-                                                paddingHorizontal: 20,
-                                                alignSelf: 'center',
-
-                                            }}
-                                        >
-                                            <Text style={{ color: CUSTOM_COLOR.White }}>Cancel</Text>
-                                        </TouchableOpacity>
+                                    <View style={{ width: '100%', alignItems: 'center' }}>
+                                        <Button title='Cancel' color={CUSTOM_COLOR.DarkOrange} onPress={() => { }} />
                                     </View>
-
+                                    </View>
                                 </View>
                             )
                         }}
@@ -579,7 +623,7 @@ export default function CustomerOrder({navigation, route}) {
                         renderItem={({ item }) => {
                             //console.log(item)
                             return (
-                                <View>
+                                <View style = {{marginBottom: 10, backgroundColor: CUSTOM_COLOR.Red}}>
                                     <PerSon
                                         avartar={item.Avatar}
                                         name={item.TenND}
@@ -609,16 +653,11 @@ export default function CustomerOrder({navigation, route}) {
                                             )
                                         }}
                                     ></FlatList>
-                                    <TouchableOpacity
-                                        onPress={() => { navigation.navigate('DetailsDelivery', { item })}}
-                                        
-                                        style={{
-                                            backgroundColor: CUSTOM_COLOR.DarkOrange, width: 100, marginLeft: 160,
-                                            marginTop: 10, height: 30, alignItems: 'center', justifyContent: 'center', marginBottom: 10
-                                        }}
-                                    >
-                                        <Text style={{ color: CUSTOM_COLOR.White }}>Details</Text>
-                                    </TouchableOpacity>
+                                    <Button
+                                        title='Detail'
+                                        color={CUSTOM_COLOR.FlushOrange}
+                                        onPress={() => {}}
+                                        />
 
                                     <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text style={{color: CUSTOM_COLOR.Black, marginLeft: 35,fontWeight: 'bold' }}>Item Code</Text>
@@ -988,4 +1027,18 @@ export default function CustomerOrder({navigation, route}) {
     }
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    background: {
+        backgroundColor: CUSTOM_COLOR.White,
+        borderColor: CUSTOM_COLOR.Alto,
+        borderWidth: 1,
+        borderRadius: 20,
+        shadowColor: CUSTOM_COLOR.Black,
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.8,
+        shadowRadius: 20,
+        elevation: 5,
+        margin: 10, 
+
+    }
+})

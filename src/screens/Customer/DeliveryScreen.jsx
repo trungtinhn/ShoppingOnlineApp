@@ -3,6 +3,7 @@ import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, S
 import CUSTOM_COLOR from "../../constants/color";
 import { IC_Back, IC_Add } from "../../../assets/Customer/icons";
 import Delivery from "../../components/Customer/Delivery";
+import { BackIcon } from "../../../assets/Customer/svgs";
 function DeliveryScreen({ navigation, route }) {
 
     const { itemsCheckout, totalMoney, choosePayment, promotion } = route.params
@@ -82,6 +83,7 @@ function DeliveryScreen({ navigation, route }) {
                 backgroundColor: CUSTOM_COLOR.White,
                 height: 40,
                 justifyContent: 'space-between',
+                marginBottom: 20,
                 alignItems: 'center'
             }}>
 
@@ -90,19 +92,12 @@ function DeliveryScreen({ navigation, route }) {
 
                     alignItems: 'center'
                 }}>
-                    <TouchableOpacity onPress={() => {
-                        navigation.goBack();
+                    <TouchableOpacity 
+                        style={{ padding: 20 }}
+                        onPress={() => {
+                            navigation.goBack();
                     }}>
-                        <Image
-                            source={IC_Back}
-                            style={{
-                                width: '20%',
-                                height: '40%',
-                                marginHorizontal: 20,
-                                marginVertical: 15
-                            }}
-                            resizeMode='stretch'
-                        />
+                        <BackIcon/>
                     </TouchableOpacity>
 
 

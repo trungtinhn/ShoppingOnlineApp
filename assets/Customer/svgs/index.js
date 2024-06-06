@@ -1,4 +1,4 @@
-export {default as BackIcon} from './back.svg';
+export {default as BackIcon} from './arrow-left.svg';
 export {default as ShoppingCartIcon} from './shopping-cart.svg';
 export {default as BellIcon} from './bell-ringing.svg';
 export {default as HomeIcon} from './house.svg'
@@ -6,3 +6,11 @@ export {default as LogoApp} from './Logo.svg'
 export {default as HeartFillIcon} from './heart-fill.svg'
 export {default as HeartIcon} from './Heart.svg'
 export {default as UserIcon} from './user.svg'
+export {default as StarIcon} from './star.svg'
+export {default as StarFullIcon} from './star-fill.svg'
+export {default as StarHaftIcon} from './star-half-fill.svg'
+export {default as DeleteIcon} from './backspace.svg'
+export {default as NextIcon} from './skip-forward.svg'
+export {default as HomeFillIcon} from './house-fill.svg'
+export {default as BellFillIcon} from './bell-ringing-fill.svg'
+export {default as UserFillIcon} from './user-fill.svg'

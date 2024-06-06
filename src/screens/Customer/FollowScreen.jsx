@@ -15,6 +15,9 @@ import Button from '../../components/Customer/Button';
 import ProductView from '../../components/Customer/ProductView';
 import SearchInput from '../../components/Customer/SearchInput';
 import CUSTOM_COLOR from '../../constants/color';
+import { ShoppingCartIcon } from '../../../assets/Customer/svgs';
+import MessengerLogo from '../../../assets/Admin/svgs/Messenger.svg'
+const url = 'https://firebasestorage.googleapis.com/v0/b/shoppingapp-a20a4.appspot.com/o/images%2Fcategories%2Fproduct_1.jpg?alt=media&token=6c835337-a643-4c0d-98bd-34957a39045b'
 function FollowScreen({navigation}) {
   //
   const avatar = 'https://i.pinimg.com/originals/0d/dc/ca/0ddccae723d85a703b798a5e682c23c1.png';
@@ -24,9 +27,40 @@ function FollowScreen({navigation}) {
   const [badgeCart, setBadgeCart] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   //
-  const [data, setdata] = useState([]);
   const [sanpham, setSanPham] = useState([]);
   //
+  const data = [
+    {
+      MaSP: 1,
+      TenSP: 'San Pham 1',
+      HinhAnhSP: url,
+      GiaSP: '10000'
+    },
+    {
+      MaSP: 2,
+      TenSP: 'San Pham 2',
+      HinhAnhSP: url,
+      GiaSP: '10000'
+    },
+    {
+      MaSP: 3,
+      TenSP: 'San Pham 3',
+      HinhAnhSP: url,
+      GiaSP: '10000'
+    },
+    {
+      MaSP: 4,
+      TenSP: 'San Pham 4',
+      HinhAnhSP: url,
+      GiaSP: '10000'
+    },
+    {
+      MaSP: 5,
+      TenSP: 'San Pham 5',
+      HinhAnhSP: url,
+      GiaSP: '10000'
+    },
+  ];
 
   const [filteredItems, setFilteredItems] = useState([]);
   const handleSearch = searchTerm => {
@@ -228,7 +262,7 @@ function FollowScreen({navigation}) {
               />
             ) : null}
 
-            <Image source={IC_Chat} />
+            <MessengerLogo />
           </TouchableOpacity>
 
           <View style={{width: 10, height: '100%'}} />
@@ -253,7 +287,7 @@ function FollowScreen({navigation}) {
                 containerStyle={{position: 'absolute', top: -5, right: -5}}
               />
             ) : null}
-            <Image source={IC_ShoppingCart} />
+            <ShoppingCartIcon />
           </TouchableOpacity>
         </View>
 
@@ -268,28 +302,32 @@ function FollowScreen({navigation}) {
           Product Liked
         </Text>
         <View style={{marginTop: 20}}>
-          <FlatList
-            data={searchTerm ? filteredItems : data}
-            renderItem={({item}) => {
-              return (
-                <TouchableOpacity
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-around',
-                  }}
-                  onPress={() => {
-                    navigation.navigate('DetailProduct', {item});
-                  }}>
-                  <ProductView
-                    source={item.HinhAnhSP[0]}
-                    title={item.TenSP}
-                    price={item.GiaSP}
-                  />
-                </TouchableOpacity>
-              );
-            }}
-            numColumns={2}
-          />
+        <FlatList
+          data={data}
+          scrollEnabled={true}
+          renderItem={({item}) => {
+            return (
+              <TouchableOpacity
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
+                  margin: 0
+                }}
+                onPress={() => {
+                  navigation.navigate('ProductDetail', {item});
+                }}>
+                <ProductView
+                  quantity={1000}
+                  source={item.HinhAnhSP}
+                  title={item.TenSP}
+                  price={item.GiaSP}
+                />
+              </TouchableOpacity>
+            );
+          }}
+          numColumns={2}
+          //keyExtractor={(item) => item.MASP}
+        />
         </View>
       </View>
     );

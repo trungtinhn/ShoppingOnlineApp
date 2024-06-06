@@ -25,6 +25,8 @@ const CUSTOM_COLOR = {
     LightBlue: '#36648B',
     RoseBud: '#FAA9A9',
     Gallery: '#F0F0F0',
+    Yellow: '#FFFF00',
+    WhitePorcelain: '#F8F9FA'
   };
   
   export default CUSTOM_COLOR;

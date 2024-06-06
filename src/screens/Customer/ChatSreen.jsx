@@ -19,6 +19,8 @@ import {
 } from '../../../assets/Customer/icons'
 import Message from "../../components/Customer/Message"
 import CUSTOM_COLOR from '../../constants/color';
+import { BackIcon } from '../../../assets/Customer/svgs';
+import FONT_FAMILY from '../../constants/font';
 const data = [
   {
       id: '1',
@@ -148,20 +150,11 @@ function ChatScreen({navigation, route}) {
           backgroundColor: CUSTOM_COLOR.White,
           paddingVertical: '1%',
         }}>
-        <TouchableOpacity
+        <TouchableOpacity style={{padding: 8}}
           onPress={() => {
             navigation.goBack();
           }}>
-          <Image
-            source={IC_Back}
-            style={{
-              width: 10,
-              height: 20,
-              marginHorizontal: 20,
-              marginVertical: 15,
-            }}
-            resizeMode="stretch"
-          />
+          <BackIcon/>
         </TouchableOpacity>
         {/*
                 <Image
@@ -178,8 +171,9 @@ function ChatScreen({navigation, route}) {
         <Text
           style={{
             marginHorizontal: '5%',
-            fontSize: 17,
-            fontWeight: 'bold',
+            fontSize: 20,
+            fontFamily: FONT_FAMILY.Semibold,
+            color: CUSTOM_COLOR.Black,
           }}>
           Fauget{' '}
         </Text>
