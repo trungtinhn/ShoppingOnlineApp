@@ -3,7 +3,7 @@ import { api } from "./AppApi";
 const addProductToCart = async({data}) => {
     try {
         const idToken = await getIdToken();
-        const url = "/cart/getCart";
+        const url = "/cart/addCart";
         const config = {
             method: "POST",
             headers: {
@@ -25,6 +25,7 @@ const addProductToCart = async({data}) => {
 
 const updateProductInCart = async({data}) => {
     try {
+        console.log("FE" +data);
         const idToken = await getIdToken();
         const url = "/cart/updateCart";
         const config = {
@@ -91,10 +92,11 @@ const clearCart = async() => {
     }
 };
 
-const getCart = async({userId}) => {
+const getCartByUser = async(userId) => {
     try {
         const idToken = await getIdToken();
-        const url = `/cart/userId=${userId}`;
+        console.log(userId);
+        const url = `/cart/getCartByUser/userId=${userId}`;
         const config = {
             method: "GET",
             headers: {
@@ -113,4 +115,4 @@ const getCart = async({userId}) => {
     }
 };
 
-export { addProductToCart, updateProductInCart, removeProductFromCart, clearCart, getCart }
+export { addProductToCart, updateProductInCart, removeProductFromCart, clearCart, getCartByUser }

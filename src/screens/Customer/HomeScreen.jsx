@@ -44,15 +44,23 @@ function HomeScreen({navigation}) {
   }
     
   const getTrending = async () => {
-    const res = await getProductTrending();
-    if(res.status === 200){
-      setTrending(res.data);
+    try{
+      const res = await getProductTrending();
+      if(res.status === 200){
+        setTrending(res.data);
+      }
+    }catch (error){
+      console.log(error);
     }
   }
   const getSanPhamOnsale = async () => {
-    const res = await getProductOnsale();
-    if(res.status === 200){
-      setSanPham(res.data);
+    try{
+      const res = await getProductOnsale();
+      if(res.status === 200){
+        setSanPham(res.data);
+      }
+    }catch(error){
+      console.log(error);
     }
   };
   const getDataPromotion = () => {
@@ -125,20 +133,6 @@ function HomeScreen({navigation}) {
 
   const setSoLuongChuaDocCuaCustomer = async () => {}
 
-  const handleSearch = (searchTerm, data) => {
-    if (searchTerm === '') {
-      setSearch(true);
-    }
-    else {
-      setSearch(false);
-      setSearchTerm(searchTerm);
-      const filteredItems = data.filter(item =>
-        item.TenSP.toLowerCase().includes(searchTerm.toLowerCase()),
-      );
-      setFilteredItems(filteredItems);
-    }
-
-  };
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     Promise.all([getTrending(), getSanPhamOnsale(), getDataPromotion(), getDanhMuc()])
@@ -282,11 +276,13 @@ function HomeScreen({navigation}) {
                 }}>
                 <Text style={styles.text}>See all</Text>
               </TouchableOpacity>
-            </View><View style={{}}>
+            </View>
+            <View style={{marginLeft: "5%"}}>
               <FlatList
-                windowSize={10}
                 horizontal={true}
                 data={trending}
+                showsHorizontalScrollIndicator={false}
+                key={item => item._id}
                 renderItem={({ item }) => (
                   <TouchableOpacity
                     style={{
@@ -299,11 +295,13 @@ function HomeScreen({navigation}) {
                     <ProductView
                       source={item.HinhAnhSP[0]}
                       title={item.TenSP}
+                      quantity={item.SoLuongDaBan}
                       price={item.GiaGiam} />
                   </TouchableOpacity>
                 )}
                 />
-            </View><View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <Text style={styles.textView}>Orther categories</Text>
               <TouchableOpacity>
                 <Text style={styles.text}>Explore now</Text>

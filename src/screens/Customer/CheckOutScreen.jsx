@@ -27,9 +27,10 @@ import Delivery from '../../components/Customer/Delivery';
 import Button from '../../components/Customer/Button';
 import { PR_1 } from '../../../assets/Customer/images';
 import FONT_FAMILY from '../../constants/font';
+import { BackIcon } from '../../../assets/Customer/svgs';
 
 function CheckoutScreen({ navigation, route }) {
-  //const { itemsCheckout, totalMoney } = route.params;
+  const { itemsCheckout } = route.params;
 
   //const { delivery, choosePayment, promotion } = route.params;
 
@@ -46,26 +47,7 @@ function CheckoutScreen({ navigation, route }) {
   //const totalOrder = totalMoney + deliveryCharge - discount;
 
   
-  const itemsCheckout = [
-    {
-      id: 1,
-      HinhAnhSP: ['https://via.placeholder.com/150', 'https://via.placeholder.com/150'],
-      TenSP: 'Áo thun trắng',
-      MauSac: 'Trắng',
-      Size: 'M',
-      GiaTien: 200000,
-      SoLuong: 2,
-    },
-    {
-      id: 2,
-      HinhAnhSP: ['https://via.placeholder.com/150', 'https://via.placeholder.com/150'],
-      TenSP: 'Quần jeans nam',
-      MauSac: 'Xanh',
-      Size: 'L',
-      GiaTien: 350000,
-      SoLuong: 1,
-    },
-  ];
+  
   
   const promotion = {
     id: 1,
@@ -142,19 +124,13 @@ function CheckoutScreen({ navigation, route }) {
           backgroundColor: CUSTOM_COLOR.White,
         }}>
         <TouchableOpacity
+          style={{
+            padding: 12,
+          }}
           onPress={() => {
             navigation.goBack();
           }}>
-          <Image
-            source={IC_Back}
-            style={{
-              width: 10,
-              height: 20,
-              marginHorizontal: 20,
-              marginVertical: 15,
-            }}
-            resizeMode="stretch"
-          />
+          <BackIcon/>
         </TouchableOpacity>
 
         <Text
@@ -170,12 +146,13 @@ function CheckoutScreen({ navigation, route }) {
       <ScrollView>
         {itemsCheckout ? (
           <ProductCheckOut
-            source={PR_1}
-            title={itemsCheckout[index].TenSP}
-            color={itemsCheckout[index].MauSac}
-            size={itemsCheckout[index].Size}
-            price={itemsCheckout[index].GiaTien}
-            number={itemsCheckout[index].SoLuong}
+            source={itemsCheckout[index].image[0]}
+            title={itemsCheckout[index].name}
+            color={itemsCheckout[index].color}
+            size={itemsCheckout[index].size}
+            price={itemsCheckout[index].price}
+            number={itemsCheckout[index].quantity}
+            check={itemsCheckout.length > 1 ? true : false}
             style={{
               marginVertical: 10,
             }}

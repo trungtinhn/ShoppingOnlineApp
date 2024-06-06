@@ -1,43 +1,40 @@
-import React from "react";
-import { StyleSheet, Text, TextInput, View, Image, ImageBackground, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
-import { IC_StartCorner, IC_StartFull } from "../../../assets/Customer/icons"
-
-import CUSTOM_COLOR from "../../constants/color";
-
-
-const StarRating = (props: any) =>{
-
-
-    const star = []
-
-    for (let x = 1; x <= props.nums; x++)
-    {
-        star.push(
-            <TouchableWithoutFeedback key={x}
-                onPress ={() => props.fill = x}
-            >
-                <Image source={x <= props.fill ? IC_StartCorner : IC_StartFull}
-                    style ={{
-                        width: 17,
-                        height: 17,
-                        marginHorizontal: 1
-                    }}
-                />
-
-            </TouchableWithoutFeedback>
-        )
+// components/StarRating.js
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { StarIcon, StarFullIcon, StarHaftIcon } from '../../../assets/Customer/svgs';
+import CUSTOM_COLOR from '../../constants/color';
+const StarRating = (props: any) => {
+  const maxStars = props.maxStars;
+  const rating = props.rating;  
+  const renderStar = (starNumber : number) => {
+    if (rating >= starNumber) {
+      return <StarFullIcon fill={CUSTOM_COLOR.FlushOrange} width={20} height={20}/>;
+    } else if (rating >= starNumber - 0.5) {
+      return <StarHaftIcon fill={CUSTOM_COLOR.FlushOrange} width={20} height={20}/>;
+    } else {
+      return <StarIcon fill={CUSTOM_COLOR.FlushOrange} width={20} height={20}/>;
     }
+  };
 
-    return(
-        <View style ={{
-            marginTop: 2,
-            flexDirection: 'row'
-        }}>
-            {star}
-        </View>
-    
-    )
-   
+  return (
+    <View style={styles.starContainer}>
+      {[...Array(maxStars)].map((_, index) => {
+        const starNumber = index + 1;
+        return (
+            <View key={index}>
+                {renderStar(starNumber)}
+            </View>
+        );
+      })}
+    </View>
+  );
 };
 
-export default StarRating
+const styles = StyleSheet.create({
+  starContainer: {
+    flexDirection: 'row',
+  },
+});
+
+export default StarRating;

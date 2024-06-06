@@ -1,92 +1,71 @@
-import {
-  ScrollView,
-  FlatList,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, {useState, useEffect} from 'react';
-import BackTo from '../../StaffView/components/BackTo';
-import CUSTOM_COLOR from '../../StaffView/constants/colors';
-import {Address, Delivery, Payment} from '../../StaffView/assets/icons';
-// import { ScrollView } from 'react-native-gesture-handler'
-//import { Acount } from './OverView'
-import PerSon from '../../StaffView/components/PerSon';
-//import { IM_MauAo } from '../assets/images'
-import ButtonDetail from '../../StaffView/components/ButtonDetail';
-import {Firestore, firebase} from '../../../Firebase/firebase';
-import {
-  collection,
-  onSnapshot,
-  query,
-  doc,
-  getDoc,
-  querySnapshot,
-  getDocs,
-  where,
-  updateDoc,
-} from 'firebase/firestore';
-import OneOrder from '../../StaffView/components/OneOrder';
-import ItemList from '../../StaffView/components/ItemList';
-import Size from '../constants/size';
+import { useState, useEffect } from 'react';
+import { View, ScrollView, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-
-const DataDelivery = {
-  Name: 'Trung Tinh',
-  Phone: '0704408389',
-  Address: '140/10 Dinh Bo Linh, Phuong 26, Binh Thanh, Ho Chi Minh',
-  CTY: 'Fast Delivery VietNam',
-  Code: '#JHGUJHCFJG',
+import { Address, Payment } from '../../../assets/Admin/icons';
+import BackTo from '../../components/Admin/BackTo';
+import OneOrder from '../../components/Admin/OneOrder';
+import PerSon from '../../components/Admin/PerSon';
+import CUSTOM_COLOR from '../../constants/color';
+import Size from '../../constants/size';
+import { BackIcon } from '../../../assets/Customer/svgs';
+import FONT_FAMILY from '../../constants/font';
+const url = "https://firebasestorage.googleapis.com/v0/b/shoppingapp-a20a4.appspot.com/o/images%2Fproducts%2Fproduct_2.jpg?alt=media&token=3d347bb8-2e49-49c5-b8c7-5ea6f7168f89"
+const mockData = {
+  TenND: 'Trung Tinh',
+  SDT: '0704408389',
+  DiaChi: '140/10 Dinh Bo Linh',
+  PhuongXa: 'Phuong 26',
+  QuanHuyen: 'Binh Thanh',
+  TinhThanhPho: 'Ho Chi Minh',
+  Avatar: url, // URL hình đại diện
+  MaND: '123456',
+  DatHang: [
+    {
+      SanPham: {
+        HinhAnhSP: [
+          url,
+          url,
+        ],
+        TenSP: 'Áo thun thời trang',
+        GiaSP: 200000,
+      },
+      SoLuong: 2,
+      MauSac: 'Đỏ',
+      Size: 'L',
+      ThanhTien: 400000,
+    },
+    {
+      SanPham: {
+        HinhAnhSP: [
+          url,
+          url,
+        ],
+        TenSP: 'Quần jeans nam',
+        GiaSP: 500000,
+      },
+      SoLuong: 1,
+      MauSac: 'Xanh',
+      Size: 'M',
+      ThanhTien: 500000,
+    },
+  ],
+  TamTinh: 900000,
+  PhiVanChuyen: 30000,
+  GiamGia: 50000,
+  TongTien: 880000,
 };
-export default function DeTailDelivery({navigation, route}) {
-  const {item} = route.params;
-  const [chatUser, setChatUser] = useState();
-  const [address, setAddress] = useState();
-  const [isLoading, setIsLoading] = useState(true);
+
+// Thay thế `item` trong mã của bạn bằng `mockData`
+export default function DeTailDelivery({navigation}) {
+  const [chatUser, setChatUser] = useState(mockData.TenND);
+  const [address, setAddress] = useState({
+    DiaChi: mockData.DiaChi,
+    PhuongXa: mockData.PhuongXa,
+    QuanHuyen: mockData.QuanHuyen,
+    TinhThanhPho: mockData.TinhThanhPho,
+  });
+  const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState('');
-  const getStatus = () => {
-    if (item.TrangThai == 'Cancel') {
-      setStatus = 'ReOrder';
-    }
-    if (item.TrangThai == 'Confirm') {
-      setStatus = 'Cancel';
-    }
-  };
-  const getAddress = async item => {
-    const docRef = doc(Firestore, 'DIACHI', item);
-    const docSnap = await getDoc(docRef);
-
-    const address = {
-      ...docSnap.data(),
-    };
-
-    setAddress(address);
-    setIsLoading(false);
-  };
-  const getDataChatUser = async () => {
-    try {
-      const q = query(
-        collection(Firestore, 'CHAT'),
-        where('MaND', '==', firebase.auth().currentUser.uid),
-      );
-
-      const unsubscribe = onSnapshot(q, async querySnapshot => {
-        querySnapshot.forEach(doc => {
-          setChatUser(doc.data());
-          console.log(doc.data());
-        });
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getAddress(item.MaDC);
-    getDataChatUser();
-  }, []);
 
   useEffect(() => {
     if (!isLoading) {
@@ -102,13 +81,26 @@ export default function DeTailDelivery({navigation, route}) {
         height: Size.DeviceHeight,
         flexDirection: 'column',
       }}>
-      <BackTo
-        style={{marginTop: 20}}
-        Info="Order/DeTails"
-        onPress={() => {
-          navigation.goBack();
-        }}
-      />
+      <View style ={{
+                flexDirection: 'row', 
+                alignItems: 'center',
+            }}>
+                <TouchableOpacity 
+                    style = {{
+                        padding: 20,
+                    }}
+                    onPress={() => {
+                        navigation.goBack();
+                    }}>
+                    <BackIcon></BackIcon>
+                </TouchableOpacity>
+              
+                <Text style ={{
+                    fontSize: 20,
+                    color: CUSTOM_COLOR.Black, 
+                    fontFamily: FONT_FAMILY.Bold,
+                }}>Order/Detail</Text>
+            </View>
       <View
         style={{
           width: '100%',
@@ -117,7 +109,7 @@ export default function DeTailDelivery({navigation, route}) {
           backgroundColor: CUSTOM_COLOR.LightGray,
         }}
       />
-      <View style={{width: '100%', height: '77%'}}>
+      <View style={{width: '100%', height: '80%'}}>
         <ScrollView style={{flex: 1}}>
           <View style={{width: '100%', flexDirection: 'column', marginTop: 10}}>
             <View
@@ -144,8 +136,8 @@ export default function DeTailDelivery({navigation, route}) {
               </View>
             </View>
             <View style={{marginLeft: 50, marginTop: 5, marginRight: 20}}>
-              <Text>{item.TenND}</Text>
-              <Text>{item.SDT}</Text>
+              <Text>{mockData.TenND}</Text>
+              <Text>{mockData.SDT}</Text>
               {!isLoading && (
                 <Text>{`${address.DiaChi}, ${address.PhuongXa}, ${address.QuanHuyen}, ${address.TinhThanhPho}`}</Text>
               )}
@@ -205,7 +197,7 @@ export default function DeTailDelivery({navigation, route}) {
                     fontWeight: 'bold',
                     marginRight: 10,
                   }}>
-                  {item.TamTinh} VND
+                  {mockData.TamTinh} VND
                 </Text>
               </View>
               <View
@@ -229,7 +221,7 @@ export default function DeTailDelivery({navigation, route}) {
                     fontWeight: 'bold',
                     marginRight: 10,
                   }}>
-                  {item.PhiVanChuyen} VND
+                  {mockData.PhiVanChuyen} VND
                 </Text>
               </View>
               <View
@@ -253,7 +245,7 @@ export default function DeTailDelivery({navigation, route}) {
                     fontWeight: 'bold',
                     marginRight: 10,
                   }}>
-                  {item.GiamGia} VND
+                  {mockData.GiamGia} VND
                 </Text>
               </View>
               <View
@@ -277,7 +269,7 @@ export default function DeTailDelivery({navigation, route}) {
                     fontWeight: 'bold',
                     marginRight: 10,
                   }}>
-                  {item.TongTien} VND
+                  {mockData.TongTien} VND
                 </Text>
               </View>
             </View>
@@ -291,10 +283,10 @@ export default function DeTailDelivery({navigation, route}) {
             }}
           />
           <View>
-            <PerSon avartar={item.Avatar} name={item.TenND} id={item.MaND} />
+            <PerSon avartar={mockData.Avatar} name={mockData.TenND} id={mockData.MaND} />
 
             <View>
-              {item.DatHang.map((product, index) => {
+              {mockData.DatHang.map((product, index) => {
                 return (
                   <View key={index}>
                     <OneOrder
@@ -309,28 +301,6 @@ export default function DeTailDelivery({navigation, route}) {
                   </View>
                 );
               })}
-              {/* <FlatList
-            data={item.DatHang}
-            renderItem={({ item }) => {
-
-              //console.log(item)
-              return (
-                <View>
-                  <OneOrder
-                    source={item.SanPham.HinhAnhSP[0]}
-                    title={item.SanPham.TenSP}
-                    price={item.SanPham.GiaSP}
-                    number={item.SoLuong}
-                    color={item.MauSac}
-                    size={item.Size}
-                    totalPrice={item.ThanhTien}
-
-                  ></OneOrder>
-
-                </View>
-              )
-            }}
-          /> */}
             </View>
           </View>
         </ScrollView>
@@ -367,10 +337,3 @@ export default function DeTailDelivery({navigation, route}) {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  button: {
-    width: 90,
-    height: 40,
-  },
-});

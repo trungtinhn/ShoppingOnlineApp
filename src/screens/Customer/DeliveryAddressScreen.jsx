@@ -5,6 +5,7 @@ import Button from "../../components/Customer/Button";
 import InputData from "../../components/Customer/InputData";
 import CUSTOM_COLOR from "../../constants/color";
 import TextInputCard from "../../components/Login_SignUp/TextInputCard";
+import { BackIcon } from "../../../assets/Customer/svgs";
 
 function DeliveryAddressScreen({ navigation, route }) {
 
@@ -56,19 +57,12 @@ function DeliveryAddressScreen({ navigation, route }) {
                 backgroundColor: CUSTOM_COLOR.White,
                 height: 40
             }}>
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity 
+                    style={{padding: 20}}
+                    onPress={() => {
                     navigation.goBack();
                 }}>
-                    <Image
-                        source={IC_Back}
-                        style={{
-                            width: '20%',
-                            height: '40%',
-                            marginHorizontal: 20,
-                            marginVertical: '20%'
-                        }}
-                        resizeMode='stretch'
-                    />
+                   <BackIcon/>
                 </TouchableOpacity>
 
 

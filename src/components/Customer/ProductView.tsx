@@ -3,6 +3,7 @@ import { StyleSheet, Text, TextInput, View, Image } from "react-native";
 import FONT_FAMILY from "../../constants/font";
 import Size from "../../constants/size";
 import CUSTOM_COLOR from "../../constants/color";
+import { formatSoldQuantity } from "../../utils/helpers";
 
 
 const ProductView = (props: any) => {
@@ -29,20 +30,20 @@ const ProductView = (props: any) => {
 
             }} />
          <View style={{ padding: 10 }}>
-             <Text style={{
+            <Text numberOfLines={1} ellipsizeMode="tail" style={{
                marginVertical: 4,
                fontFamily: FONT_FAMILY.Medium,
                color: CUSTOM_COLOR.Black,
             }}>{props.title}</Text>
             <View style={styles.rowContent}>
                <Text style={{
-                  fontSize: 14,
+                  fontSize: 16,
                   marginTop: -5,
-                  fontStyle: 'italic',
+                  
                   //fontFamily: FONT_FAMILY.Bold,
                   color: CUSTOM_COLOR.FlushOrange,
                }}>đ{props.price}</Text>
-               <Text style={{marginTop: -5, fontSize: 10}}>Đã bán 1,3k</Text>
+               <Text style={{fontSize: 10}}>Đã bán {formatSoldQuantity(props.quantity)}</Text>
             </View>
          </View>
         

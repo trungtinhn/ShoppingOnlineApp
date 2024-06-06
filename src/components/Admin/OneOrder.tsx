@@ -1,5 +1,6 @@
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
+import CUSTOM_COLOR from '../../constants/color';
 
 const OneOrder = (props: any) => {
   return (
@@ -18,8 +19,8 @@ const OneOrder = (props: any) => {
           resizeMode="cover"
         />
         <View style={{flexDirection: 'column', marginLeft: 10, width: 250}}>
-          <Text>{props.title}</Text>
-          <Text style={{fontWeight: 'bold'}}>{props.price} VND</Text>
+          <Text style={{fontWeight: 'bold', color: CUSTOM_COLOR.Black, fontSize: 20}}>{props.title}</Text>
+          <Text style={{fontWeight: 'bold', color: CUSTOM_COLOR.FlushOrange}}>{props.price} VND</Text>
           <Text>x{props.number}</Text>
           <Text>Màu sắc: {props.color}</Text>
           <Text>Size: {props.size}</Text>
@@ -31,7 +32,7 @@ const OneOrder = (props: any) => {
               justifyContent: 'space-between',
             }}>
             <Text style={{fontWeight: 'bold'}}>Total</Text>
-            <Text style={{fontWeight: 'bold', marginRight: 20}}>
+            <Text style={{fontWeight: 'bold', marginRight: 20, color: CUSTOM_COLOR.FlushOrange}}>
               {props.totalPrice} VND
             </Text>
           </View>
