@@ -23,8 +23,8 @@ const PerSon = (props: any) => {
         resizeMode="cover"
       />
       <View style={{flexDirection: 'column', marginLeft: 10, marginTop: 13}}>
-        <Text style={{fontWeight: 'bold', fontFamily: FONT_FAMILY.Bold, color: CUSTOM_COLOR.Black, fontSize: 18}}>{props.name}</Text>
-        <Text style={{marginTop: 1, fontWeight: 'bold'}}>Customer</Text>
+        <Text style={{fontFamily: FONT_FAMILY.CeraPro, color: CUSTOM_COLOR.Black, fontSize: 18}}>{props.name}</Text>
+        <Text style={{marginTop: 1, fontWeight: 'bold', color: CUSTOM_COLOR.Black}}>Customer</Text>
       </View>
     </View>
   );

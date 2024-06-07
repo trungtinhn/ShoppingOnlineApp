@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, KeyboardAvoidingView } from "react-native";
 import { getFocusedRouteNameFromRoute, NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
@@ -23,6 +23,10 @@ const TabBottom = createBottomTabNavigator()
 function CustomerBottomTab() {
 
     return (
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "android" ? "padding" : "height"}
+            style={{ flex: 1 }}
+            >
         <NavigationContainer>
             <TabBottom.Navigator
 
@@ -109,7 +113,7 @@ function CustomerBottomTab() {
 
             </TabBottom.Navigator>
         </NavigationContainer>
-
+    </KeyboardAvoidingView>
     )
 }
 

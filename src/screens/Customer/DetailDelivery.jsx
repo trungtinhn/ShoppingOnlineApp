@@ -7,8 +7,9 @@ import OneOrder from '../../components/Admin/OneOrder';
 import PerSon from '../../components/Admin/PerSon';
 import CUSTOM_COLOR from '../../constants/color';
 import Size from '../../constants/size';
-import { BackIcon } from '../../../assets/Customer/svgs';
+import { BackIcon, Location, LocationFill, PaymentFill } from '../../../assets/Customer/svgs';
 import FONT_FAMILY from '../../constants/font';
+import Button from '../../components/Customer/Button';
 const url = "https://firebasestorage.googleapis.com/v0/b/shoppingapp-a20a4.appspot.com/o/images%2Fproducts%2Fproduct_2.jpg?alt=media&token=3d347bb8-2e49-49c5-b8c7-5ea6f7168f89"
 const mockData = {
   TenND: 'Trung Tinh',
@@ -92,7 +93,7 @@ export default function DeTailDelivery({navigation}) {
                     onPress={() => {
                         navigation.goBack();
                     }}>
-                    <BackIcon></BackIcon>
+                    <BackIcon fill={CUSTOM_COLOR.FlushOrange}></BackIcon>
                 </TouchableOpacity>
               
                 <Text style ={{
@@ -105,7 +106,6 @@ export default function DeTailDelivery({navigation}) {
         style={{
           width: '100%',
           height: 10,
-          marginTop: 10,
           backgroundColor: CUSTOM_COLOR.LightGray,
         }}
       />
@@ -120,10 +120,8 @@ export default function DeTailDelivery({navigation}) {
                 justifyContent: 'space-between',
               }}>
               <View style={{flexDirection: 'row'}}>
-                <Image
-                  source={Address}
+                <LocationFill
                   style={{width: 26, height: 26, marginLeft: 18}}
-                  resizeMode="contain"
                 />
                 <Text
                   style={{
@@ -160,10 +158,8 @@ export default function DeTailDelivery({navigation}) {
                 justifyContent: 'space-between',
               }}>
               <View style={{flexDirection: 'row'}}>
-                <Image
-                  source={Payment}
+                <PaymentFill
                   style={{width: 26, height: 26, marginLeft: 18}}
-                  resizeMode="contain"
                 />
                 <Text
                   style={{
@@ -308,31 +304,10 @@ export default function DeTailDelivery({navigation}) {
       <View
         style={{
           width: '100%',
-          height: 60,
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Chat', {chatUser});
-          }}
-          style={{
-            width: '50%',
-            height: 55,
-            borderRadius: 25,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: CUSTOM_COLOR.DarkOrange,
-          }}>
-          <Text
-            style={{
-              color: CUSTOM_COLOR.White,
-              fontSize: 20,
-              fontWeight: 'bold',
-            }}>
-            Contact Seller
-          </Text>
-        </TouchableOpacity>
+       <Button title="Contact Seller" color={CUSTOM_COLOR.FlushOrange} onPress={() => {}}/>
       </View>
     </SafeAreaView>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { View, Text, StyleSheet,FlatList, TouchableOpacity, Image, ScrollView, RefreshControl, Alert } from "react-native";
+import { View, Text, StyleSheet,FlatList, TouchableOpacity, Image, ScrollView, RefreshControl, Alert, Switch } from "react-native";
 import ProductCheckOut from "../../components/Customer/ProductCheckout";
 import { IC_Back } from "../../../assets/Customer/icons";
 import { PR_1, PR_2, PR_3, PR_4, PR_5 } from "../../../assets/Customer/images";
@@ -11,6 +11,7 @@ import { getCartByUser, removeProductFromCart, updateProductInCart } from "../..
 import {firebase} from "../../../firebase/firebase"
 import LoadingScreen from "../LoadingScreen";
 import { id } from "date-fns/locale";
+import CheckBox from "@react-native-community/checkbox";
 const ShoppingCard = ({navigation}) => {
     const idUser = firebase.auth().currentUser.uid;
     const [items, setItems] = useState([]);
@@ -232,29 +233,7 @@ const ShoppingCard = ({navigation}) => {
                         justifyContent: 'center',
                         alignItems: 'center'
                     }}>
-                        <TouchableOpacity style={{
-                            width: 23,
-                            height: 23,
-                            borderWidth: 1,
-                            borderRadius: 20,
-                            marginRight: 20,
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}
-                            onPress={() => {
-                                ChooseAll()
-                            }}
-                        >
-                            {checkChooseAll ?
-                                <View style={{
-                                    width: 10,
-                                    height: 10,
-                                    borderRadius: 10,
-                                    backgroundColor: CUSTOM_COLOR.Black
-                                }}>
-
-                                </View> : null}
-                        </TouchableOpacity>
+                        <CheckBox value={checkChooseAll} onValueChange={() => ChooseAll()} onCheckColor={CUSTOM_COLOR.FlushOrange} />
 
                         <Text style={{
                             fontSize: 17,

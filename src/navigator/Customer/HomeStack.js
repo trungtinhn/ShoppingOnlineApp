@@ -5,6 +5,11 @@ import ChatScreen from '../../screens/Customer/ChatSreen';
 import HomeScreen from '../../screens/Customer/HomeScreen';
 import DetailCategoryScreen from '../../screens/Customer/DetailCategoryScreen';
 import ProductDetail from '../../screens/Customer/Productdetail';
+import CheckoutScreen from '../../screens/Customer/CheckOutScreen';
+import PaymentMethodScreen from '../../screens/Customer/PaymentMethodScreen';
+import DeliveryAddressScreen from '../../screens/Customer/DeliveryAddressScreen';
+import PromotionScreen from '../../screens/Customer/PromotionScreen';
+import DeliveryScreen from '../../screens/Customer/DeliveryScreen';
 const HomeStack = createNativeStackNavigator();
 const HomeNavigation = () => {
   return (
@@ -14,6 +19,11 @@ const HomeNavigation = () => {
       <HomeStack.Screen name='ChatScreen' component={ChatScreen}/>
       <HomeStack.Screen name='DetailCategory' component={DetailCategoryScreen}/>
       <HomeStack.Screen name="ProductDetail" component={ProductDetail}/>
+      <HomeStack.Screen name="Checkout" component={CheckoutScreen}/>
+      <HomeStack.Screen name="PaymentMethod" component={PaymentMethodScreen}/>
+      <HomeStack.Screen name="Promotion" component={PromotionScreen}/>
+      <HomeStack.Screen name="DeliveryAddress" component={DeliveryAddressScreen}/>
+      <HomeStack.Screen name="Delivery" component={DeliveryScreen}/>
     </HomeStack.Navigator>
   )
 }
