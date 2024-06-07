@@ -5,10 +5,17 @@ const OrderSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    addressId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Address',
-        required: true,
+    name: {
+        type: String,
+        required: true
+    },
+    phone: {
+        type: String,
+        required: true
+    },
+    address: {
+        type: String,
+        required: true
     },
     promotionId: {
         type: mongoose.Schema.Types.ObjectId,

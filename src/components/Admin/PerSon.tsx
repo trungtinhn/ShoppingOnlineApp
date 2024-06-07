@@ -7,8 +7,8 @@ const PerSon = (props: any) => {
     <View
       style={{
         width: '100%',
-        height: 80,
         borderBottomWidth: 0.5,
+        borderColor: CUSTOM_COLOR.LightGray,
         flexDirection: 'row',
       }}>
       <Image
@@ -17,8 +17,8 @@ const PerSon = (props: any) => {
           width: 60,
           aspectRatio: 1,
           borderRadius: 55,
-          marginTop: 15,
-          marginLeft: 15,
+          marginVertical: 10,
+          marginLeft: 20,
         }}
         resizeMode="cover"
       />

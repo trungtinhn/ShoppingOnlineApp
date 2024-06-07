@@ -27,6 +27,7 @@ import { useNavigation } from '@react-navigation/native';
 import LoadingComponent from '../../components/LoadingComponent';
 import { Default_Avatar } from '../../../assets/Customer/images';
 import {firebase} from '../../../firebase/firebase'
+import { CalendarIcon, CreditIcon, DeliveryIcon, GiftIcon, LockIcon, NextRight, OrderIcon, ProfileIcon, UserFillIcon } from '../../../assets/Customer/svgs';
 function AccountScreen() {
     const navigation = useNavigation();
     const hanleSignOut = () => { };
@@ -120,13 +121,6 @@ function AccountScreen() {
                                 </View>
                             </View>
 
-                            {/* <Text
-                style={{
-                  marginHorizontal: '5%',
-                  color: CUSTOM_COLOR.White,
-                }}>
-                Following: 3
-              </Text> */}
                         </View>
 
                         <TouchableOpacity
@@ -146,14 +140,8 @@ function AccountScreen() {
                                     flexDirection: 'row',
                                     alignItems: 'center',
                                 }}>
-                                <Image
-                                    source={IC_Order}
-                                    style={{
-                                        marginHorizontal: '10%',
-                                        tintColor: CUSTOM_COLOR.Black,
-                                    }}
-                                    resizeMode="stretch"
-                                />
+                                <OrderIcon style={styles.iconOption}/>
+                               
 
                                 <Text
                                     style={{
@@ -176,12 +164,7 @@ function AccountScreen() {
                                     }}>
                                     View purchase history
                                 </Text>
-                                <Image
-                                    source={IC_Next}
-                                    style={{
-                                        marginLeft: '5%',
-                                    }}
-                                />
+                                <NextRight/>
                             </View>
                         </TouchableOpacity>
 
@@ -195,72 +178,21 @@ function AccountScreen() {
                                 borderBottomColor: CUSTOM_COLOR.Alto,
                             }}>
                             <TouchableOpacity>
-                                <Image
-                                    source={IC_Wallet}
-                                    style={{
-                                        height: 25,
-                                        width: 25,
-                                    }}
-                                />
+                                <CreditIcon/>
                             </TouchableOpacity>
 
                             <TouchableOpacity>
-                                <Image
-                                    source={IC_Gift}
-                                    style={{
-                                        height: 25,
-                                        width: 25,
-                                    }}
-                                />
+                                <GiftIcon/>
                             </TouchableOpacity>
 
                             <TouchableOpacity>
-                                <Image
-                                    source={IC_Delivery}
-                                    style={{
-                                        height: 25,
-                                        width: 25,
-                                    }}
-                                />
+                                <DeliveryIcon/>
                             </TouchableOpacity>
 
                             <TouchableOpacity>
-                                <Image
-                                    source={IC_Revote}
-                                    style={{
-                                        height: 25,
-                                        width: 25,
-                                    }}
-                                />
+                                <CalendarIcon/>
                             </TouchableOpacity>
                         </View>
-
-                        {/* <TouchableOpacity
-              style={{
-                ...styles.option,
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}>
-                <Image
-                  source={IC_Question}
-                  style={{
-                    ...styles.iconOption,
-                  }}
-                />
-                <Text
-                  style={{
-                    fontSize: 15,
-                    color: CUSTOM_COLOR.Black,
-                  }}>
-                  Help center
-                </Text>
-              </View>
-
-              <Image source={IC_Next} />
-            </TouchableOpacity> */}
 
                         <TouchableOpacity
                             onPress={() => {
@@ -274,12 +206,7 @@ function AccountScreen() {
                                     flexDirection: 'row',
                                     alignItems: 'center',
                                 }}>
-                                <Image
-                                    source={IC_Profile}
-                                    style={{
-                                        ...styles.iconOption,
-                                    }}
-                                />
+                                <ProfileIcon style={styles.iconOption} fill={CUSTOM_COLOR.Black} />
                                 <Text
                                     style={{
                                         fontSize: 16,
@@ -289,7 +216,7 @@ function AccountScreen() {
                                 </Text>
                             </View>
 
-                            <Image source={IC_Next} />
+                            <NextRight/>
                         </TouchableOpacity>
 
                         <TouchableOpacity
@@ -304,12 +231,7 @@ function AccountScreen() {
                                     flexDirection: 'row',
                                     alignItems: 'center',
                                 }}>
-                                <Image
-                                    source={IC_Lock}
-                                    style={{
-                                        ...styles.iconOption,
-                                    }}
-                                />
+                                <LockIcon style={styles.iconOption} fill={CUSTOM_COLOR.Black} />
                                 <Text
                                     style={{
                                         fontSize: 16,
@@ -319,40 +241,13 @@ function AccountScreen() {
                                 </Text>
                             </View>
 
-                            <Image source={IC_Next} />
+                            <NextRight/>
                         </TouchableOpacity>
 
-                        {/* <TouchableOpacity
-              style={{
-                ...styles.option,
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}>
-                <Image
-                  source={IC_Theme}
-                  style={{
-                    ...styles.iconOption,
-                  }}
-                />
-                <Text
-                  style={{
-                    fontSize: 15,
-                    color: CUSTOM_COLOR.Black,
-                  }}>
-                  Theme color
-                </Text>
-              </View>
-
-              <Image source={IC_Next} />
-            </TouchableOpacity> */}
 
                         <TouchableOpacity
                             onPress={() => {
                                 firebase.auth().signOut();
-                                // navigation.navigate('Login');
                             }}
                             style={{
                                 ...styles.option,

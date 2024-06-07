@@ -16,6 +16,14 @@ const isValidString = value => {
     }
     return true;
 };
+
+function formatCurrency(number) {
+  if (typeof number !== 'undefined' && number !== null) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  } else {
+    return "0"; 
+  }
+}
 function formatSoldQuantity(quantityStr) {
     const quantity = parseInt(quantityStr, 10);
   
@@ -31,4 +39,4 @@ function formatSoldQuantity(quantityStr) {
     return quantityStr;
   }
 const avatarDefault = 'https://firebasestorage.googleapis.com/v0/b/shoppingapp-ada07.appspot.com/o/images%2Fusers%2FuserCustomer.png?alt=media&token=16225e3a-c284-4a14-bdc6-710ae891f34b';
-export { isValidEmail, isValidPassword, isValidString, avatarDefault, formatSoldQuantity };
+export { isValidEmail, isValidPassword, isValidString, avatarDefault, formatSoldQuantity, formatCurrency };
