@@ -1,9 +1,12 @@
 const express = require("express")
-
+const socketSetup = require("./socket");
 const cors = require("cors")
 const dotenv = require("dotenv")
 const mongoose = require("mongoose")
 const cokieParser = require("cookie-parser")
+const app = express();
+const http = require("http");
+const server = http.createServer(app);
 
 const categoryRoutes = require("./routes/routeCategory")
 const productRoutes = require('./routes/routeProduct');
@@ -15,7 +18,6 @@ const cartRoutes = require("./routes/routeCart");
 const parameterRoutes = require("./routes/routesParameter");
 const likeRoutes = require("./routes/routesLike");
 dotenv.config()
-const app = express()
 mongoose.connect(process.env.MONGODB_URL.replace("<password>", process.env.MONGODB_PASSWORD)).then(() => {
     console.log("Database connected");
 })
@@ -23,8 +25,12 @@ mongoose.connect(process.env.MONGODB_URL.replace("<password>", process.env.MONGO
 
 app.use(cors())
 app.use(express.json())
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use(cokieParser())
 
+app.get("/", (req, res) =>
+    res.status(200).json("Welcome server")
+  );
 
 app.use("/api/category", categoryRoutes)
 app.use('/api/products', productRoutes);
@@ -36,7 +42,9 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/parameter', parameterRoutes);
 app.use('/api/like', likeRoutes);
 
-app.listen(8000, () => {
+socketSetup(server);
+
+server.listen(8000, () => {
     console.log("Server running on port 8000");
 });
     

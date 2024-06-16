@@ -128,7 +128,7 @@ function Promotion({navigation}){
               console.log(item);
               return (
                 <PromotionCard
-                  source={item.HinhAnhKhuyenMai}
+                  source={item.HinhAnhKM}
                   name={item.TenKM}
                   discount={item.TiLe * 100}
                   minimum={item.DonToiThieu}

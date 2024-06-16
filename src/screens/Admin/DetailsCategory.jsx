@@ -7,6 +7,7 @@ import CUSTOM_COLOR from '../../constants/color';
 import ProductView from '../../components/Admin/ProductView';
 import SearchInput from '../../components/Admin/SearchInput';
 import SortDropdown from '../../components/Admin/SortDropdown';
+import { getProductByCategory } from '../../api/ProductApi';
 
 function DetailCategory({navigation, route}) {
   const {category} = route.params;
@@ -24,7 +25,11 @@ function DetailCategory({navigation, route}) {
   };
 
   const getDataCategory = async () => {
-    
+   const res = await getProductByCategory({MaDM: category._id});
+   if(res.status === 200){
+    console.log("lấy dữ liệu thành công")
+    setItems(res.data)
+   }
   };
   useEffect(() => {
     getDataCategory();
@@ -124,7 +129,7 @@ function DetailCategory({navigation, route}) {
                 <ProductView
                   source={item.HinhAnhSP[0]}
                   title={item.TenSP}
-                  price={item.GiaSP}
+                  price={item.GiaGoc}
                 />
               </TouchableOpacity>
             );
