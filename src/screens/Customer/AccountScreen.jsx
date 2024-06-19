@@ -8,54 +8,36 @@ import {
     SafeAreaView,
 } from 'react-native';
 import {
-    IC_Delivery,
-    IC_Gift,
-    IC_Lock,
     IC_Logout,
-    IC_Next,
-    IC_Order,
-    IC_Profile,
-    IC_Question,
-    IC_Revote,
-    IC_Theme,
-    IC_Wallet,
     IC_User,
 } from '../../../assets/Customer/icons'
-//Test App
 import CUSTOM_COLOR from '../../constants/color';
 import { useNavigation } from '@react-navigation/native';
 import LoadingComponent from '../../components/LoadingComponent';
-import { Default_Avatar } from '../../../assets/Customer/images';
 import {firebase} from '../../../firebase/firebase'
-import { CalendarIcon, CreditIcon, DeliveryIcon, GiftIcon, LockIcon, NextRight, OrderIcon, ProfileIcon, UserFillIcon } from '../../../assets/Customer/svgs';
+import { CalendarIcon, CreditIcon, DeliveryIcon, GiftIcon, LockIcon, NextRight, OrderIcon, ProfileIcon } from '../../../assets/Customer/svgs';
+import { getUserType } from '../../api/UserApi';
+
 function AccountScreen() {
     const navigation = useNavigation();
-    const hanleSignOut = () => { };
-    const [user, setUser] = useState();
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [userData, setUserData] = useState(null);
-    const [imageUrl, setImageUrl] = useState(null);
 
     const getUserData = async () => {
-        
+        const res = await getUserType({ MaND: firebase.auth().currentUser.uid });
+        if (res.status === 200) {
+            setUserData(res.data);
+            setIsLoading(true);
+        }else{
+            console.log(res)
+        }
     }
     useEffect(() => {
-        const userData = [
-            {
-                TenND: 'Tien Phat',
-                LoaiND: 'VIP'
-            }
-        ];
-        setUserData(userData)
-        setImageUrl(Default_Avatar);
-        // fetchUserData(firebase.auth().currentUser.uid);
-        // fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
-        //   setImageUrl(url),
-        // );
+        getUserData();
     }, []);
     return (
         <SafeAreaView style={styles.container}>
-            {true ? (
+            {isLoading ? (
                 <>
                     <View style={styles.container}>
                         <View
@@ -73,9 +55,9 @@ function AccountScreen() {
                                     alignItems: 'center',
                                     marginHorizontal: '5%',
                                 }}>
-                                {imageUrl ? (
+                                {userData.Avatar ? (
                                     <Image
-                                        source={imageUrl}
+                                        source={{uri: userData.Avatar}}
                                         style={{
                                             width: 100,
                                             height: 100,
@@ -107,7 +89,7 @@ function AccountScreen() {
                                             color: CUSTOM_COLOR.White,
                                             fontWeight: '500',
                                         }}>
-                                        Trần Tiến Phát
+                                        {userData.TenND}
                                     </Text>
 
                                     <Text
@@ -276,7 +258,9 @@ function AccountScreen() {
                     </View>
                 </>
             ) : (
-                <LoadingComponent text="Loading data..." />
+                
+                    <LoadingComponent/>
+                
             )}
         </SafeAreaView>
     );

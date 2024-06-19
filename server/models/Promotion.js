@@ -17,6 +17,10 @@ const promotionSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    SoLuotConLai:{
+        type: Number,
+        default: 0,
+    },
     SoLuotSuDung: {
         type: Number,
         required: false,
@@ -25,7 +29,7 @@ const promotionSchema = new mongoose.Schema({
         type: Number,
         required: false,
     },
-    HinhAnhKhuyenMai: {
+    AnhNenKhuyenMai: {
         type: String,
         required: true
     },
@@ -45,10 +49,6 @@ const promotionSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    ThoiGianTao: {
-        type: Date,
-        default: Date.now
-    }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Promotion', promotionSchema);

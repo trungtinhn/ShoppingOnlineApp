@@ -9,10 +9,8 @@ admin.initializeApp({
 
 const verifyToken = async (req, res, next) => {
   const idToken = req.headers.authorization && req.headers.authorization.split(' ')[1];
-  console.log("Ahihijhhh")
   try {
     const decodedToken = await admin.auth().verifyIdToken(idToken);
-    console.log("Token server" + decodedToken);
     req.user = decodedToken;
     next();
   } catch (error) {

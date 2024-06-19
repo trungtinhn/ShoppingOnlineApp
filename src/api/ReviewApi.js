@@ -4,7 +4,7 @@ import { api } from "./AppApi";
 const addReview = async({data}) => {
     try {
         const idToken = await getIdToken();
-        const url = "/review/addReview";
+        const url = "/reviews/addReview";
         const config = {
             method: "POST",
             headers: {
@@ -27,7 +27,7 @@ const addReview = async({data}) => {
 const getAllReviews = async() => {
     try {
         const idToken = await getIdToken();
-        const url = "/review/getReviews";
+        const url = "/reviews/getReviews";
         const config = {
             method: "GET",
             headers: {
@@ -49,7 +49,7 @@ const getAllReviews = async() => {
 const getReviewById = async({id}) => {
     try {
         const idToken = await getIdToken();
-        const url = `/review/getReviewById/id=${id}`;
+        const url = `/reviews/getReviewById/id=${id}`;
         const config = {
             method: "GET",
             headers: {
@@ -71,7 +71,7 @@ const getReviewById = async({id}) => {
 const updateReview = async({id, data}) => {
     try {
         const idToken = await getIdToken();
-        const url = `/review/updateReview/id=${id}`;
+        const url = `/reviews/updateReview/id=${id}`;
         const config = {
             method: "PUT",
             headers: {
@@ -94,7 +94,7 @@ const updateReview = async({id, data}) => {
 const deleteReview = async({id}) => {
     try {
         const idToken = await getIdToken();
-        const url = `/review/deleteReview/id=${id}`;
+        const url = `/reviews/deleteReview/id=${id}`;
         const config = {
             method: "DELETE",
             headers: {

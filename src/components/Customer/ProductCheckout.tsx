@@ -5,6 +5,7 @@ import CUSTOM_COLOR from "../../constants/color";
 import { DeleteIcon, NextIcon } from "../../../assets/Customer/svgs";
 import FONT_FAMILY from "../../constants/font";
 import CheckBox from "@react-native-community/checkbox";
+import { formatCurrency } from "../../utils/helpers";
 
 
 const ProductCheckOut = (props: any) => {
@@ -55,9 +56,8 @@ const ProductCheckOut = (props: any) => {
                     marginVertical: 2,
                     fontSize: 17,
                     color: CUSTOM_COLOR.FlushOrange,
-                    fontFamily: FONT_FAMILY.Semibold,
-                    fontWeight: 'bold'
-                }}>{props.price}đ</Text>
+                    fontFamily: FONT_FAMILY.CeraPro,
+                }}>{formatCurrency(props.price)}đ</Text>
 
                 {props.show ?
 

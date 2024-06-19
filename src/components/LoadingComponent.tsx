@@ -8,7 +8,7 @@ const LoadingComponent = (props: any) => (
     <ActivityIndicator
       //style={styles.loadingContainer}
       size="large"
-      color={CUSTOM_COLOR.White}
+      color={CUSTOM_COLOR.FlushOrange}
     />
     {props.text && <Text style={styles.text}>{props.text}</Text>}
   </View>

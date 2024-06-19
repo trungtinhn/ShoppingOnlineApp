@@ -25,6 +25,7 @@ import { Slider } from 'react-native-elements';
 import FONT_FAMILY from '../../constants/font';
 import { getCategory } from '../../api/CategoryApi';
 import { getProductOnsale, getProductTrending } from '../../api/ProductApi';
+import { getPromotionCurrent } from '../../api/PromotionApi';
 function HomeScreen({navigation}) {
   const [trending, setTrending] = useState([]);
   const [danhmuc, setDanhMuc] = useState([]);
@@ -63,65 +64,11 @@ function HomeScreen({navigation}) {
       console.log(error);
     }
   };
-  const getDataPromotion = () => {
-    const data = [
-      {
-        HinhAnhKM: PR_1,
-        TenKM: 'Promotion 1',
-        TiLe: 0.2, // Discount rate
-        DonToiThieu: '$50', // Minimum purchase
-        NgayBatDau: new Date('2024-04-20'), // Start date
-        NgayKetThuc: new Date('2024-04-30'), // End date
-        Loai: 'Sale', // Type of promotion
-      },
-      {
-        HinhAnhKM: PR_2,
-        TenKM: 'Promotion 2',
-        TiLe: 0.1,
-        DonToiThieu: '$30',
-        NgayBatDau: new Date('2024-04-15'),
-        NgayKetThuc: new Date('2024-04-25'),
-        Loai: 'Discount',
-      },
-      {
-        HinhAnhKM: PR_1,
-        TenKM: 'Promotion 1',
-        TiLe: 0.2, // Discount rate
-        DonToiThieu: '$50', // Minimum purchase
-        NgayBatDau: new Date('2024-04-20'), // Start date
-        NgayKetThuc: new Date('2024-04-30'), // End date
-        Loai: 'Sale', // Type of promotion
-      },
-      {
-        HinhAnhKM: PR_2,
-        TenKM: 'Promotion 2',
-        TiLe: 0.1,
-        DonToiThieu: '$30',
-        NgayBatDau: new Date('2024-04-15'),
-        NgayKetThuc: new Date('2024-04-25'),
-        Loai: 'Discount',
-      },
-      {
-        HinhAnhKM: PR_1,
-        TenKM: 'Promotion 1',
-        TiLe: 0.2, // Discount rate
-        DonToiThieu: '$50', // Minimum purchase
-        NgayBatDau: new Date('2024-04-20'), // Start date
-        NgayKetThuc: new Date('2024-04-30'), // End date
-        Loai: 'Sale', // Type of promotion
-      },
-      {
-        HinhAnhKM: PR_2,
-        TenKM: 'Promotion 2',
-        TiLe: 0.1,
-        DonToiThieu: '$30',
-        NgayBatDau: new Date('2024-04-15'),
-        NgayKetThuc: new Date('2024-04-25'),
-        Loai: 'Discount',
-      },
-      // Add more objects as needed
-    ];
-    setDataPromotion(data);
+  const getDataPromotion = async () => {
+    const res = await getPromotionCurrent();
+    if(res.status === 200){
+      setDataPromotion(res.data);
+    }
   }
   useEffect(() => {
     getTrending();

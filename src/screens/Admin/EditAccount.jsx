@@ -26,8 +26,6 @@ function EditAccount ({navigation, route}) {
   const [birth, setBirth] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
-  // const {user} = navigation.params();
   const user = route.params?.user;
 
   useEffect(() => {

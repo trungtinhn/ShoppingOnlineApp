@@ -24,6 +24,16 @@ function formatCurrency(number) {
     return "0"; 
   }
 }
+
+function formatDate(date) {
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+    return [year, month, day].join('.').toString();
+}
 function formatSoldQuantity(quantityStr) {
     const quantity = parseInt(quantityStr, 10);
   
@@ -39,4 +49,4 @@ function formatSoldQuantity(quantityStr) {
     return quantityStr;
   }
 const avatarDefault = 'https://firebasestorage.googleapis.com/v0/b/shoppingapp-ada07.appspot.com/o/images%2Fusers%2FuserCustomer.png?alt=media&token=16225e3a-c284-4a14-bdc6-710ae891f34b';
-export { isValidEmail, isValidPassword, isValidString, avatarDefault, formatSoldQuantity, formatCurrency };
+export { isValidEmail, isValidPassword, isValidString, avatarDefault, formatSoldQuantity, formatCurrency, formatDate };

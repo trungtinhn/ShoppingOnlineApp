@@ -17,103 +17,112 @@ import NotificationNavigation from "./NotificationStack";
 import LoveNavigation from "./LoveStack";
 import AccountNavigation from "./AccountStack";
 import { BellFillIcon, HeartFillIcon, HomeFillIcon, UserFillIcon } from "../../../assets/Customer/svgs";
+import { OrderProvider } from "../../context/OrderContext";
+import { StripeProvider } from "@stripe/stripe-react-native";
 const TabBottom = createBottomTabNavigator()
 
 
 function CustomerBottomTab() {
-
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "android" ? "padding" : "height"}
-            style={{ flex: 1 }}
-            >
-        <NavigationContainer>
-            <TabBottom.Navigator
+    <StripeProvider
+        publishableKey="pk_test_51PPShQAeyMMyXyX6hJzFCoORKaJxa3DOO82rBHEogafgCF7pyIjzfS7AmiMeigkPdpdZDMc9rvvpTRmes35iEuVK00quslxsWi"
+        urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
+        merchantIdentifier="merchant.com.{{YOUR_APP_NAME}}" // required for Apple Pay
+      >
+        <OrderProvider>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "android" ? "padding" : "height"}
+                style={{ flex: 1 }}
+                >
+            <NavigationContainer>
+                <TabBottom.Navigator
 
-                screenOptions={
-                    {
-                        tabBarStyle: {
-                            position: 'absolute',
-                            bottom: 0,
-                        },
+                    screenOptions={
+                        {
+                            tabBarStyle: {
+                                position: 'absolute',
+                                bottom: 0,
+                            },
 
-                        tabBarShowLabel: false,
+                            tabBarShowLabel: false,
 
-                        headerShown: false,
-
-
-                    }
-
-                }
+                            headerShown: false,
 
 
-
-            >
-                <TabBottom.Screen name='HomeNavigation' component={HomeNavigation} options={({ route }) => ({
-
-                    tabBarLabel: 'Home',
-                    tabBarStyle: { display: getTabBarVisibility(route) },
-                    tabBarIcon: ({ focused }) => {
-                        return (
-                            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                {focused ? <HomeFillIcon fill={CUSTOM_COLOR.FlushOrange} /> : <HomeIcon fill={CUSTOM_COLOR.Black}/>}
-                            </View>
-                        )
+                        }
 
                     }
 
-                })} />
-
-                <TabBottom.Screen name='NotificationNavigation' component={NotificationNavigation} options={({ route }) => ({
-                    
-                    tabBarLabel: 'Notification',
-                    tabBarStyle: { display: getTabBarVisibility(route) },
-                    tabBarIcon: ({ focused }) => {
-                        return (
-                            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                {focused ? <BellFillIcon fill={CUSTOM_COLOR.FlushOrange} /> : <BellIcon fill={CUSTOM_COLOR.Black}/>}
-                            </View>
-                        )
 
 
-                    }
-                })}
+                >
+                    <TabBottom.Screen name='HomeNavigation' component={HomeNavigation} options={({ route }) => ({
 
-                />
+                        tabBarLabel: 'Home',
+                        tabBarStyle: { display: getTabBarVisibility(route) },
+                        tabBarIcon: ({ focused }) => {
+                            return (
+                                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                    {focused ? <HomeFillIcon fill={CUSTOM_COLOR.FlushOrange} /> : <HomeIcon fill={CUSTOM_COLOR.Black}/>}
+                                </View>
+                            )
 
-                <TabBottom.Screen name = 'FollowNavigation' component={LoveNavigation} 
-                            options = {({ route }) => ({
-                                tabBarLabel: 'Follow',
-                                tabBarStyle: { display: getTabBarVisibility(route) },
-                                tabBarIcon: ({focused}) =>{
-                                    return( 
-                                        <View style ={{alignItems: 'center', justifyContent: 'center'}}>
-                                            {focused ? <HeartFillIcon fill={CUSTOM_COLOR.FlushOrange} /> : <HeartIcon fill={CUSTOM_COLOR.Black}/>}
-                                        </View>
-                                )
-                                
-                                    
-                                }
-                            })}
+                        }
+
+                    })} />
+
+                    <TabBottom.Screen name='NotificationNavigation' component={NotificationNavigation} options={({ route }) => ({
+                        
+                        tabBarLabel: 'Notification',
+                        tabBarStyle: { display: getTabBarVisibility(route) },
+                        tabBarIcon: ({ focused }) => {
+                            return (
+                                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                    {focused ? <BellFillIcon fill={CUSTOM_COLOR.FlushOrange} /> : <BellIcon fill={CUSTOM_COLOR.Black}/>}
+                                </View>
+                            )
+
+
+                        }
+                    })}
+
                     />
 
-                <TabBottom.Screen name = 'AccountNavigation' component={AccountNavigation} 
-                    options = {({ route }) => ({
-                        tabBarLabel: 'Account',
-                        tabBarStyle: { display: getTabBarVisibility(route) },
-                        tabBarIcon: ({focused}) =>{
-                            return( 
-                                <View style ={{alignItems: 'center', justifyContent: 'center'}}>
-                                    {focused ? <UserFillIcon fill={CUSTOM_COLOR.FlushOrange} /> : <AccountIcon fill={CUSTOM_COLOR.Black}/>}
-                                </View>
-                        )           
-                        }
-                })}
-            />
+                    <TabBottom.Screen name = 'FollowNavigation' component={LoveNavigation} 
+                                options = {({ route }) => ({
+                                    tabBarLabel: 'Follow',
+                                    tabBarStyle: { display: getTabBarVisibility(route) },
+                                    tabBarIcon: ({focused}) =>{
+                                        return( 
+                                            <View style ={{alignItems: 'center', justifyContent: 'center'}}>
+                                                {focused ? <HeartFillIcon fill={CUSTOM_COLOR.FlushOrange} /> : <HeartIcon fill={CUSTOM_COLOR.Black}/>}
+                                            </View>
+                                    )
+                                    
+                                        
+                                    }
+                                })}
+                        />
 
-            </TabBottom.Navigator>
-        </NavigationContainer>
-    </KeyboardAvoidingView>
+                    <TabBottom.Screen name = 'AccountNavigation' component={AccountNavigation} 
+                        options = {({ route }) => ({
+                            tabBarLabel: 'Account',
+                            tabBarStyle: { display: getTabBarVisibility(route) },
+                            tabBarIcon: ({focused}) =>{
+                                return( 
+                                    <View style ={{alignItems: 'center', justifyContent: 'center'}}>
+                                        {focused ? <UserFillIcon fill={CUSTOM_COLOR.FlushOrange} /> : <AccountIcon fill={CUSTOM_COLOR.Black}/>}
+                                    </View>
+                            )           
+                            }
+                    })}
+                />
+
+                </TabBottom.Navigator>
+            </NavigationContainer>
+        </KeyboardAvoidingView>
+        </OrderProvider>
+    </StripeProvider>
     )
 }
 

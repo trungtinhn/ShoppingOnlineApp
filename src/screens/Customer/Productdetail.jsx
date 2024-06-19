@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import { View, Text, Image, TouchableOpacity, TouchableWithoutFeedback, FlatList, Modal, Alert, ActivityIndicator } from "react-native";
 import { StyleSheet } from "react-native";
 import CUSTOM_COLOR from "../../constants/color";
@@ -16,9 +16,13 @@ import FONT_FAMILY from "../../constants/font";
 import Button from "../../components/Customer/Button";
 import {firebase} from '../../../firebase/firebase'
 import { addProductToCart } from "../../api/CartApi";
-const url = 'https://firebasestorage.googleapis.com/v0/b/shoppingapp-a20a4.appspot.com/o/images%2Fcategories%2Fproduct_1.jpg?alt=media&token=6c835337-a643-4c0d-98bd-34957a39045b'
+import { OrderContext } from "../../context/OrderContext";
+import { get } from "mongoose";
+import { addLike, checkLike, deleteLike } from "../../api/LikeApi";
+const url = 'https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.jpg';
 function ProductDetail({ navigation, route }) {
     const { id } = route.params;
+    const userId = firebase.auth().currentUser.uid;
     const [dataSanPham, setDataSanPham] = useState([]);
     const [isLoading, setLoading] = useState(true);
     const [isLoadingCart, setLoadingCart] = useState(false);
@@ -30,8 +34,33 @@ function ProductDetail({ navigation, route }) {
     const [seeDetails, setSeeDetails] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
-    const setDataYeuThich = () => {
-        setLove(!love);
+    const {product, setProduct} = useContext(OrderContext);
+    const getDataLove = async () => {
+        const res = await checkLike({data: {MaND: userId, _id: id}});
+        if (res.status === 200) {
+            const data = res.data.isFavorited;
+            setLove(data);
+        }else{
+            console.log(res)
+            setLove(false);
+        }
+    };
+    const setDataLove = async () => {
+        if(love){
+            const res = await deleteLike({data: {MaND: userId, _id: id}});
+            if (res.status === 200) {
+                setLove(false);
+            }else{
+                console.log(res)
+            }
+        }else{
+            const res = await addLike({data: {MaND: userId, _id: id}});
+            if (res.status === 200) {
+                setLove(true);
+            }else{
+                console.log(res)
+            }
+        }
     };
     const itemsRe = [
         {
@@ -101,6 +130,7 @@ function ProductDetail({ navigation, route }) {
     }
 
     const getDataById = async (id) => {
+        await getDataLove(id);
         try{
             const res = await getProductById({productId: id});
             if(res.status === 200){
@@ -129,7 +159,8 @@ function ProductDetail({ navigation, route }) {
                 price: dataSanPham.GiaGiam,
                 totalPrice: dataSanPham.GiaGiam * numProduct
             }]
-            navigation.navigate('Checkout', {itemsCheckout: data});
+            setProduct(data);
+            navigation.navigate('Checkout');
         }
     };
     const onRefresh = useCallback(() => {
@@ -166,7 +197,7 @@ function ProductDetail({ navigation, route }) {
                         onPress={() => {
                             navigation.goBack();
                         }}>
-                        <BackIcon></BackIcon>
+                        <BackIcon fill={CUSTOM_COLOR.FlushOrange}></BackIcon>
                     </TouchableOpacity>
 
                     <Text style={{ height: 40, padding: 7, fontSize: 20, color: CUSTOM_COLOR.Black, fontFamily: FONT_FAMILY.Bold, fontWeight: 'bold',  }}>Product</Text>
@@ -174,7 +205,7 @@ function ProductDetail({ navigation, route }) {
 
                 <View style={{ flexDirection: "row", alignItems: 'center', marginRight: 10 }} >
                     <TouchableOpacity onPress={() => {
-                        setDataYeuThich();
+                        setDataLove();
                     }}
                     >
                         {love ? (<HeartFillIcon fill={CUSTOM_COLOR.FlushOrange}

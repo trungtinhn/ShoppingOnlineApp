@@ -20,7 +20,6 @@ const OrderSchema = new mongoose.Schema({
     promotionId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Promotion',
-        required: true,
     },
     products: [{
         productId: {
@@ -69,15 +68,15 @@ const OrderSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    totalProduct:{
+        type: Number,
+        required: true
+    },
     status: {
         type: String,
         enum: ['Confirm', 'On Wait', 'Delivering', 'Delivered', 'Cancel'],
         default: 'Confirm'
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
 });
 
 const Order = mongoose.model('Order', OrderSchema);

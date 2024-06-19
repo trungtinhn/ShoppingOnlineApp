@@ -14,6 +14,8 @@ const userRoutes = require("./routes/routeUser");
 const cartRoutes = require("./routes/routeCart");
 const parameterRoutes = require("./routes/routesParameter");
 const likeRoutes = require("./routes/routesLike");
+const orderRoutes = require("./routes/routesOrder");
+const paymentRoutes = require("./routes/routePayment");
 dotenv.config()
 const app = express()
 mongoose.connect(process.env.MONGODB_URL.replace("<password>", process.env.MONGODB_PASSWORD)).then(() => {
@@ -35,7 +37,8 @@ app.use('/api/user', userRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/parameter', parameterRoutes);
 app.use('/api/like', likeRoutes);
-
+app.use('/api/order', orderRoutes);
+app.use('/api/payment', paymentRoutes);
 app.listen(8000, () => {
     console.log("Server running on port 8000");
 });

@@ -78,12 +78,12 @@ const Review = (props: any) =>{
         
         {props.images && props.images.length > 0 && (
         <View style={styles.container}>
-            {props.images.map((image: any) => (
+            {props.images.map((image: any, index: any) => (
             <TouchableOpacity onPress={props.onPress}>
                 <Image
                 source={{ uri: image }}
                 style={{ width: 100, height: 100, marginTop: 10, marginHorizontal: 5 }}
-                key={image}
+                key={index}
                 />
             </TouchableOpacity>
             ))}

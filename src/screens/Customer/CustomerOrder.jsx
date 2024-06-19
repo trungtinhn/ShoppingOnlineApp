@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ActivityIndicator, useWindowDimensions, ScrollView, RefreshControl } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
@@ -14,12 +14,15 @@ import { Icon } from 'react-native-elements';
 import CustomButton from '../../components/Login_SignUp/CustomButton';
 import { formatCurrency } from '../../utils/helpers';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-
-
-const url = 'https://firebasestorage.googleapis.com/v0/b/shoppingapp-a20a4.appspot.com/o/images%2Fproducts%2Fproduct_2.jpg?alt=media&token=3d347bb8-2e49-49c5-b8c7-5ea6f7168f89';
-
+import { get } from 'mongoose';
+import { firebase } from '../../../firebase/firebase';
+import LoadingComponent from '../../components/LoadingComponent';
+import { getOrdersByUserIdAndStatus, updateOrderStatus } from '../../api/OrderApi';
 const CustomerOrder = ({ navigation }) => {
+    const userId = firebase.auth().currentUser.uid;
     const layout = useWindowDimensions();
+    const [loading, setLoading] = useState(true);
+    const [handle, setHandle] = useState(false);
 
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
@@ -30,176 +33,170 @@ const CustomerOrder = ({ navigation }) => {
         { key: 'cancel', title: 'Cancel' },
     ]);
 
-    const donHangConfirm = [
-        {
-            Avatar: url,
-            TenND: 'John Doe',
-            DatHang: [
-                {
-                    SanPham: {
-                        HinhAnhSP: [url],
-                        TenSP: 'Product 1',
-                        GiaSP: 100,
-                    },
-                    SoLuong: 2,
-                    ThanhTien: 200,
-                    MauSac: 'Red',
-                    Size: 'M',
-                    MaDH: 'DH001'
-                },
-                {
-                    SanPham: {
-                        HinhAnhSP: [url],
-                        TenSP: 'Product 2',
-                        GiaSP: 150,
-                    },
-                    SoLuong: 1,
-                    ThanhTien: 150,
-                    MauSac: 'Blue',
-                    Size: 'L',
-                    MaDH: 'DH002'
-                }
-            ],
-            TongTien: 1000000,
-            MaDH: 'DH001'
-        },
-        {
-            Avatar: url,
-            TenND: 'Jane Smith',
-            DatHang: [
-                {
-                    SanPham: {
-                        HinhAnhSP: [url],
-                        TenSP: 'Product 3',
-                        GiaSP: 200,
-                    },
-                    SoLuong: 3,
-                    ThanhTien: 600,
-                    MauSac: 'Green',
-                    Size: 'S',
-                    MaDH: 'DH003'
-                }
-            ],
-            TongTien: 3000000,
-            MaDH: 'DH002'
-        }
-    ];
+    const [donHangConfirm, setDonHangConfirm] = useState([]);
+    const [donHangOnWait, setDonHangOnWait] = useState([]);
+    const [donHangDelivering, setDonHangDelivering] = useState([]);
+    const [donHangDelivered, setDonHangDelivered] = useState([]);
+    const [donHangCancel, setDonHangCancel] = useState([]);
 
-    const donHangOnWait = [];
-    const donHangDelivering = [];
-    const donHangDelivered = [];
-    const donHangCancel = [];
+    const fetchOrders = async () => {
+        try {
+            const [confirmRes, onWaitRes, deliveringRes, deliveredRes, cancelRes] = await Promise.all([
+                getOrdersByUserIdAndStatus({ userId, status: 'Confirm' }),
+                getOrdersByUserIdAndStatus({ userId, status: 'On Wait' }),
+                getOrdersByUserIdAndStatus({ userId, status: 'Delivering' }),
+                getOrdersByUserIdAndStatus({ userId, status: 'Delivered' }),
+                getOrdersByUserIdAndStatus({ userId, status: 'Cancel' })
+            ]);
+
+            if (confirmRes.status === 200) setDonHangConfirm(confirmRes.data);
+            if (onWaitRes.status === 200) setDonHangOnWait(onWaitRes.data);
+            if (deliveringRes.status === 200) setDonHangDelivering(deliveringRes.data);
+            if (deliveredRes.status === 200) setDonHangDelivered(deliveredRes.data);
+            if (cancelRes.status === 200) setDonHangCancel(cancelRes.data);
+            setLoading(false);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        fetchOrders();
+    }, []);
 
     const renderOrderList = (data) => (
-        <FlatList
-            data={data}
-            renderItem={({ item }) => (
-                <View style={styles.background}>
-                    <View style={styles.separatorLine}/>
+        loading ? <LoadingComponent/> :
+        <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchOrders} />}>
+        {data.map(item => (
+            <View key={item._id} style={styles.background}>
+                <TouchableOpacity onPress={() => navigation.navigate('DeliveryDetail', { item })}>
+                    <View style={styles.separatorLine} />
                     <PerSon avartar={item.Avatar} name={item.TenND} />
                     <Text style={styles.labelFocus}>Purchased Products</Text>
-                    <FlatList
-                        data={item.DatHang}
-                        renderItem={({ item }) => (
-                            <OneOrder
-                                source={item.SanPham.HinhAnhSP[0]}
-                                title={item.SanPham.TenSP}
-                                price={item.SanPham.GiaSP}
-                                number={item.SoLuong}
-                                totalPrice={item.ThanhTien}
-                                color={item.MauSac}
-                                size={item.Size}
-                                Code={item.MaDH}
-                                onPress={() => {}}
-                                PressConfirm={() => {}}
-                            />
-                        )}
-                    />
-                    <View style={styles.itemCodeContainer}>
-                        <Text style={styles.itemCode}>$Total: </Text>
-                        <Text style={styles.itemCodeText}>{formatCurrency(item.TongTien)} VND</Text>
-                    </View>
+                    {item.products.map(product => (
+                        <OneOrder
+                            key={product._id}
+                            source={product.image[0]}
+                            title={product.name}
+                            price={product.price}
+                            number={product.quantity}
+                            totalPrice={product.price * product.quantity}
+                            color={product.color}
+                            size={product.size}
+                            Code={product._id}
+                            onPress={() => {}}
+                            PressConfirm={() => {}}
+                        />
+                    ))}
+                </TouchableOpacity>
+                <View style={styles.itemCodeContainer}>
+                    <Text style={styles.itemCode}>$Total: </Text>
+                    <Text style={styles.itemCodeText}>{formatCurrency(item.totalPrice)} VND</Text>
                 </View>
-            )}
-        />
+            </View>
+        ))}
+        </ScrollView>
     );
 
     const renderOrderConfirm = (data) => (
-        <FlatList
-            data={data}
-            renderItem={({ item }) => (
-                <TouchableWithoutFeedback onPress={() => {navigation.navigate('DeliveryDetail')}}>
-                <View style={styles.background}>
-                    <View style={styles.separatorLine}/>
+        loading ? <LoadingComponent/> :
+        <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchOrders} />}>
+        {data.map(item => (
+            <View key={item._id} style={styles.background}>
+                <TouchableOpacity onPress={() => navigation.navigate('DeliveryDetail', { item })}>
+                    <View style={styles.separatorLine} />
                     <PerSon avartar={item.Avatar} name={item.TenND} />
                     <Text style={styles.labelFocus}>Purchased Products</Text>
-                    <FlatList
-                        data={item.DatHang}
-                        renderItem={({ item }) => (
-                            <OneOrder
-                                source={item.SanPham.HinhAnhSP[0]}
-                                title={item.SanPham.TenSP}
-                                price={item.SanPham.GiaSP}
-                                number={item.SoLuong}
-                                totalPrice={item.ThanhTien}
-                                color={item.MauSac}
-                                size={item.Size}
-                                Code={item.MaDH}
-                                onPress={() => {}}
-                                PressConfirm={() => {}}
-                            />
-                        )}
-                    />
-                    <View style={styles.itemCodeContainer}>
-                        <Text style={styles.itemCode}>$Total: </Text>
-                        <Text style={styles.itemCodeText}>{formatCurrency(item.TongTien)} VND</Text>
-                    </View>
-                    <View style={{width: '100%', alignItems: 'flex-end', marginBottom: 10}}>
-                        <Button title="Cancel" color={CUSTOM_COLOR.FlushOrange} onPress={() => {}}/>
-                    </View>
+                    {item.products.map(product => (
+                        <OneOrder
+                            key={product._id}
+                            source={product.image[0]}
+                            title={product.name}
+                            price={product.price}
+                            number={product.quantity}
+                            totalPrice={product.price * product.quantity}
+                            color={product.color}
+                            size={product.size}
+                            Code={product._id}
+                            onPress={() => {}}
+                            PressConfirm={() => {}}
+                        />
+                    ))}
+                </TouchableOpacity>
+                <View style={styles.itemCodeContainer}>
+                    <Text style={styles.itemCode}>$Total: </Text>
+                    <Text style={styles.itemCodeText}>{formatCurrency(item.totalPrice)} VND</Text>
                 </View>
-                </TouchableWithoutFeedback>
-            )}
-        />
+                <View style={{ width: '100%', alignItems: 'flex-end', marginBottom: 10 }}>
+                    <Button
+                        title="Cancel"
+                        color={CUSTOM_COLOR.FlushOrange}
+                        onPress={async () => {
+                            setHandle(true);
+                            const res = await updateOrderStatus({ id: item._id, status: 'Cancel' });
+                            if (res.status === 200) {
+                                fetchOrders();
+                                setHandle(false);
+                            } else {
+                                console.log(res);
+                            }
+                        }}
+                    />
+                </View>
+            </View>
+        ))}
+        </ScrollView>
     ) 
 
     const renderOrderCancel = (data) => (
-        <FlatList
-            data={data}
-            renderItem={({ item }) => (
-                <TouchableWithoutFeedback onPress={() => {navigation.navigate('DeliveryDetail')}}>
-                <View style={styles.background}>
-                    <View style={styles.separatorLine}/>
+        loading ? <LoadingComponent/> :
+        <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchOrders} />}>
+        {data.map(item => (
+            <View key={item._id} style={styles.background}>
+                <TouchableOpacity onPress={() => navigation.navigate('DeliveryDetail', { item })}>
+                    <View style={styles.separatorLine} />
                     <PerSon avartar={item.Avatar} name={item.TenND} />
                     <Text style={styles.labelFocus}>Purchased Products</Text>
-                    <FlatList
-                        data={item.DatHang}
-                        renderItem={({ item }) => (
-                            <OneOrder
-                                source={item.SanPham.HinhAnhSP[0]}
-                                title={item.SanPham.TenSP}
-                                price={item.SanPham.GiaSP}
-                                number={item.SoLuong}
-                                totalPrice={item.ThanhTien}
-                                color={item.MauSac}
-                                size={item.Size}
-                                Code={item.MaDH}
-                                onPress={() => {}}
-                                PressConfirm={() => {}}
-                            />
-                        )}
-                    />
-                    <View style={styles.itemCodeContainer}>
-                        <Text style={styles.itemCode}>$Total: </Text>
-                        <Text style={styles.itemCodeText}>{formatCurrency(item.TongTien)} VND</Text>
-                    </View>
-                    <View style={{width: '100%', alignItems: 'flex-end', marginBottom: 10}}>
-                        <Button title="Re Order" color={CUSTOM_COLOR.FlushOrange} onPress={() => {}}/>
-                    </View>
+                    {item.products.map(product => (
+                        <OneOrder
+                            key={product._id}
+                            source={product.image[0]}
+                            title={product.name}
+                            price={product.price}
+                            number={product.quantity}
+                            totalPrice={product.price * product.quantity}
+                            color={product.color}
+                            size={product.size}
+                            Code={product._id}
+                            onPress={() => {}}
+                            PressConfirm={() => {}}
+                        />
+                    ))}
+                </TouchableOpacity>
+                <View style={styles.itemCodeContainer}>
+                    <Text style={styles.itemCode}>$Total: </Text>
+                    <Text style={styles.itemCodeText}>{formatCurrency(item.totalPrice)} VND</Text>
                 </View>
-                </TouchableWithoutFeedback>
-            )}
-        />
+                <View style={{ width: '100%', alignItems: 'flex-end', marginBottom: 10 }}>
+                    <Button
+                        title="Re Order"
+                        color={CUSTOM_COLOR.FlushOrange}
+                        onPress={async () => {
+                            setHandle(true);
+                            const res = await updateOrderStatus({ id: item._id, status: 'Confirm' });
+                            if (res.status === 200) {
+                                fetchOrders();
+                                setHandle(false);
+                            } else {
+                                console.log(res);
+                            }
+                        }}
+                    />
+                </View>
+               
+            </View>
+        ))}
+        </ScrollView>
     )
 
     const renderScene = SceneMap({
@@ -227,6 +224,7 @@ const CustomerOrder = ({ navigation }) => {
     );
 
     return (
+        
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
@@ -241,6 +239,11 @@ const CustomerOrder = ({ navigation }) => {
                 initialLayout={{ width: layout.width }}
                 renderTabBar={renderTabBar}
             />
+             {handle && (
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color={CUSTOM_COLOR.FlushOrange} />
+                </View>
+                )}
         </SafeAreaView>
     );
 };
@@ -321,7 +324,13 @@ const styles = StyleSheet.create({
     },
     background: {
         backgroundColor: CUSTOM_COLOR.White,
-    }
+    },
+    loadingContainer: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 });
 
 export default CustomerOrder;

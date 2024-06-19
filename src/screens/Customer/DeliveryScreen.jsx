@@ -1,80 +1,51 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity, ScrollView, Keyboard } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, RefreshControl, Alert } from "react-native";
 import CUSTOM_COLOR from "../../constants/color";
-import { IC_Back, IC_Add } from "../../../assets/Customer/icons";
+import { IC_Add } from "../../../assets/Customer/icons";
 import Delivery from "../../components/Customer/Delivery";
 import { BackIcon } from "../../../assets/Customer/svgs";
-function DeliveryScreen({ navigation, route }) {
+import { OrderContext } from "../../context/OrderContext";
+import { getAddressByMaND } from "../../api/AddressApi";
+import {firebase} from "../../../firebase/firebase"
+import LoadingScreen from "../LoadingScreen";
+function DeliveryScreen({ navigation }) {
+    const { address, setAddress } = useContext(OrderContext);
+    const [isLoading, setLoading] = useState(true)
+    const [dataDelivery, setDataDelivery] = useState([])
 
-    const { itemsCheckout, totalMoney, choosePayment, promotion } = route.params
-
-    const [dataDelivery, setDataDelivery] = useState([
-        {
-            id: 1,
-            TenNguoiMua: "Nguyen Van A",
-            SDT: "0901234567",
-            PhuongXa: "Phuong 1",
-            QuanHuyen: "Quan 1",
-            TinhThanhPho: "Thanh Pho Ho Chi Minh",
-            DiaChi: "123 Nguyen Trai",
-            checkSelect: false
-        },
-        {
-            id: 2,
-            TenNguoiMua: "Le Thi B",
-            SDT: "0912345678",
-            PhuongXa: "Phuong 2",
-            QuanHuyen: "Quan 2",
-            TinhThanhPho: "Thanh Pho Ho Chi Minh",
-            DiaChi: "456 Le Loi",
-            checkSelect: true
-        },
-        {
-            id: 3,
-            TenNguoiMua: "Tran Van C",
-            SDT: "0923456789",
-            PhuongXa: "Phuong 3",
-            QuanHuyen: "Quan 3",
-            TinhThanhPho: "Thanh Pho Ho Chi Minh",
-            DiaChi: "789 Tran Hung Dao",
-            checkSelect: false
+    const getDataDelivery = async() => {
+        const res = await getAddressByMaND({MaND: firebase.auth().currentUser.uid})
+        if(res.status === 200){
+            const data = res.data.map((delivery) => {
+                return { ...delivery, checkSelect: false }
+            })
+            setDataDelivery(data)
+            setLoading(false)
+        }else{
+            console.log(res)
         }
-    ])
-
-    const [delivery, setDelivey] = useState()
-
-    const getDataDelivery = () => {
-        // const q = query(collection(Firestore, "DIACHI"), where("MaND", "==", firebase.auth().currentUser.uid));
-
-        // const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        //     const data = [];
-
-        //     querySnapshot.forEach((doc) => {
-
-        //         data.push({ ...doc.data(), checkSelect: false })
-        //     });
-        //     setDataDelivery(data)
-
-
-        // });
-
-
     }
 
     const updateCheck = (item) => {
-        const updatedData = dataDelivery.map((delivery) => 
-            delivery.id === item.id ? { ...delivery, checkSelect: !delivery.checkSelect } : delivery
-        );
-        setDataDelivery(updatedData);
+        const updateItem = dataDelivery.map((diachi) => {
+            if (diachi._id === item._id) {
+                diachi.checkSelect = true
+                setAddress(diachi)
+            }
+            else diachi.checkSelect = false
+            return diachi
+        })
+        setDataDelivery(updateItem)
     }
-
 
     useEffect(() => {
         getDataDelivery()
-
     }, [])
 
-
+    if(isLoading){
+        return <LoadingScreen/>
+    }
+    else
     return (
         <View style={styles.container}>
             <View style={{
@@ -112,7 +83,13 @@ function DeliveryScreen({ navigation, route }) {
                 <TouchableOpacity style={{
                     marginHorizontal: 15
                 }}
-                    onPress={delivery ? () => navigation.navigate('Checkout', { itemsCheckout, totalMoney, choosePayment, delivery, promotion }) : null}
+                    onPress={()=>{
+                        if(address){
+                            navigation.navigate('Checkout')
+                        }else{
+                            Alert.alert('Vui lòng chọn địa chỉ nhận hàng')
+                        }
+                    }}
                 >
                     <Text style={{
                         fontSize: 18,
@@ -123,9 +100,8 @@ function DeliveryScreen({ navigation, route }) {
 
 
 
-            <ScrollView>
+            <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={getDataDelivery} />}>
                 {dataDelivery ? dataDelivery.map((item, index) => {
-
                     return (
                         <Delivery
                             name={item.TenNguoiMua}
@@ -143,17 +119,15 @@ function DeliveryScreen({ navigation, route }) {
                                 margin: 10
                             }}
                         />
-
                     )
                 }) : null}
-
                 <TouchableOpacity style={{
                     flexDirection: 'row',
                     justifyContent: 'center',
                     alignItems: 'center',
                     marginVertical: 15
                 }}
-                    onPress={() => navigation.navigate('DeliveryAddress', { itemsCheckout, totalMoney, choosePayment, promotion })}
+                    onPress={() => navigation.navigate('DeliveryAddress')}
                 >
                     <Image
                         source={IC_Add}
@@ -164,18 +138,13 @@ function DeliveryScreen({ navigation, route }) {
                             marginRight: 10
                         }}
                     />
-
                     <Text style={{
                         color: CUSTOM_COLOR.FlushOrange,
                         fontSize: 16
                     }}>Add new delivery</Text>
                 </TouchableOpacity>
             </ScrollView>
-
-
-
         </View>
-
     )
 }
 

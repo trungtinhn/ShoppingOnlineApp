@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import { View, Text, StyleSheet,FlatList, TouchableOpacity, Image, ScrollView, RefreshControl, Alert, Switch } from "react-native";
 import ProductCheckOut from "../../components/Customer/ProductCheckout";
 import { IC_Back } from "../../../assets/Customer/icons";
@@ -12,7 +12,10 @@ import {firebase} from "../../../firebase/firebase"
 import LoadingScreen from "../LoadingScreen";
 import { id } from "date-fns/locale";
 import CheckBox from "@react-native-community/checkbox";
+import { OrderContext } from "../../context/OrderContext";
+
 const ShoppingCard = ({navigation}) => {
+    const {product, setProduct, setPromoCode} = useContext(OrderContext)
     const idUser = firebase.auth().currentUser.uid;
     const [items, setItems] = useState([]);
     const [isLoading, setLoading] = useState(true)
@@ -149,7 +152,7 @@ const ShoppingCard = ({navigation}) => {
     }
     const LoadItemsCheckout = () => {
         const data = items.filter((product) => product.checkSelect == true)
-        setItemsCheckout(data)
+        setProduct(data)
     }
 
     
@@ -267,17 +270,15 @@ const ShoppingCard = ({navigation}) => {
                     type="primary"
                     text="CHECK OUT"
                     onPress={() => {
-                        if(itemsCheckout.length > 0){
-                            navigation.navigate('Checkout', {itemsCheckout: itemsCheckout})
-                            //setItemsCheckout([])
-                            //ResetProduct()
+                        if(product.length > 0){
+                            setPromoCode(null)
+                            navigation.navigate('Checkout')
                         }
                         else{
                             Alert.alert('Warning', 'Please choose product')
                         }
                     }}
                  />
-                        
                 </View>
             </View>
         </View>
