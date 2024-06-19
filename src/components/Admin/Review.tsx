@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, TextInput, View, Image, ImageBackground, TouchableOpacity, ViewComponent } from "react-native";
 import { IC_Clock } from "../../../assets/Admin/icons";
 import CUSTOM_COLOR from "../../constants/color";
-import StarRating from "./StarRating";
+import StarRating from "../Customer/StartRating";
 
 
 const Review = (props: any) => {
@@ -59,7 +59,7 @@ const Review = (props: any) => {
                         color: CUSTOM_COLOR.Black
                     }}>{props.rating} rating</Text>
                     <StarRating
-                        nums={5}
+                        maxStars={5}
                         fill={props.rating}
                     />
                 </View>

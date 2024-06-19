@@ -6,7 +6,6 @@ import CustomerBottomTab from "../../navigator/Customer/CustomerBottomNavigation
 
 
 const Promotion = (props: any) => {
-
     return (
         <View style={{
             paddingHorizontal: 10,
@@ -17,6 +16,7 @@ const Promotion = (props: any) => {
             alignItems: 'center',
             borderWidth: 1,
             borderColor: CUSTOM_COLOR.Alto,
+            backgroundColor: CUSTOM_COLOR.WhitePorcelain,
             borderRadius: 10,
             paddingVertical: 10,
             width: props.show ? null : '90%',
@@ -30,7 +30,8 @@ const Promotion = (props: any) => {
                     style={{
                         width: 80,
                         height: 80,
-                        marginHorizontal: 10
+                        marginHorizontal: 10,
+                        backgroundColor: CUSTOM_COLOR.LightGray
                     }}
                 />
 

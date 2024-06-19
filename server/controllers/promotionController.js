@@ -44,6 +44,35 @@ const promotionController = {
         } catch (error) {
             res.status(500).json({ message: 'Failed to get promotion!', error });
         }
+    },
+    getPromotionCurrent: async (req, res) => {
+        try {
+            const promotion = await Promotion.find({ NgayBatDau: { $lte: new Date() }, NgayKetThuc: { $gte: new Date() }, SoLuotConLai: { $gt: 0 } });
+            if (!promotion) {
+                return res.status(404).json('Promotion not found!');
+            }
+            res.status(200).json(promotion);
+        } catch (error) {
+            res.status(500).json({ message: 'Failed to get promotion!', error });
+        }
+    },
+    checkPromotion: async (req, res) => {
+        try{
+            const { id } = req.params;
+            const promotion = await Promotion.findOne({
+                _id: id,
+                NgayBatDau: { $lte: new Date() },
+                NgayKetThuc: { $gte: new Date() },
+                SoLuotConLai: { $gt: 0 }
+            });
+            if (!promotion) {
+                return res.status(404).json('Promotion not found or not valid!');
+            }
+            res.status(200).json(promotion);
+        }catch(error){
+            res.status(500).json({ message: 'Failed to get promotion!', error });
+        }
+        
     }
 };
 

@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity } from "react-native";
-import { IC_Back, IC_Location, IC_MyLocation} from "../../../assets/Customer/icons"
+import React, { useState } from "react";
+import { StyleSheet, Text, View, TouchableOpacity, Alert } from "react-native";
 import Button from "../../components/Customer/Button";
 import InputData from "../../components/Customer/InputData";
 import CUSTOM_COLOR from "../../constants/color";
-import TextInputCard from "../../components/Login_SignUp/TextInputCard";
-
-function DeliveryAddressScreen({ navigation, route }) {
-
-    const { itemsCheckout, totalMoney, choosePayment, promotion } = route.params
+import { BackIcon } from "../../../assets/Customer/svgs";
+import {firebase} from '../../../firebase/firebase'
+import { addAddress } from "../../api/AddressApi";
+function DeliveryAddressScreen({ navigation}) {
 
     const [diaChi, setDiaChi] = useState('')
     const [phuongXa, setPhuongXa] = useState('')
@@ -19,33 +17,25 @@ function DeliveryAddressScreen({ navigation, route }) {
 
 
     const addDataAddress = async () => {
-        // const docRef = await addDoc(collection(Firestore, "DIACHI"), {
-        //     DiaChi: diaChi,
-        //     PhuongXa: phuongXa,
-        //     QuanHuyen: quanHuyen,
-        //     TinhThanhPho: tinhTP,
-        //     SDT: numberPhone,
-        //     TenNguoiMua: name,
-        //     MaND: firebase.auth().currentUser.uid
-        // });
-        // const updateRef = doc(Firestore, "DIACHI", docRef.id);
-
-        // await updateDoc(updateRef, {
-        //     MaDC: docRef.id
-        // });
-
-        // const loadRef = doc(Firestore, "DIACHI", docRef.id);
-        // const docSnap = await getDoc(loadRef);
-
-        // navigation.navigate('Delivery', { itemsCheckout, totalMoney, choosePayment, promotion })
-
-
-        // return docSnap.data()
-
+        if(diaChi === '' || phuongXa === '' || quanHuyen === '' || tinhTP === '' || numberPhone === '' || name === ''){
+            return Alert.alert('Error', 'Please input all information') 
+        }
+        const data = {
+            DiaChi: diaChi,
+            PhuongXa: phuongXa,
+            QuanHuyen: quanHuyen,
+            TinhThanhPho: tinhTP,
+            SDT: numberPhone,
+            TenNguoiMua: name,
+            MaND: firebase.auth().currentUser.uid
+        }
+        const res = await addAddress({data: data})
+        if(res.status === 200){
+            navigation.navigate('Delivery')
+        }else{
+            console.log(res)
+        }
     }
-
-
-
 
     return (
         <View style={styles.container}>
@@ -56,19 +46,12 @@ function DeliveryAddressScreen({ navigation, route }) {
                 backgroundColor: CUSTOM_COLOR.White,
                 height: 40
             }}>
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity 
+                    style={{padding: 20}}
+                    onPress={() => {
                     navigation.goBack();
                 }}>
-                    <Image
-                        source={IC_Back}
-                        style={{
-                            width: '20%',
-                            height: '40%',
-                            marginHorizontal: 20,
-                            marginVertical: '20%'
-                        }}
-                        resizeMode='stretch'
-                    />
+                   <BackIcon/>
                 </TouchableOpacity>
 
 
@@ -84,7 +67,6 @@ function DeliveryAddressScreen({ navigation, route }) {
             }}>
                 <InputData
                     title='Name'
-                    
                     width='85%'
                     placeholder='Input your name'
                     onChangeText={(text) => setName(text)}
@@ -148,8 +130,6 @@ function DeliveryAddressScreen({ navigation, route }) {
                     title='SAVE'
                     color={CUSTOM_COLOR.FlushOrange}
                     onPress={() => addDataAddress()}
-
-
                 />
             </View>
 

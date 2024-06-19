@@ -119,6 +119,35 @@ const productController = {
             res.status(500).json({ message: 'Failed to set product status!', error });
         }
     },
+    checkAvailable: async (req, res) => {
+        try {
+            const products = req.body; // Danh sách sản phẩm cần kiểm tra
+            console.log(req.body);
+    
+            const productAvailability = await Promise.all(products.map(async (item) => {
+                const product = await Product.findOne({
+                    _id: item.productId,
+                    'Type.size': item.size,
+                    'Type.color': item.color
+                });
+    
+                if (!product) {
+                    return { productId: item.productId, available: false, message: 'Product not found' };
+                }
+    
+                const type = product.Type.find(t => t.size === item.size && t.color === item.color);
+                if (type.quantity >= item.quantity) {
+                    return { productId: item.productId, available: true, quantityAvailable: type.quantity };
+                } else {
+                    return { productId: item.productId, available: false, quantityAvailable: type.quantity };
+                }
+            }));
+    
+            res.status(200).json(productAvailability);
+        } catch (error) {
+            res.status(400).json({ message: error.message });
+        }
+    },
 };
 
 module.exports = productController;

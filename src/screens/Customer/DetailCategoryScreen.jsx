@@ -6,7 +6,8 @@ import ProductView from '../../components/Customer/ProductView';
 import SearchInput from '../../components/Customer/SearchInput';
 import SortDropdown from '../../components/Customer/SortDropDown';
 import CUSTOM_COLOR from '../../constants/color';
-import { PR_1, PR_2, PR_3, PR_4, PR_5 } from '../../../assets/Customer/images';
+import { BackIcon } from '../../../assets/Customer/svgs';
+const url = 'https://firebasestorage.googleapis.com/v0/b/shoppingapp-a20a4.appspot.com/o/images%2Fcategories%2Fproduct_1.jpg?alt=media&token=6c835337-a643-4c0d-98bd-34957a39045b'
 function DetailCategoryScreen({navigation, route}) {
   const {item} = route.params;
 
@@ -24,31 +25,31 @@ function DetailCategoryScreen({navigation, route}) {
     {
       MaSP: 1,
       TenSP: 'San Pham 1',
-      HinhAnhSP: PR_1,
+      HinhAnhSP: url,
       GiaSP: '10000'
     },
     {
       MaSP: 2,
       TenSP: 'San Pham 2',
-      HinhAnhSP: PR_2,
+      HinhAnhSP: url,
       GiaSP: '10000'
     },
     {
       MaSP: 3,
       TenSP: 'San Pham 3',
-      HinhAnhSP: PR_3,
+      HinhAnhSP: url,
       GiaSP: '10000'
     },
     {
       MaSP: 4,
       TenSP: 'San Pham 4',
-      HinhAnhSP: PR_4,
+      HinhAnhSP: url,
       GiaSP: '10000'
     },
     {
       MaSP: 5,
       TenSP: 'San Pham 5',
-      HinhAnhSP: PR_5,
+      HinhAnhSP: url,
       GiaSP: '10000'
     },
   ];
@@ -112,18 +113,13 @@ function DetailCategoryScreen({navigation, route}) {
           alignItems: 'center',
         }}>
         <TouchableOpacity
+          style={{
+            padding: 10,
+          }}
           onPress={() => {
             navigation.goBack();
           }}>
-          <Image
-            source={IC_Back}
-            style={{
-              width: 10,
-              height: 20,
-              margin: 20,
-            }}
-            resizeMode="stretch"
-          />
+            <BackIcon/>
         </TouchableOpacity>
         <View style={{width: '1%', height: '100%'}} />
         <View style={{width: '85%', height: '70%'}}>
@@ -188,6 +184,7 @@ function DetailCategoryScreen({navigation, route}) {
                   navigation.navigate('ProductDetail', {item});
                 }}>
                 <ProductView
+                  quantity={1000}
                   source={item.HinhAnhSP}
                   title={item.TenSP}
                   price={item.GiaSP}

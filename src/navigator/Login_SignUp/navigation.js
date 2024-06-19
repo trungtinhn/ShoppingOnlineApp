@@ -14,8 +14,9 @@ import ResetPasswordScreen from '../../screens/Login_SignUp/ResetPasswordScreen'
 import CongratulationScreen from '../../screens/Login_SignUp/CongratulationScreen';
 import SmartOTPEmailScreen from '../../screens/Login_SignUp/SmartOTPEmail';
 import DoneScreen from '../../screens/Login_SignUp/DoneScreen';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 const MainNavigation = () => {
   return (

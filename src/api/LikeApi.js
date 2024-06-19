@@ -70,10 +70,11 @@ const getLikeByUser = async (MaND) => {
 }
 const checkLike = async ({data}) => {
     try {
+        console.log(data);
         const idToken = await getIdToken();
         const url = "/like/checkLike";
         const config = {
-            method: "POST",
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${idToken}`

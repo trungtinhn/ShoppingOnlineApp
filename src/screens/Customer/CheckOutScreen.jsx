@@ -1,133 +1,203 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   StyleSheet,
   Text,
-  TextInput,
   View,
   Image,
-  FlatList,
   TouchableOpacity,
   ScrollView,
   Alert,
+  ActivityIndicator
 } from 'react-native';
 
 import {
-  IC_Back,
-  IC_CheckGreen,
-  IC_CheckGrey,
   IC_Location,
-  IC_Next,
   IC_Visa,
 } from '../../../assets/Customer/icons';
 import CUSTOM_COLOR from '../../constants/color';
 import ProductCheckOut from '../../components/Customer/ProductCheckout';
 import Promotion from '../../components/Customer/Promotion';
 import Delivery from '../../components/Customer/Delivery';
-import Button from '../../components/Customer/Button';
-import { PR_1 } from '../../../assets/Customer/images';
+import {firebase} from '../../../firebase/firebase';
 import FONT_FAMILY from '../../constants/font';
+import { BackIcon, CheckFill, Discount, NextRight, PaymentArea } from '../../../assets/Customer/svgs';
+import { OrderContext } from '../../context/OrderContext';
+import { formatCurrency, formatDate } from '../../utils/helpers';
+import { checkAvailable } from '../../api/ProductApi';
+import { checkPromotion } from '../../api/PromotionApi';
+import { createOrder } from '../../api/OrderApi';
+import fetchPaymentSheetParams from '../../api/PaymentApi';
+import { useStripe } from '@stripe/stripe-react-native';
+import Button from '../../components/Customer/Button';
 
-function CheckoutScreen({ navigation, route }) {
-  //const { itemsCheckout, totalMoney } = route.params;
+function CheckoutScreen({ navigation }) {
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const [loading, setLoading] = useState(false);
 
-  //const { delivery, choosePayment, promotion } = route.params;
+  const { promoCode, setPromoCode, address, setAddress, product, setProduct, payment, setPayment } = useContext(OrderContext);
 
   const [index, setIndex] = useState(0);
-
-  // const deliveryCharge =
-  //   promotion && promotion.Loai === 'MienPhiVanChuyen' ? 0 : 20000;
-
-  //const discount =
-    // promotion && promotion.Loai === 'GiamGia'
-    //   ? totalMoney * promotion.TiLe
-    //   : 5000;
-
-  //const totalOrder = totalMoney + deliveryCharge - discount;
-
   
-  const itemsCheckout = [
-    {
-      id: 1,
-      HinhAnhSP: ['https://via.placeholder.com/150', 'https://via.placeholder.com/150'],
-      TenSP: 'Áo thun trắng',
-      MauSac: 'Trắng',
-      Size: 'M',
-      GiaTien: 200000,
-      SoLuong: 2,
-    },
-    {
-      id: 2,
-      HinhAnhSP: ['https://via.placeholder.com/150', 'https://via.placeholder.com/150'],
-      TenSP: 'Quần jeans nam',
-      MauSac: 'Xanh',
-      Size: 'L',
-      GiaTien: 350000,
-      SoLuong: 1,
-    },
-  ];
+
+  const [promotion, setPromotion] = useState(false);
+
+  const [totalMoney, setTotalMoney] = useState(0);
   
-  const promotion = {
-    id: 1,
-    TenKM: 'Giảm giá 10%',
-    HinhAnhKM: 'https://via.placeholder.com/150',
-    DonToiThieu: 500000,
-    NgayBatDau: '2024-05-01',
-    NgayKetThuc: '2024-05-31',
+  const [deliveryCharge, setDeliveryCharge] = useState(0);
+  
+  const [discount, setDiscount] = useState(0);
+  
+  const [totalOrder, setTotalOrder] = useState(0);
+
+
+  const openPaymentSheet = async () => {
+    const { error } = await presentPaymentSheet();
+    if (error) {
+      Alert.alert(`Error code: ${error.code}`, error.message);
+      setLoading(false);
+    } else {
+      Alert.alert('Success', 'Your order is confirmed!');
+      AddOrderInServer();
+    }
   };
-  // const day = promotion ? promotion.NgayKetThuc.toDate().getDate() : null;
-  // const month = promotion ? promotion.NgayKetThuc.toDate().getMonth() : null;
-  // const year = promotion ? promotion.NgayKetThuc.toDate().getFullYear() : null;
-  
-  const delivery = {
-    TenNguoiMua: 'Nguyễn Văn A',
-    SDT: '0987654321',
-    PhuongXa: 'Phường 1',
-    QuanHuyen: 'Quận Bình Thạnh',
-    TinhThanhPho: 'TP.HCM',
-    DiaChi: '123 Đường ABC',
+  const initializePaymentSheet = async () => {
+    const {
+      paymentIntent,
+      ephemeralKey,
+      customer,
+      publishableKey,
+    } = await fetchPaymentSheetParams(totalOrder);
+
+    const { error } = await initPaymentSheet({
+      merchantDisplayName: "Example, Inc.",
+      customerId: customer,
+      customerEphemeralKeySecret: ephemeralKey,
+      paymentIntentClientSecret: paymentIntent,
+      // Set `allowsDelayedPaymentMethods` to true if your business can handle payment
+      //methods that complete payment after a delay, like SEPA Debit and Sofort.
+      allowsDelayedPaymentMethods: true,
+      defaultBillingDetails: {
+        name: 'Jane Doe',
+      }
+    });
   };
-  
-  const totalMoney = itemsCheckout.reduce((total, item) => total + item.GiaTien * item.SoLuong, 0);
-  
-  const deliveryCharge = 20000; // Phí vận chuyển
-  
-  const discount = totalMoney * 0.1; // Giảm giá từ khuyến mãi
-  
-  const totalOrder = totalMoney + deliveryCharge - discount; 
 
-  const choosePayment = 'CashPayment'
+  const HandlePayment = async () => {
+    if(payment === 'OnlineBanking'){
+      await initializePaymentSheet();
+      await openPaymentSheet();
+    }else{
+      AddOrderInServer();
+    }
+   
+  }
+  const AddOrderInServer = async () => {
+    const orderData = {
+      userId: firebase.auth().currentUser.uid,
+      name: address.TenNguoiMua,
+      phone: address.SDT, // Số điện thoại của người đặt hàng
+      address: address.DiaChi + " " + address.PhuongXa + " " + address.QuanHuyen + " " + address.TinhThanhPho, // Địa chỉ giao hàng
+      promotionId: promoCode == null ? null : promoCode._id, // ID của khuyến mãi được áp dụng (nếu có)
+      products: product, // Danh sách sản phẩm đơn hàng
+      discount: discount, // Giảm giá được áp dụng (nếu có)
+      deliveryFees: deliveryCharge, // Phí vận chuyển
+      paymentMethod: payment, // Phương thức thanh toán
+      totalProduct: totalMoney, // Tổng giá trị đơn hàng
+      totalPrice: totalOrder, // Tổng giá trị đơn hàng
+      status: 'Confirm' // Trạng thái đơn hàng
+    };
+    const res = await createOrder({data: orderData});
+    setLoading(false)
+    if(res.status === 200){
+      //Alert.alert('Notification', 'Order successfully!');
+      navigation.navigate('ThankScreen');
+    }else{
+      Alert.alert('Notification', 'Order failed!');
+    }
+  }
 
-  const [idDonHang, setIdDonHang] = useState();
+
+  const handleTotal = () => {
+    let total = 0;
+    product.forEach((item) => {
+      total += item.price * item.quantity;
+    });
+    setTotalMoney(total);
+    const deliveryCharge = 30000;
+    setDeliveryCharge(deliveryCharge);
+    const discount = 0;
+    const totalOrder = total + deliveryCharge - discount;
+    console.log(totalOrder);
+    setTotalOrder(totalOrder);
+    setDiscount(discount);
+    if(promoCode != null){
+      if(totalMoney >= promoCode.DonToiThieu){
+        const deliveryCharge = promoCode.Loai === 'MienPhiVanChuyen' ? 0 : 30000;
+        const discount = promoCode.Loai === 'GiamGia'
+            ? totalMoney * promoCode.TiLe
+            : 0;
+        const totalOrder = totalMoney + deliveryCharge - discount;
+        setTotalOrder(totalOrder);
+        setDiscount(discount);
+        setDeliveryCharge(deliveryCharge);
+        setPromotion(true);
+      }else{
+        //Alert.alert('Notification', 'Does not reach the minimum order value!');
+        setPromotion(false);
+      }
+    }
+  };
+
 
   const AddDonHang = async () => {
-    navigation.navigate('CustomerHomeScreen');
-
-    // Alert.alert('Notification', 'You have placed our order successfully!', [
-    //   {
-    //     text: 'Cancle',
-    //     onPress: () => {
-    //       navigation.navigate('HomeScreen')
-
-    //     }
-    //   }
-    // ])
+    try{
+        let hasUnavailableProduct = false;
+        setLoading(true);
+        const res = await checkAvailable({data: product});
+        if(res.status === 200){
+          const data = res.data;
+          console.log(data);
+          data.map((item) => {
+            if(!item.available){
+              Alert.alert('Notification', 'Sản phẩm' + item.name + 'đã hết hàng. Vui lòng chọn sản phẩm khác!');
+              hasUnavailableProduct = true;
+            }
+          })
+          // Nếu có sản phẩm hết hàng, dừng lại
+          if (hasUnavailableProduct) {
+            setLoading(false);
+            return;
+          }
+          if(promoCode == null){
+              console.log('null');
+              HandlePayment();
+          }else{
+              const res = await checkPromotion({id: promoCode._id});
+              if(res.status === 200){
+                HandlePayment();
+              }else{
+                Alert.alert('Notification', 'Promotion does not exist or expired!');
+                return;
+              }
+          }
+        }else{
+          console.log(res);
+        }
+      }catch(error){
+        console.log(error);
+      }
+    
   };
 
-  const getSoLuongSP = async (maSP) => {
-   
-  };
-  const AddDatHang = async (item, id) => {
-
-  };
 
   const MoveNext = () => {
-    setIndex(index == itemsCheckout.length - 1 ? 0 : index + 1);
+    setIndex(index == product.length - 1 ? 0 : index + 1);
   };
 
   useEffect(() => {
-    console.log(itemsCheckout, totalMoney);
-  }, [itemsCheckout, totalMoney]);
+    handleTotal();
+  }, [product, address, promoCode]);
+
 
   return (
     <View
@@ -142,21 +212,15 @@ function CheckoutScreen({ navigation, route }) {
           backgroundColor: CUSTOM_COLOR.White,
         }}>
         <TouchableOpacity
+          style={{
+            padding: 12,
+          }}
           onPress={() => {
+            setPromoCode(null);
             navigation.goBack();
           }}>
-          <Image
-            source={IC_Back}
-            style={{
-              width: 10,
-              height: 20,
-              marginHorizontal: 20,
-              marginVertical: 15,
-            }}
-            resizeMode="stretch"
-          />
+          <BackIcon/>
         </TouchableOpacity>
-
         <Text
           style={{
             fontSize: 20,
@@ -168,14 +232,15 @@ function CheckoutScreen({ navigation, route }) {
       </View>
 
       <ScrollView>
-        {itemsCheckout ? (
+        {product ? (
           <ProductCheckOut
-            source={PR_1}
-            title={itemsCheckout[index].TenSP}
-            color={itemsCheckout[index].MauSac}
-            size={itemsCheckout[index].Size}
-            price={itemsCheckout[index].GiaTien}
-            number={itemsCheckout[index].SoLuong}
+            source={product[index].image[0]}
+            title={product[index].name}
+            color={product[index].color}
+            size={product[index].size}
+            price={product[index].price}
+            number={product[index].quantity}
+            check={product.length > 1 ? true : false}
             style={{
               marginVertical: 10,
             }}
@@ -193,12 +258,7 @@ function CheckoutScreen({ navigation, route }) {
             marginVertical: 10,
           }}
           onPress={() =>
-            navigation.navigate('Promotion', {
-              itemsCheckout,
-              totalMoney,
-              delivery,
-              choosePayment,
-            })
+            navigation.navigate('Promotion')
           }>
           <Text
             style={{
@@ -208,7 +268,7 @@ function CheckoutScreen({ navigation, route }) {
             }}>
             Offers Details
           </Text>
-          <Image source={IC_Next} />
+          <NextRight/>
         </TouchableOpacity>
 
         <View
@@ -218,23 +278,35 @@ function CheckoutScreen({ navigation, route }) {
             justifyContent: 'space-between',
             marginHorizontal: 20,
           }}>
-          {promotion ? (
+          {promoCode != null && promotion ? (
             <Promotion
-              source={promotion.HinhAnhKM}
-              title={promotion.TenKM}
-              minimum={promotion.DonToiThieu}
-              expiry={promotion.NgayKetThuc}
+              source={promoCode.HinhAnhKM}
+              title={promoCode.TenKM}
+              minimum={promoCode.DonToiThieu}
+              expiry={formatDate(promoCode.NgayBatDau) + ' - ' + formatDate(promoCode.NgayKetThuc)}
             />
           ) : (
-            <Text
-              style={{
-                fontSize: 17,
-              }}>
-              Choose promotion
-            </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <PaymentArea>
+                  <Discount/>
+                </PaymentArea>
+                <Text
+                  style={{
+                    fontSize: 17,
+                    marginLeft: 20,
+                    fontFamily: FONT_FAMILY.CeraPro
+                  }}>
+                  Choose promotion
+                </Text>
+            </View>
+            
           )}
-
-          <Image source={promotion ? IC_CheckGreen : IC_CheckGrey} />
+          {promoCode && promotion ? (
+            <CheckFill fill={CUSTOM_COLOR.Green} />
+          ) : (
+            <CheckFill fill={CUSTOM_COLOR.LightGray} />
+          )}
+          
         </View>
 
         <TouchableOpacity
@@ -246,12 +318,7 @@ function CheckoutScreen({ navigation, route }) {
             marginVertical: 10,
           }}
           onPress={() =>
-            navigation.navigate('Delivery', {
-              itemsCheckout,
-              totalMoney,
-              choosePayment,
-              promotion,
-            })
+            navigation.navigate('Delivery')
           }>
           <Text
             style={{
@@ -261,7 +328,7 @@ function CheckoutScreen({ navigation, route }) {
             }}>
             Delivery Address
           </Text>
-          <Image source={IC_Next} />
+          <NextRight/>
         </TouchableOpacity>
 
         <View
@@ -271,14 +338,14 @@ function CheckoutScreen({ navigation, route }) {
             justifyContent: 'space-between',
             marginHorizontal: 20,
           }}>
-          {delivery ? (
+          {address != null ? (
             <Delivery
-              name={delivery.TenNguoiMua}
-              phoneNumber={delivery.SDT}
-              ward={delivery.PhuongXa}
-              district={delivery.QuanHuyen}
-              city={delivery.TinhThanhPho}
-              address={delivery.DiaChi}
+              name={address.TenNguoiMua}
+              phoneNumber={address.SDT}
+              ward={address.PhuongXa}
+              district={address.QuanHuyen}
+              city={address.TinhThanhPho}
+              address={address.DiaChi}
               show={false}
               style={{
                 width: '90%',
@@ -302,12 +369,13 @@ function CheckoutScreen({ navigation, route }) {
                 style={{
                   marginHorizontal: 20,
                   fontSize: 17,
+                  fontFamily: FONT_FAMILY.CeraPro
                 }}>
                 Add your address
               </Text>
             </View>
           )}
-          <Image source={delivery ? IC_CheckGreen : IC_CheckGrey} />
+          {address ? <CheckFill fill={CUSTOM_COLOR.Green} /> : <CheckFill fill={CUSTOM_COLOR.LightGray} />}
         </View>
 
         <TouchableOpacity
@@ -319,12 +387,7 @@ function CheckoutScreen({ navigation, route }) {
             marginVertical: 10,
           }}
           onPress={() =>
-            navigation.navigate('PaymentMethod', {
-              itemsCheckout,
-              totalMoney,
-              delivery,
-              promotion,
-            })
+            navigation.navigate('PaymentMethod')
           }>
           <Text
             style={{
@@ -334,7 +397,7 @@ function CheckoutScreen({ navigation, route }) {
             }}>
             Payment Method
           </Text>
-          <Image source={IC_Next} />
+          <NextRight/>
         </TouchableOpacity>
 
         <View
@@ -349,6 +412,7 @@ function CheckoutScreen({ navigation, route }) {
               flexDirection: 'row',
               alignItems: 'center',
             }}>
+
             <Image
               source={IC_Visa}
               style={{
@@ -356,12 +420,10 @@ function CheckoutScreen({ navigation, route }) {
                 height: 50,
               }}
             />
-            {choosePayment ? (
-              choosePayment === 'MomoWallet' ? (
-                <Text style={{ ...styles.textPayment }}>Momo Wallet</Text>
-              ) : choosePayment === 'CashPayment' ? (
+            {payment ? (
+              payment === 'CashPayment' ? (
                 <Text style={{ ...styles.textPayment }}>Cash Payment</Text>
-              ) : choosePayment === 'OnlineBanking' ? (
+              ) : payment === 'OnlineBanking' ? (
                 <Text style={{ ...styles.textPayment }}>Online Banking</Text>
               ) : null
             ) : (
@@ -373,7 +435,7 @@ function CheckoutScreen({ navigation, route }) {
               </Text>
             )}
           </View>
-          <Image source={choosePayment ? IC_CheckGreen : IC_CheckGrey} />
+          {payment ? <CheckFill fill={CUSTOM_COLOR.Green} /> : <CheckFill fill={CUSTOM_COLOR.LightGray} />}
         </View>
 
         <View
@@ -411,7 +473,7 @@ function CheckoutScreen({ navigation, route }) {
               color: CUSTOM_COLOR.Black,
               fontFamily: FONT_FAMILY.Medium
             }}>
-            {totalMoney} đ
+            {formatCurrency(totalMoney)} đ
           </Text>
         </View>
 
@@ -435,7 +497,7 @@ function CheckoutScreen({ navigation, route }) {
               color: CUSTOM_COLOR.Black,
               fontFamily: FONT_FAMILY.Medium
             }}>
-            {deliveryCharge} đ
+            {formatCurrency(deliveryCharge)} đ
           </Text>
         </View>
 
@@ -459,7 +521,7 @@ function CheckoutScreen({ navigation, route }) {
               color: CUSTOM_COLOR.Black,
               fontFamily: FONT_FAMILY.Medium
             }}>
-            - {discount} đ
+            - {formatCurrency(discount)} đ
           </Text>
         </View>
 
@@ -483,7 +545,7 @@ function CheckoutScreen({ navigation, route }) {
               color: CUSTOM_COLOR.SeaBuckthorn,
               fontFamily: FONT_FAMILY.Medium
             }}>
-            {totalOrder} đ
+            {formatCurrency(totalOrder)} đ
           </Text>
         </View>
 
@@ -496,7 +558,7 @@ function CheckoutScreen({ navigation, route }) {
             color={CUSTOM_COLOR.FlushOrange}
             title="CHECK OUT"
             onPress={
-              promotion && delivery && choosePayment
+              address && payment
                 ? () => AddDonHang()
                 : () => {
                   Alert.alert(
@@ -513,6 +575,11 @@ function CheckoutScreen({ navigation, route }) {
           />
         </View>
       </ScrollView>
+      {loading && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={CUSTOM_COLOR.FlushOrange} />
+          </View>
+        )}
     </View>
   );
 }
@@ -526,7 +593,14 @@ const styles = StyleSheet.create({
   textPayment: {
     marginHorizontal: 20,
     fontSize: 17,
+    fontFamily: FONT_FAMILY.CeraPro
   },
+  loadingContainer: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+},
 });
 
-export default CheckoutScreen;
+export default CheckoutScreen

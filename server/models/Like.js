@@ -8,11 +8,13 @@ const LikeSchema = new mongoose.Schema({
   },
   danhSachSanPham: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'SanPham' // Tham chiếu tới model SanPham
+    ref: 'Product' // Tham chiếu tới model SanPham
   }]
 });
 
 // Tạo model từ schema
-const YeuThich = mongoose.model('YeuThich', LikeSchema);
 
-module.exports = YeuThich;
+const Like = mongoose.model('Like', LikeSchema);
+
+
+module.exports = Like;

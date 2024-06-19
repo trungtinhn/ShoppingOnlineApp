@@ -1,991 +1,336 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import React, { useState, useEffect } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import BackTo from '../../components/Admin/BackTo'
-//import { SearchIcon } from '../../CustomerView/assets/icons'
-import { FlatList, ScrollView, } from 'react-native-gesture-handler'
-import Status from '../../components/Admin/Status'
-import CUSTOM_COLOR from '../../constants/color'
-//import { Acount } from './OverView'
-import PerSon from '../../components/Admin/PerSon'
-//import { IM_MauAo } from '../assets/images'
-import OneOrder from '../../components/Admin/OneOrder'
+import { StyleSheet, Text, View, Image, TouchableOpacity, ActivityIndicator, useWindowDimensions, ScrollView, RefreshControl } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import BackTo from '../../components/Admin/BackTo';
+import Status from '../../components/Admin/Status';
+import CUSTOM_COLOR from '../../constants/color';
+import PerSon from '../../components/Admin/PerSon';
+import OneOrder from '../../components/Admin/OneOrder';
+import { BackIcon } from '../../../assets/Customer/svgs';
+import FONT_FAMILY from '../../constants/font';
+import Button from '../../components/Customer/Button';
+import { Icon } from 'react-native-elements';
+import CustomButton from '../../components/Login_SignUp/CustomButton';
+import { formatCurrency } from '../../utils/helpers';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { get } from 'mongoose';
+import { firebase } from '../../../firebase/firebase';
+import LoadingComponent from '../../components/LoadingComponent';
+import { getOrdersByUserIdAndStatus, updateOrderStatus } from '../../api/OrderApi';
+const CustomerOrder = ({ navigation }) => {
+    const userId = firebase.auth().currentUser.uid;
+    const layout = useWindowDimensions();
+    const [loading, setLoading] = useState(true);
+    const [handle, setHandle] = useState(false);
 
+    const [index, setIndex] = React.useState(0);
+    const [routes] = React.useState([
+        { key: 'confirm', title: 'Confirm' },
+        { key: 'onWait', title: 'On Wait' },
+        { key: 'delivering', title: 'Delivering' },
+        { key: 'delivered', title: 'Delivered' },
+        { key: 'cancel', title: 'Cancel' },
+    ]);
 
-export default function CustomerOrder({navigation, route}) {
-    const [confirm, setConfirm] = useState(true)
-    const [onWait, setOnWait] = useState(false)
-    const [delivering, setDelivering] = useState(false)
-    const [delivered, setDelivered] = useState(false)
-    const [cancel, setCancel] = useState(false)
+    const [donHangConfirm, setDonHangConfirm] = useState([]);
+    const [donHangOnWait, setDonHangOnWait] = useState([]);
+    const [donHangDelivering, setDonHangDelivering] = useState([]);
+    const [donHangDelivered, setDonHangDelivered] = useState([]);
+    const [donHangCancel, setDonHangCancel] = useState([]);
 
-    const [donHangConfirm, setDonHangConfirm] = useState([])
-    const [donHangOnWait, setDonHangOnWait] = useState([])
-    const [donHangDelivering, setDonHangDelivering] = useState([])
-    const [donHangDelivered, setDonHangDelivered] = useState([])
-    const [donHangCancel, setDonHangCancel] = useState([])
-    const CancelDonHang = async (item) => {
-    //     const confirmRef = doc(Firestore, "DONHANG", item.MaDH)
+    const fetchOrders = async () => {
+        try {
+            const [confirmRes, onWaitRes, deliveringRes, deliveredRes, cancelRes] = await Promise.all([
+                getOrdersByUserIdAndStatus({ userId, status: 'Confirm' }),
+                getOrdersByUserIdAndStatus({ userId, status: 'On Wait' }),
+                getOrdersByUserIdAndStatus({ userId, status: 'Delivering' }),
+                getOrdersByUserIdAndStatus({ userId, status: 'Delivered' }),
+                getOrdersByUserIdAndStatus({ userId, status: 'Cancel' })
+            ]);
 
-    //     await updateDoc(confirmRef, {
-    //         TrangThai: "Cancel"
-    //     })
-    // }
-    // const ConfirmDonHang = async (item) => {
-    //     const confirmRef = doc(Firestore, "DONHANG", item.MaDH)
-
-    //     await updateDoc(confirmRef, {
-    //         TrangThai: "Confirm"
-    //     })
-    }
-
-    const getUsers = async (item) => {
-        // item = item.trim();
-
-        // const docRef = doc(Firestore, "NGUOIDUNG", item);
-        // const docSnap = await getDoc(docRef);
-
-        // const user = {
-        //     ...docSnap.data()
-        // }
-
-        // return user;
-    }
-
-
-    const getDatHang = async (item) => {
-        // const q = query(collection(Firestore, "DATHANG"), where("MaDH", "==", item));
-
-        // const querySnapshot = await getDocs(q);
-
-        // const data = []
-        // querySnapshot.forEach((doc) => {
-
-        //     data.push(doc.data())
-        //     //console.log(doc.id, " => ", doc.data());
-        // });
-        // return data
-    }
-
-    const getSanPham = async (item) => {
-        // const docRef = doc(Firestore, "SANPHAM", item);
-
-        // const docSnap = await getDoc(docRef);
-
-        // const sanPham = {
-        //     ...docSnap.data()
-        // }
-
-        // return sanPham;
-    }
-
-    const getDonHangCancel = () => {
-        // const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Cancel")
-        // ,where('MaND', '==', firebase.auth().currentUser.uid));
-    
-        // const unsubscribe = onSnapshot(q, async (querySnapshot) => {
-        //     const promises = [];
-        //     const promisesDatHang = [];
-    
-        //     querySnapshot.forEach((documentSnapshot) => {
-        //         const promise = getUsers(documentSnapshot.data().MaND);
-        //         const datHang = getDatHang(documentSnapshot.data().MaDH);
-    
-        //         promises.push(promise);
-        //         promisesDatHang.push(datHang);
-        //     });
-    
-        //     try {
-        //         const dataUser = await Promise.all(promises);
-        //         const dataDatHang = await Promise.all(promisesDatHang);
-        //         const dataSanPham = [];
-    
-        //         for (const documentDatHang of dataDatHang) {
-        //             const promises = [];
-        //             for (const documentSanPham of documentDatHang) {
-        //                 const promise = getSanPham(documentSanPham.MaSP);
-        //                 promises.push(promise);
-        //             }
-        //             const promiseSanPham = await Promise.all(promises);
-        //             dataSanPham.push(promiseSanPham);
-        //         }
-    
-        //         dataDatHang.forEach((datHang, i) => {
-        //             datHang.forEach((sanPham, index) => {
-        //                 dataDatHang[i][index] = {
-        //                     ...dataDatHang[i][index],
-        //                     SanPham: dataSanPham[i][index]
-        //                 };
-        //             });
-        //         });
-    
-        //         const data = dataUser.map((user, index) => {
-        //             const documentSnapshot = querySnapshot.docs[index];
-        //             return {
-        //                 ...documentSnapshot.data(),
-        //                 ...user,
-        //                 DatHang: dataDatHang[index]
-        //             };
-        //         });
-    
-        //         setDonHangCancel(data);
-        //     } catch (error) {
-        //         console.log("Error getting data: ", error);
-        //     }
-        // });
-    
-        // return unsubscribe;
-        // // Để ngừng lắng nghe thay đổi trong thời gian thực, gọi hàm unsubscribe:
-        // // unsubscribe();
+            if (confirmRes.status === 200) setDonHangConfirm(confirmRes.data);
+            if (onWaitRes.status === 200) setDonHangOnWait(onWaitRes.data);
+            if (deliveringRes.status === 200) setDonHangDelivering(deliveringRes.data);
+            if (deliveredRes.status === 200) setDonHangDelivered(deliveredRes.data);
+            if (cancelRes.status === 200) setDonHangCancel(cancelRes.data);
+            setLoading(false);
+        } catch (error) {
+            console.error(error);
+        }
     };
-    
-          
-
-      const getDonHangConfirm = () => {
-        // const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Confirm")
-        // ,where('MaND', '==', firebase.auth().currentUser.uid));
-    
-        // const unsubscribe = onSnapshot(q, async (querySnapshot) => {
-        //     const promises = [];
-        //     const promisesDatHang = [];
-    
-        //     querySnapshot.forEach((documentSnapshot) => {
-        //         const promise = getUsers(documentSnapshot.data().MaND);
-        //         const datHang = getDatHang(documentSnapshot.data().MaDH);
-    
-        //         promises.push(promise);
-        //         promisesDatHang.push(datHang);
-        //     });
-    
-        //     try {
-        //         const dataUser = await Promise.all(promises);
-        //         const dataDatHang = await Promise.all(promisesDatHang);
-        //         const dataSanPham = [];
-    
-        //         for (const documentDatHang of dataDatHang) {
-        //             const promises = [];
-        //             for (const documentSanPham of documentDatHang) {
-        //                 const promise = getSanPham(documentSanPham.MaSP);
-        //                 promises.push(promise);
-        //             }
-        //             const promiseSanPham = await Promise.all(promises);
-        //             dataSanPham.push(promiseSanPham);
-        //         }
-    
-        //         dataDatHang.forEach((datHang, i) => {
-        //             datHang.forEach((sanPham, index) => {
-        //                 dataDatHang[i][index] = {
-        //                     ...dataDatHang[i][index],
-        //                     SanPham: dataSanPham[i][index]
-        //                 };
-        //             });
-        //         });
-    
-        //         const data = dataUser.map((user, index) => {
-        //             const documentSnapshot = querySnapshot.docs[index];
-        //             return {
-        //                 ...documentSnapshot.data(),
-        //                 ...user,
-        //                 DatHang: dataDatHang[index]
-        //             };
-        //         });
-    
-        //         setDonHangConfirm(data);
-        //     } catch (error) {
-        //         console.log("Error getting data: ", error);
-        //     }
-        // });
-    
-        // return unsubscribe;
-        // Để ngừng lắng nghe thay đổi trong thời gian thực, gọi hàm unsubscribe:
-        // unsubscribe();
-    };
-    
-      
-      
-    
-
-    const getDonHangOnWait = () => {
-        // const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "OnWait")
-        // ,where('MaND', '==', firebase.auth().currentUser.uid));
-    
-        // const unsubscribe = onSnapshot(q, async (querySnapshot) => {
-        //     const promises = [];
-        //     const promisesDatHang = [];
-    
-        //     querySnapshot.forEach((documentSnapshot) => {
-        //         const promise = getUsers(documentSnapshot.data().MaND);
-        //         const datHang = getDatHang(documentSnapshot.data().MaDH);
-    
-        //         promises.push(promise);
-        //         promisesDatHang.push(datHang);
-        //     });
-    
-        //     try {
-        //         const dataUser = await Promise.all(promises);
-        //         const dataDatHang = await Promise.all(promisesDatHang);
-        //         const dataSanPham = [];
-    
-        //         for (const documentDatHang of dataDatHang) {
-        //             const promises = [];
-        //             for (const documentSanPham of documentDatHang) {
-        //                 const promise = getSanPham(documentSanPham.MaSP);
-        //                 promises.push(promise);
-        //             }
-        //             const promiseSanPham = await Promise.all(promises);
-        //             dataSanPham.push(promiseSanPham);
-        //         }
-    
-        //         dataDatHang.forEach((datHang, i) => {
-        //             datHang.forEach((sanPham, index) => {
-        //                 dataDatHang[i][index] = {
-        //                     ...dataDatHang[i][index],
-        //                     SanPham: dataSanPham[i][index]
-        //                 };
-        //             });
-        //         });
-    
-        //         const data = dataUser.map((user, index) => {
-        //             const documentSnapshot = querySnapshot.docs[index];
-        //             return {
-        //                 ...documentSnapshot.data(),
-        //                 ...user,
-        //                 DatHang: dataDatHang[index]
-        //             };
-        //         });
-    
-        //         setDonHangOnWait(data);
-        //     } catch (error) {
-        //         console.log("Error getting data: ", error);
-        //     }
-        // });
-    
-        // return unsubscribe;
-        // // Để ngừng lắng nghe thay đổi trong thời gian thực, gọi hàm unsubscribe:
-        // // unsubscribe();
-    };
-      
-    
-
-    const getDonHangDelivered = () => {
-        // const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Delivered")
-        // ,where('MaND', '==', firebase.auth().currentUser.uid));
-    
-        // const unsubscribe = onSnapshot(q, async (querySnapshot) => {
-        //     const promises = [];
-        //     const promisesDatHang = [];
-    
-        //     querySnapshot.forEach((documentSnapshot) => {
-        //         const promise = getUsers(documentSnapshot.data().MaND);
-        //         const datHang = getDatHang(documentSnapshot.data().MaDH);
-    
-        //         promises.push(promise);
-        //         promisesDatHang.push(datHang);
-        //     });
-        //     try {
-        //         const dataUser = await Promise.all(promises);
-        //         const dataDatHang = await Promise.all(promisesDatHang);
-        //         const dataSanPham = [];
-    
-        //         for (const documentDatHang of dataDatHang) {
-        //             const promises = [];
-        //             for (const documentSanPham of documentDatHang) {
-        //                 const promise = getSanPham(documentSanPham.MaSP);
-        //                 promises.push(promise);
-        //             }
-        //             const promiseSanPham = await Promise.all(promises);
-        //             dataSanPham.push(promiseSanPham);
-        //         }
-    
-        //         dataDatHang.forEach((datHang, i) => {
-        //             datHang.forEach((sanPham, index) => {
-        //                 dataDatHang[i][index] = {
-        //                     ...dataDatHang[i][index],
-        //                     SanPham: dataSanPham[i][index]
-        //                 };
-        //             });
-        //         });
-    
-        //         const data = dataUser.map((user, index) => {
-        //             const documentSnapshot = querySnapshot.docs[index];
-        //             return {
-        //                 ...documentSnapshot.data(),
-        //                 ...user,
-        //                 DatHang: dataDatHang[index]
-        //             };
-        //         });
-    
-        //         setDonHangDelivered(data);
-        //     } catch (error) {
-        //         console.log("Error getting data: ", error);
-        //     }
-        // });
-    
-        // return unsubscribe;
-        // Để ngừng lắng nghe thay đổi trong thời gian thực, gọi hàm unsubscribe:
-        // unsubscribe();
-    };
-    
-    const getDonHangDelivering = () => {
-        // const q = query(collection(Firestore, "DONHANG"), where("TrangThai", "==", "Delivering")
-        // ,where('MaND', '==', firebase.auth().currentUser.uid));
-    
-        // const unsubscribe = onSnapshot(q, async (querySnapshot) => {
-        //     const promises = [];
-        //     const promisesDatHang = [];
-    
-        //     querySnapshot.forEach((documentSnapshot) => {
-        //         const promise = getUsers(documentSnapshot.data().MaND);
-        //         const datHang = getDatHang(documentSnapshot.data().MaDH);
-    
-        //         promises.push(promise);
-        //         promisesDatHang.push(datHang);
-        //     });
-    
-        //     try {
-        //         const dataUser = await Promise.all(promises);
-        //         const dataDatHang = await Promise.all(promisesDatHang);
-        //         const dataSanPham = [];
-    
-        //         for (const documentDatHang of dataDatHang) {
-        //             const promises = [];
-        //             for (const documentSanPham of documentDatHang) {
-        //                 const promise = getSanPham(documentSanPham.MaSP);
-        //                 promises.push(promise);
-        //             }
-        //             const promiseSanPham = await Promise.all(promises);
-        //             dataSanPham.push(promiseSanPham);
-        //         }
-    
-        //         dataDatHang.forEach((datHang, i) => {
-        //             datHang.forEach((sanPham, index) => {
-        //                 dataDatHang[i][index] = {
-        //                     ...dataDatHang[i][index],
-        //                     SanPham: dataSanPham[i][index]
-        //                 };
-        //             });
-        //         });
-    
-        //         const data = dataUser.map((user, index) => {
-        //             const documentSnapshot = querySnapshot.docs[index];
-        //             return {
-        //                 ...documentSnapshot.data(),
-        //                 ...user,
-        //                 DatHang: dataDatHang[index]
-        //             };
-        //         });
-    
-        //         setDonHangDelivering(data);
-        //     } catch (error) {
-        //         console.log("Error getting data: ", error);
-        //     }
-        // });
-    
-        // return unsubscribe;
-        // Để ngừng lắng nghe thay đổi trong thời gian thực, gọi hàm unsubscribe:
-        // unsubscribe();
-    };
-    
-      
-
-
-
 
     useEffect(() => {
-        getDonHangConfirm()
-        getDonHangOnWait()
-        getDonHangDelivering()
-        getDonHangDelivered()
-        getDonHangCancel()
-    }, [donHangConfirm.length, donHangOnWait.length, donHangDelivering.length, donHangDelivered.length, donHangCancel.length])
+        fetchOrders();
+    }, []);
 
-
-    if (confirm == true) {
-        return (
-            <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White }}>
-                <View style={{ width: '100%', height: 30, flexDirection: 'row', marginTop: 5 }}>
-                    <BackTo
-                        onPress={() => navigation.goBack()}
-                        Info='My Order'
-                    ></BackTo>
+    const renderOrderList = (data) => (
+        loading ? <LoadingComponent/> :
+        <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchOrders} />}>
+        {data.map(item => (
+            <View key={item._id} style={styles.background}>
+                <TouchableOpacity onPress={() => navigation.navigate('DeliveryDetail', { item })}>
+                    <View style={styles.separatorLine} />
+                    <PerSon avartar={item.Avatar} name={item.TenND} />
+                    <Text style={styles.labelFocus}>Purchased Products</Text>
+                    {item.products.map(product => (
+                        <OneOrder
+                            key={product._id}
+                            source={product.image[0]}
+                            title={product.name}
+                            price={product.price}
+                            number={product.quantity}
+                            totalPrice={product.price * product.quantity}
+                            color={product.color}
+                            size={product.size}
+                            Code={product._id}
+                            onPress={() => {}}
+                            PressConfirm={() => {}}
+                        />
+                    ))}
+                </TouchableOpacity>
+                <View style={styles.itemCodeContainer}>
+                    <Text style={styles.itemCode}>$Total: </Text>
+                    <Text style={styles.itemCodeText}>{formatCurrency(item.totalPrice)} VND</Text>
                 </View>
-                <View style={{ width: '100%', height: 50, flexDirection: 'row', justifyContent: 'space-around', marginTop: 15 }}>
-                    <Status
-                        title='Confirm'
-                        Color={CUSTOM_COLOR.DarkOrange}
-                        botwidth={2}
-                        borderColor={CUSTOM_COLOR.Red}
-                        countProduct={donHangConfirm.length}
-                    ></Status>
-                    <Status
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setOnWait(true), setConfirm(false) }}
-                        title='On Wait'
-                        countProduct={donHangOnWait.length}>
-                    </Status>
-                    <Status
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setDelivering(true), setConfirm(false) }}
-                        title='Delivering'
-                        countProduct={donHangDelivering.length}>
-                    </Status>
-                    <Status
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setDelivered(true), setConfirm(false) }}
-                        title='Delivered'
-                        countProduct={donHangDelivered.length}>
-                    </Status>
-                    <Status
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setCancel(true), setConfirm(false) }}
-                        title='Cancel'
-                        countProduct={donHangCancel.length}>
-                    </Status>
+            </View>
+        ))}
+        </ScrollView>
+    );
+
+    const renderOrderConfirm = (data) => (
+        loading ? <LoadingComponent/> :
+        <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchOrders} />}>
+        {data.map(item => (
+            <View key={item._id} style={styles.background}>
+                <TouchableOpacity onPress={() => navigation.navigate('DeliveryDetail', { item })}>
+                    <View style={styles.separatorLine} />
+                    <PerSon avartar={item.Avatar} name={item.TenND} />
+                    <Text style={styles.labelFocus}>Purchased Products</Text>
+                    {item.products.map(product => (
+                        <OneOrder
+                            key={product._id}
+                            source={product.image[0]}
+                            title={product.name}
+                            price={product.price}
+                            number={product.quantity}
+                            totalPrice={product.price * product.quantity}
+                            color={product.color}
+                            size={product.size}
+                            Code={product._id}
+                            onPress={() => {}}
+                            PressConfirm={() => {}}
+                        />
+                    ))}
+                </TouchableOpacity>
+                <View style={styles.itemCodeContainer}>
+                    <Text style={styles.itemCode}>$Total: </Text>
+                    <Text style={styles.itemCodeText}>{formatCurrency(item.totalPrice)} VND</Text>
                 </View>
-                <View style={{ width: '100%', height: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
-                <View style={{
-                    height: '85%'
-                }}>
-
-                    <FlatList
-                        data={donHangConfirm}
-                        contentContainerStyle={{ paddingBottom: 50 }}
-                        renderItem={({ item }) => {
-                            //console.log(item)
-                            return (
-                                <View>
-                                    <PerSon
-                                        avartar={item.Avatar}
-                                        name={item.TenND}
-                                    />
-                                    <FlatList
-                                        data={item.DatHang}
-
-                                        renderItem={({ item }) => {
-
-                                            console.log(item)
-                                            return (
-                                                <View>
-
-                                                    <OneOrder
-                                                        source={item.SanPham.HinhAnhSP[0]}
-                                                        title={item.SanPham.TenSP}
-                                                        price={item.SanPham.GiaSP}
-                                                        number={item.SoLuong}
-                                                        totalPrice={item.ThanhTien}
-                                                        color={item.MauSac}
-                                                        size={item.Size}
-                                                        Code={item.MaDH}
-                                                        onPress={() => {  }}
-                                                        PressConfirm={() => { }}
-                                                    ></OneOrder>
-                                                </View>
-
-                                            )
-                                        }}
-                                    ></FlatList>
-
-                                    <TouchableOpacity
-                                        onPress={() => { navigation.navigate('DetailsDelivery', { item })}}
-                                        style={{
-                                            backgroundColor: CUSTOM_COLOR.DarkOrange, width: 100, marginLeft: 160,
-                                            marginTop: 10, height: 30, alignItems: 'center', justifyContent: 'center', marginBottom: 10
-                                        }}
-                                    >
-                                        <Text style={{ color: CUSTOM_COLOR.White }}>Details</Text>
-                                    </TouchableOpacity>
-
-                                    <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <Text style={{color: CUSTOM_COLOR.Black, marginLeft: 35 ,fontWeight: 'bold'}}>Item Code</Text>
-                                        <Text style={{color: CUSTOM_COLOR.Black, marginRight: 35 }}>#{item.MaDH}</Text>
-                                    </View>
-                                    <View style={{ width: '100%', height: 30, alignItems: 'center' }}>
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                CancelDonHang(item)
-                                            }}
-                                            style={{
-                                                width: '100%',
-                                                height: '100%',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                backgroundColor: CUSTOM_COLOR.DarkOrange,
-                                                paddingHorizontal: 20,
-                                                alignSelf: 'center',
-
-                                            }}
-                                        >
-                                            <Text style={{ color: CUSTOM_COLOR.White }}>Cancel</Text>
-                                        </TouchableOpacity>
-                                    </View>
-
-                                </View>
-                            )
+                <View style={{ width: '100%', alignItems: 'flex-end', marginBottom: 10 }}>
+                    <Button
+                        title="Cancel"
+                        color={CUSTOM_COLOR.FlushOrange}
+                        onPress={async () => {
+                            setHandle(true);
+                            const res = await updateOrderStatus({ id: item._id, status: 'Cancel' });
+                            if (res.status === 200) {
+                                fetchOrders();
+                                setHandle(false);
+                            } else {
+                                console.log(res);
+                            }
                         }}
                     />
-
-
                 </View>
-            </SafeAreaView>
-        )
-    }
-    if (onWait == true) {
-        return (
-            <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White }}>
-                <View style={{ width: '100%', height: 30, flexDirection: 'row', marginTop: 5 }}>
-                    <BackTo
-                        onPress={() => navigation.goBack()}
-                        Info='My Order'
-                    ></BackTo>
+            </View>
+        ))}
+        </ScrollView>
+    ) 
+
+    const renderOrderCancel = (data) => (
+        loading ? <LoadingComponent/> :
+        <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchOrders} />}>
+        {data.map(item => (
+            <View key={item._id} style={styles.background}>
+                <TouchableOpacity onPress={() => navigation.navigate('DeliveryDetail', { item })}>
+                    <View style={styles.separatorLine} />
+                    <PerSon avartar={item.Avatar} name={item.TenND} />
+                    <Text style={styles.labelFocus}>Purchased Products</Text>
+                    {item.products.map(product => (
+                        <OneOrder
+                            key={product._id}
+                            source={product.image[0]}
+                            title={product.name}
+                            price={product.price}
+                            number={product.quantity}
+                            totalPrice={product.price * product.quantity}
+                            color={product.color}
+                            size={product.size}
+                            Code={product._id}
+                            onPress={() => {}}
+                            PressConfirm={() => {}}
+                        />
+                    ))}
+                </TouchableOpacity>
+                <View style={styles.itemCodeContainer}>
+                    <Text style={styles.itemCode}>$Total: </Text>
+                    <Text style={styles.itemCodeText}>{formatCurrency(item.totalPrice)} VND</Text>
                 </View>
-                <View style={{ width: '100%', height: 50, flexDirection: 'row', justifyContent: 'space-around', marginTop: 15 }}>
-                    <Status
-                        title='Confirm'
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setConfirm(true), setOnWait(false) }}
-                        countProduct={donHangConfirm.length}
-                    ></Status>
-                    <Status
-                        botwidth={2}
-                        borderColor={CUSTOM_COLOR.Red}
-                        Color={CUSTOM_COLOR.DarkOrange}
-                        title='On Wait'
-                        countProduct={donHangOnWait.length}>
-                    </Status>
-                    <Status
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setDelivering(true), setOnWait(false) }}
-                        title='Delivering'
-                        countProduct={donHangDelivering.length}>
-                    </Status>
-                    <Status
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setDelivered(true), setOnWait(false) }}
-                        title='Delivered'
-                        countProduct={donHangDelivered.length}>
-                    </Status>
-                    <Status
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setCancel(true), setOnWait(false) }}
-                        title='Cancel'
-                        countProduct={donHangCancel.length}>
-                    </Status>
-                </View>
-                <View style={{ width: '100%', height: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
-                <View>
-
-                    <FlatList
-                        data={donHangOnWait}
-                        renderItem={({ item }) => {
-                            //console.log(item)
-                            return (
-                                <View>
-                                    <PerSon
-                                        avartar={item.Avatar}
-                                        name={item.TenND}
-                                    />
-                                    <FlatList
-                                        data={item.DatHang}
-                                        renderItem={({ item }) => {
-
-                                            console.log(item)
-                                            return (
-                                                <View>
-
-                                                    <OneOrder
-                                                         source={item.SanPham.HinhAnhSP[0]}
-                                                         title={item.SanPham.TenSP}
-                                                         price={item.SanPham.GiaSP}
-                                                         number={item.SoLuong}
-                                                         totalPrice={item.ThanhTien}
-                                                         color={item.MauSac}
-                                                         size={item.Size}
-                                                         Code={item.MaDH}
-                                                         onPress={() => {  }}
-                                                         PressConfirm={() => { }}
-                                                    ></OneOrder>
-                                                </View>
-
-                                            )
-                                        }}
-                                    ></FlatList>
-                                    <TouchableOpacity
-                                        onPress={() => { navigation.navigate('DetailsDelivery', { item })}}
-                                        
-                                        style={{
-                                            backgroundColor: CUSTOM_COLOR.DarkOrange, width: 100, marginLeft: 160,
-                                            marginTop: 10, height: 30, alignItems: 'center', justifyContent: 'center', marginBottom: 10
-                                        }}
-                                    >
-                                        <Text style={{ color: CUSTOM_COLOR.White }}>Details</Text>
-                                    </TouchableOpacity>
-
-                                    <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <Text style={{color: CUSTOM_COLOR.Black, marginLeft: 35,fontWeight: 'bold' }}>Item Code</Text>
-                                        <Text style={{color: CUSTOM_COLOR.Black, marginRight: 35 }}>#{item.MaDH}</Text>
-                                    </View>
-                                </View>
-                            )
+                <View style={{ width: '100%', alignItems: 'flex-end', marginBottom: 10 }}>
+                    <Button
+                        title="Re Order"
+                        color={CUSTOM_COLOR.FlushOrange}
+                        onPress={async () => {
+                            setHandle(true);
+                            const res = await updateOrderStatus({ id: item._id, status: 'Confirm' });
+                            if (res.status === 200) {
+                                fetchOrders();
+                                setHandle(false);
+                            } else {
+                                console.log(res);
+                            }
                         }}
                     />
-
-
                 </View>
+               
+            </View>
+        ))}
+        </ScrollView>
+    )
 
-            </SafeAreaView>
-        )
-    }
-    if (delivering == true) {
-        return (
-            <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White }}>
-                <View style={{ width: '100%', height: 30, flexDirection: 'row', marginTop: 5 }}>
-                    <BackTo
-                        onPress={() => navigation.goBack()}
-                        Info='My Order'
-                    ></BackTo>
+    const renderScene = SceneMap({
+        confirm: () => renderOrderConfirm(donHangConfirm),
+        onWait: () => renderOrderList(donHangOnWait),
+        delivering: () => renderOrderList(donHangDelivering),
+        delivered: () => renderOrderList(donHangDelivered),
+        cancel: () => renderOrderCancel(donHangCancel),
+    });
+
+    const renderTabBar = props => (
+        <TabBar
+            {...props}
+            indicatorStyle={styles.indicator}
+            style={styles.tabbar}
+            labelStyle={styles.label}
+            activeColor={CUSTOM_COLOR.DarkOrange}
+            inactiveColor={CUSTOM_COLOR.Black}
+            renderLabel={({ route, focused }) => (
+                <Text style={{ color: focused ? CUSTOM_COLOR.DarkOrange : CUSTOM_COLOR.Black, fontWeight: 'bold' }}>
+                    {route.title}
+                </Text>
+            )}
+        />
+    );
+
+    return (
+        
+        <SafeAreaView style={styles.container}>
+            <View style={styles.header}>
+                <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+                    <BackIcon fill={CUSTOM_COLOR.FlushOrange} />
+                </TouchableOpacity>
+                <Text style={styles.headerText}>Product</Text>
+            </View>
+            <TabView
+                navigationState={{ index, routes }}
+                renderScene={renderScene}
+                onIndexChange={setIndex}
+                initialLayout={{ width: layout.width }}
+                renderTabBar={renderTabBar}
+            />
+             {handle && (
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color={CUSTOM_COLOR.FlushOrange} />
                 </View>
-                <View style={{ width: '100%', height: 50, flexDirection: 'row', justifyContent: 'space-around', marginTop: 15 }}>
-                <Status
-                        title='Confirm'
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setConfirm(true), setDelivering(false) }}
-                        countProduct={donHangConfirm.length}
-                    ></Status>
-                    <Status
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setOnWait(true), setDelivering(false) }}
-                        title='On Wait'
-                        countProduct={donHangOnWait.length}
-                    >
-                    </Status>
-                    <Status
-                        botwidth={2}
-                        borderColor={CUSTOM_COLOR.Red}
-                        Color={CUSTOM_COLOR.DarkOrange}
-                        title='Delivering'
-                        countProduct={donHangDelivering.length}
-                    >
-                    </Status>
-                    <Status
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setDelivered(true), setDelivering(false) }}
-                        title='Delivered'
-                        countProduct={donHangDelivered.length}
-                    >
-                    </Status>
-                    <Status
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setCancel(true), setDelivering(false) }}
-                        title='Cancel'
-                        countProduct={donHangCancel.length}>
-                    </Status>
-                </View>
-                <View style={{ width: '100%', height: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
-                <View style={{
-                    height: '85%'
-                }}>
+                )}
+        </SafeAreaView>
+    );
+};
 
-                    <FlatList
-                        data={donHangDelivering}
-                        contentContainerStyle={{ paddingBottom: 50 }}
-                        renderItem={({ item }) => {
-                            //console.log(item)
-                            return (
-                                <View>
-                                    <PerSon
-                                        avartar={item.Avatar}
-                                        name={item.TenND}
-                                    />
-                                    <FlatList
-                                        data={item.DatHang}
+const styles = StyleSheet.create({
+    separatorLine: {
+        width: '100%',
+        height: 10,
+        backgroundColor: CUSTOM_COLOR.LightGray,
+    },
+    container: {
+        flex: 1,
+        backgroundColor: CUSTOM_COLOR.White,
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    backButton: {
+        padding: 12,
+    },
+    headerText: {
+        fontSize: 20,
+        color: CUSTOM_COLOR.Black,
+        fontWeight: '700',
+        fontFamily: FONT_FAMILY.CeraPro,
+    },
+    tabbar: {
+        backgroundColor: CUSTOM_COLOR.White,
+        width: '100%',
+    },
+    indicator: {
+        backgroundColor: CUSTOM_COLOR.DarkOrange,
+    },
+    labelFocus: {
+        color: CUSTOM_COLOR.FlushOrange,
+        fontWeight: 'bold',
+        textTransform: 'capitalize',
+        marginLeft: 20,
+    },
+    label: {
+        color: CUSTOM_COLOR.Black,
+        fontWeight: 'bold',
+        textTransform: 'capitalize',
+    },
+    orderContainer: {
+        marginBottom: 10,
+        backgroundColor: CUSTOM_COLOR.White,
+    },
+    detailsButton: {
+        backgroundColor: CUSTOM_COLOR.DarkOrange,
+        width: 100,
+        marginLeft: 160,
+        marginTop: 10,
+        height: 30,
+        alignItems: 'center',
+        justifyContent: 'flex-center',
+        marginBottom: 10,
+    },
+    detailsButtonText: {
+        color: CUSTOM_COLOR.White,
+    },
+    itemCodeContainer: {
+        width: '100%',
+        height: 25,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        paddingHorizontal: 35,
+        marginVertical: 10,
+    },
+    itemCode: {
+        fontSize: 16,
+    },
+    itemCodeText: {
+        color: CUSTOM_COLOR.DarkOrange,
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    background: {
+        backgroundColor: CUSTOM_COLOR.White,
+    },
+    loadingContainer: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+});
 
-                                        renderItem={({ item }) => {
-
-                                            console.log(item)
-                                            return (
-                                                <View>
-
-                                                    <OneOrder
-                                                        source={item.SanPham.HinhAnhSP[0]}
-                                                        title={item.SanPham.TenSP}
-                                                        price={item.SanPham.GiaSP}
-                                                        number={item.SoLuong}
-                                                        totalPrice={item.ThanhTien}
-                                                        color={item.MauSac}
-                                                        size={item.Size}
-                                                        Code={item.MaDH}
-                                                        onPress={() => {  }}
-                                                        PressConfirm={() => { }}
-                                                    ></OneOrder>
-                                                </View>
-
-                                            )
-                                        }}
-                                    ></FlatList>
-
-                                    <TouchableOpacity
-                                        onPress={() => { navigation.navigate('DetailsDelivery', { item })}}
-                                        style={{
-                                            backgroundColor: CUSTOM_COLOR.DarkOrange, width: 100, marginLeft: 160,
-                                            marginTop: 10, height: 30, alignItems: 'center', justifyContent: 'center', marginBottom: 10
-                                        }}
-                                    >
-                                        <Text style={{ color: CUSTOM_COLOR.White }}>Details</Text>
-                                    </TouchableOpacity>
-
-                                    <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <Text style={{color: CUSTOM_COLOR.Black, marginLeft: 35 ,fontWeight: 'bold'}}>Item Code</Text>
-                                        <Text style={{color: CUSTOM_COLOR.Black, marginRight: 35 }}>#{item.MaDH}</Text>
-                                    </View>
-
-                                </View>
-                            )
-                        }}
-                    />
-
-
-                </View>
-            </SafeAreaView>
-        )
-    }
-    if (delivered == true) {
-        return (
-            <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White }}>
-                <View style={{ width: '100%', height: 30, flexDirection: 'row', marginTop: 5 }}>
-                    <BackTo
-                        onPress={() => navigation.goBack()}
-                        Info='My Order'
-                    ></BackTo>
-                </View>
-                <View style={{ width: '100%', height: 50, flexDirection: 'row', justifyContent: 'space-around', marginTop: 15 }}>
-                    <Status
-                        title='Confirm'
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setConfirm(true), setDelivered(false) }}
-                        countProduct={donHangConfirm.length}
-                    ></Status>
-                    <Status
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setOnWait(true), setDelivered(false) }}
-                        title='On Wait'
-                        countProduct={donHangOnWait.length}
-                    >
-                    </Status>
-                    <Status
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setDelivering(true), setDelivered(false) }}
-                        title='Delivering'
-                        countProduct={donHangDelivering.length}
-                    >
-                    </Status>
-                    <Status
-                        botwidth={2}
-                        borderColor={CUSTOM_COLOR.Red}
-                        Color={CUSTOM_COLOR.DarkOrange}
-                        title='Delivered'
-                        countProduct={donHangDelivered.length}
-                    >
-                    </Status>
-                    <Status
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setCancel(true), setDelivered(false) }}
-                        title='Cancel'
-                        countProduct={donHangCancel.length}>
-                    </Status>
-                </View>
-                <View style={{ width: '100%', height: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
-                <View>
-
-                    <FlatList
-                        data={donHangDelivered}
-                        renderItem={({ item }) => {
-                            //console.log(item)
-                            return (
-                                <View>
-                                    <PerSon
-                                        avartar={item.Avatar}
-                                        name={item.TenND}
-                                    />
-                                    <FlatList
-                                        data={item.DatHang}
-                                        renderItem={({ item }) => {
-                                            console.log(item)
-                                            return (
-                                                <View>
-
-                                                    <OneOrder
-                                                         source={item.SanPham.HinhAnhSP[0]}
-                                                         title={item.SanPham.TenSP}
-                                                         price={item.SanPham.GiaSP}
-                                                         number={item.SoLuong}
-                                                         totalPrice={item.ThanhTien}
-                                                         color={item.MauSac}
-                                                         size={item.Size}
-                                                         Code={item.MaDH}
-                                                         onPress={() => {  }}
-                                                         PressConfirm={() => { }}
-                                                    ></OneOrder>
-
-                                                </View>
-                                            )
-                                        }}
-                                        keyExtractor={() => item.MaSP}
-                                    ></FlatList>
-                                    <TouchableOpacity
-                                        onPress={() => { navigation.navigate('DetailsDelivery', { item })}}
-                                        style={{
-                                            backgroundColor: CUSTOM_COLOR.DarkOrange, width: 100, marginLeft: 160,
-                                            marginTop: 10, height: 30, alignItems: 'center', justifyContent: 'center', marginBottom: 10
-                                        }}
-                                    >
-                                        <Text style={{ color: CUSTOM_COLOR.White }}>Details</Text>
-                                    </TouchableOpacity>
-
-                                    <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <Text style={{color: CUSTOM_COLOR.Black,fontWeight: 'bold', marginLeft: 35 }}>Item Code</Text>
-                                        <Text style={{color: CUSTOM_COLOR.Black, marginRight: 35 }}>#{item.MaDH}</Text>
-                                    </View>
-
-                                </View>
-                            )
-                        }}
-                    />
-
-
-                </View>
-            </SafeAreaView>
-        )
-    }
-    if(cancel == true){
-        return (
-            <SafeAreaView style={{ backgroundColor: CUSTOM_COLOR.White }}>
-                <View style={{ width: '100%', height: 30, flexDirection: 'row', marginTop: 5 }}>
-                    <BackTo
-                        onPress={() => navigation.goBack()}
-                        Info='My Order'
-                    ></BackTo>
-                </View>
-                <View style={{ width: '100%', height: 50, flexDirection: 'row', justifyContent: 'space-around', marginTop: 15 }}>
-                    <Status
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setConfirm(true), setCancel(false) }}
-                        title='Confirm'
-                        countProduct={donHangConfirm.length}
-                    ></Status>
-                    <Status
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setOnWait(true), setCancel(false) }}
-                        title='On Wait'
-                        countProduct={donHangOnWait.length}>
-                    </Status>
-                    <Status
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setDelivering(true), setCancel(false) }}
-                        title='Delivering'
-                        countProduct={donHangDelivering.length}>
-                    </Status>
-                    <Status
-                        Color={CUSTOM_COLOR.Black}
-                        onPress={() => { setDelivered(true), setCancel(false) }}
-                        title='Delivered'
-                        countProduct={donHangDelivered.length}>
-                    </Status>
-                    <Status
-                        title='Cancel'
-                        Color={CUSTOM_COLOR.DarkOrange}
-                        botwidth={2}
-                        borderColor={CUSTOM_COLOR.Red}
-                        countProduct={donHangCancel.length}
-                    >
-                    </Status>
-                </View>
-                <View style={{ width: '100%', height: 10, backgroundColor: CUSTOM_COLOR.LightGray }}></View>
-                <View style={{
-                    height: '85%'
-                }}>
-
-                    <FlatList
-                        data={donHangCancel}
-                        contentContainerStyle={{ paddingBottom: 50 }}
-                        renderItem={({ item }) => {
-                            //console.log(item)
-                            return (
-                                <View>
-                                    <PerSon
-                                        avartar={item.Avatar}
-                                        name={item.TenND}
-                                    />
-                                    <FlatList
-                                        data={item.DatHang}
-
-                                        renderItem={({ item }) => {
-
-                                            console.log(item)
-                                            return (
-                                                <View>
-
-                                                    <OneOrder
-                                                         source={item.SanPham.HinhAnhSP[0]}
-                                                         title={item.SanPham.TenSP}
-                                                         price={item.SanPham.GiaSP}
-                                                         number={item.SoLuong}
-                                                         totalPrice={item.ThanhTien}
-                                                         color={item.MauSac}
-                                                         size={item.Size}
-                                                         Code={item.MaDH}
-                                                         onPress={() => {  }}
-                                                         PressConfirm={() => { }}
-                                                    ></OneOrder>
-                                                </View>
-
-                                            )
-                                        }}
-                                    ></FlatList>
-
-                                    <TouchableOpacity
-                                        onPress={() => { navigation.navigate('DetailsDelivery', { item })}}
-                                        style={{
-                                            backgroundColor: CUSTOM_COLOR.DarkOrange, width: 100, marginLeft: 160,
-                                            marginTop: 10, height: 30, alignItems: 'center', justifyContent: 'center', marginBottom: 10
-                                        }}
-                                    >
-                                        <Text style={{ color: CUSTOM_COLOR.White }}>Details</Text>
-                                    </TouchableOpacity>
-
-                                    <View style={{ width: '100%', height: 25, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <Text style={{color: CUSTOM_COLOR.Black,fontWeight: 'bold', marginLeft: 35 }}>Item Code</Text>
-                                        <Text style={{color: CUSTOM_COLOR.Black, marginRight: 35 }}>#{item.MaDH}</Text>
-                                    </View>
-                                    <View style={{ width: '100%', height: 30, alignItems: 'center' }}>
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                ConfirmDonHang(item)
-                                            }}
-                                            style={{
-                                                width: '100%',
-                                                height: '100%',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                backgroundColor: CUSTOM_COLOR.DarkOrange,
-                                                paddingHorizontal: 20,
-                                                alignSelf: 'center',
-
-                                            }}
-                                        >
-                                            <Text style={{ color: CUSTOM_COLOR.White }}>ReOrder</Text>
-                                        </TouchableOpacity>
-                                    </View>
-
-                                </View>
-                            )
-                        }}
-                    />
-
-
-                </View>
-            </SafeAreaView>
-        )
-    }
-}
-
-const styles = StyleSheet.create({})
+export default CustomerOrder;

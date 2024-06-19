@@ -2,25 +2,35 @@ import React from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
 import FONT_FAMILY from "../../constants/font";
 import CUSTOM_COLOR from "../../constants/color";
+import { formatSoldQuantity } from "../../utils/helpers";
 
 const ProductView = (props: any) => {
    return (
       <View style={styles.container}>
          <Image
-            source={{uri: props.source}}
-            style={styles.image} 
-         />
-         <View style={styles.content}>
-             <Text
-               style={styles.title}
-               numberOfLines={1}
-               ellipsizeMode='tail'
-             >
-               {props.title}
-             </Text>
+            source={{ uri: props.source}}
+            style={{
+               width: 180,
+               height: 165,
+               borderTopLeftRadius: 20,
+               borderTopRightRadius: 20,
+
+            }} />
+         <View style={{ padding: 10 }}>
+            <Text numberOfLines={1} ellipsizeMode="tail" style={{
+               marginVertical: 4,
+               fontFamily: FONT_FAMILY.Medium,
+               color: CUSTOM_COLOR.Black,
+            }}>{props.title}</Text>
             <View style={styles.rowContent}>
-               <Text style={styles.price}>đ{props.price}</Text>
-               <Text style={styles.sold}>Đã bán 1,3k</Text>
+               <Text style={{
+                  fontSize: 16,
+                  marginTop: -5,
+                  
+                  //fontFamily: FONT_FAMILY.Bold,
+                  color: CUSTOM_COLOR.FlushOrange,
+               }}>đ{props.price}</Text>
+               <Text style={{fontSize: 10}}>Đã bán {formatSoldQuantity(props.quantity)}</Text>
             </View>
          </View>
       </View>

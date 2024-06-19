@@ -9,7 +9,7 @@ const Categories = (props: any) => {
   return (
     <View style={{ width: 300, height: 150, borderRadius: 30, marginVertical: 10, marginHorizontal: 50, alignItems: "center", justifyContent: 'center' }}>
 
-      <Image source={props.source}
+      <Image source={{uri: props.source}}
         resizeMode='cover'
         style={{
           borderRadius: 30,

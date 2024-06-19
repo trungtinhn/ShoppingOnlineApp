@@ -118,4 +118,50 @@ const deletePromotion = async ({ id }) => {
   }
 };
 
-export { addPromotion, getAllPromotions, getPromotionById, updatePromotion, deletePromotion };
+const getPromotionCurrent = async () => {
+  try {
+    const idToken = await getIdToken();
+    const url = "/promotion/getPromotionCurrent";
+    const config = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${idToken}`
+      },
+    };
+
+    const res = await api(url, config);
+    return res;
+  } catch (error) {
+    if (error.response) {
+      return error.response.data;
+    } else {
+      throw error;
+    }
+  }
+};
+
+const checkPromotion = async ({ id }) => {
+  try {
+    const idToken = await getIdToken();
+    const url = `/promotion/checkPromotion/id=${id}`;
+    const config = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${idToken}`
+      },
+    };
+
+    const res = await api(url, config);
+    return res;
+  } catch (error) {
+    if (error.response) {
+      return error.response.data;
+    } else {
+      throw error;
+    }
+  }
+};
+
+export { addPromotion, getAllPromotions, getPromotionById, updatePromotion, deletePromotion, getPromotionCurrent, checkPromotion };

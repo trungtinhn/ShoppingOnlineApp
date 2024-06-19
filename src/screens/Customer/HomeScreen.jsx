@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import dayjs from 'dayjs';
 import {
   FlatList,
@@ -7,7 +7,8 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  RefreshControl
 } from 'react-native';
 import { Badge } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
@@ -22,6 +23,9 @@ import ShoppingCartLogo from '../../../assets/Customer/svgs/shopping-cart.svg'
 import LogoApp from '../../../assets/Customer/svgs/Logo.svg'
 import { Slider } from 'react-native-elements';
 import FONT_FAMILY from '../../constants/font';
+import { getCategory } from '../../api/CategoryApi';
+import { getProductOnsale, getProductTrending } from '../../api/ProductApi';
+import { getPromotionCurrent } from '../../api/PromotionApi';
 function HomeScreen({navigation}) {
   const [trending, setTrending] = useState([]);
   const [danhmuc, setDanhMuc] = useState([]);
@@ -32,176 +36,56 @@ function HomeScreen({navigation}) {
   const [dataPromotion, setDataPromotion] = useState([]);
   const [search, setSearch] = useState(true);
   const [sanpham, setSanPham] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
   const getDanhMuc = async () => {
-    const data = [
-      {
-        MaDM: 1,
-        TenDM: 'Thể thao',
-        AnhDM: PR_1,
-      },
-      {
-        MaDM: 2,
-        TenDM: 'Nội trợ',
-        AnhDM: PR_2,
-      },
-    ];
-    setDanhMuc(data);
+    const res = await getCategory();
+    if(res.status === 200){
+      setDanhMuc(res.data);
+    }
   }
+    
   const getTrending = async () => {
-    const data = [
-      {
-        MaSP: 1,
-        TenSP: 'San Pham 1',
-        HinhAnhSP: PR_1,
-        GiaSP: '10000'
-      },
-      {
-        MaSP: 2,
-        TenSP: 'San Pham 2',
-        HinhAnhSP: PR_2,
-        GiaSP: '10000'
-      },
-      {
-        MaSP: 3,
-        TenSP: 'San Pham 3',
-        HinhAnhSP: PR_3,
-        GiaSP: '10000'
-      },
-      {
-        MaSP: 4,
-        TenSP: 'San Pham 4',
-        HinhAnhSP: PR_4,
-        GiaSP: '10000'
-      },
-      {
-        MaSP: 5,
-        TenSP: 'San Pham 5',
-        HinhAnhSP: PR_5,
-        GiaSP: '10000'
-      },
-    ];
-    setTrending(data);
+    try{
+      const res = await getProductTrending();
+      if(res.status === 200){
+        setTrending(res.data);
+      }
+    }catch (error){
+      console.log(error);
+    }
   }
-  const getSanPham = async () => {
-    const items = [
-      {
-        MaSP: 1,
-        TenSP: 'San Pham 1',
-        HinhAnhSP: PR_1,
-        GiaSP: '10000'
-      },
-      {
-        MaSP: 2,
-        TenSP: 'San Pham 2',
-        HinhAnhSP: PR_2,
-        GiaSP: '10000'
-      },
-      {
-        MaSP: 3,
-        TenSP: 'San Pham 3',
-        HinhAnhSP: PR_3,
-        GiaSP: '10000'
-      },
-      {
-        MaSP: 4,
-        TenSP: 'San Pham 4',
-        HinhAnhSP: PR_4,
-        GiaSP: '10000'
-      },
-      {
-        MaSP: 5,
-        TenSP: 'San Pham 5',
-        HinhAnhSP: PR_5,
-        GiaSP: '10000'
-      },
-    ];
-    setSanPham(items);
+  const getSanPhamOnsale = async () => {
+    try{
+      const res = await getProductOnsale();
+      if(res.status === 200){
+        setSanPham(res.data);
+      }
+    }catch(error){
+      console.log(error);
+    }
   };
-  const getDataPromotion = () => {
-    const data = [
-      {
-        HinhAnhKM: PR_1,
-        TenKM: 'Promotion 1',
-        TiLe: 0.2, // Discount rate
-        DonToiThieu: '$50', // Minimum purchase
-        NgayBatDau: new Date('2024-04-20'), // Start date
-        NgayKetThuc: new Date('2024-04-30'), // End date
-        Loai: 'Sale', // Type of promotion
-      },
-      {
-        HinhAnhKM: PR_2,
-        TenKM: 'Promotion 2',
-        TiLe: 0.1,
-        DonToiThieu: '$30',
-        NgayBatDau: new Date('2024-04-15'),
-        NgayKetThuc: new Date('2024-04-25'),
-        Loai: 'Discount',
-      },
-      {
-        HinhAnhKM: PR_1,
-        TenKM: 'Promotion 1',
-        TiLe: 0.2, // Discount rate
-        DonToiThieu: '$50', // Minimum purchase
-        NgayBatDau: new Date('2024-04-20'), // Start date
-        NgayKetThuc: new Date('2024-04-30'), // End date
-        Loai: 'Sale', // Type of promotion
-      },
-      {
-        HinhAnhKM: PR_2,
-        TenKM: 'Promotion 2',
-        TiLe: 0.1,
-        DonToiThieu: '$30',
-        NgayBatDau: new Date('2024-04-15'),
-        NgayKetThuc: new Date('2024-04-25'),
-        Loai: 'Discount',
-      },
-      {
-        HinhAnhKM: PR_1,
-        TenKM: 'Promotion 1',
-        TiLe: 0.2, // Discount rate
-        DonToiThieu: '$50', // Minimum purchase
-        NgayBatDau: new Date('2024-04-20'), // Start date
-        NgayKetThuc: new Date('2024-04-30'), // End date
-        Loai: 'Sale', // Type of promotion
-      },
-      {
-        HinhAnhKM: PR_2,
-        TenKM: 'Promotion 2',
-        TiLe: 0.1,
-        DonToiThieu: '$30',
-        NgayBatDau: new Date('2024-04-15'),
-        NgayKetThuc: new Date('2024-04-25'),
-        Loai: 'Discount',
-      },
-      // Add more objects as needed
-    ];
-    setDataPromotion(data);
+  const getDataPromotion = async () => {
+    const res = await getPromotionCurrent();
+    if(res.status === 200){
+      setDataPromotion(res.data);
+    }
   }
   useEffect(() => {
     getTrending();
-    getSanPham();
+    getSanPhamOnsale();
     getDataPromotion();
     getDanhMuc();
   }, []);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredItems, setFilteredItems] = useState([]);
+
 
   const setSoLuongChuaDocCuaCustomer = async () => {}
 
-  const handleSearch = (searchTerm, data) => {
-    if (searchTerm === '') {
-      setSearch(true);
-    }
-    else {
-      setSearch(false);
-      setSearchTerm(searchTerm);
-      const filteredItems = data.filter(item =>
-        item.TenSP.toLowerCase().includes(searchTerm.toLowerCase()),
-      );
-      setFilteredItems(filteredItems);
-    }
-
-  };
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    Promise.all([getTrending(), getSanPhamOnsale(), getDataPromotion(), getDanhMuc()])
+      .then(() => setRefreshing(false))
+      .catch(() => setRefreshing(false));
+  }, []);
 
   return (
     <View
@@ -278,9 +162,12 @@ function HomeScreen({navigation}) {
         </View>
       </View>
 
-      {search ? (
-        <>
-          <ScrollView>
+
+        <ScrollView
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          >
             <Text style={styles.textView}>On sale</Text><View
               style={{
                 height: 175,
@@ -336,27 +223,32 @@ function HomeScreen({navigation}) {
                 }}>
                 <Text style={styles.text}>See all</Text>
               </TouchableOpacity>
-            </View><View style={{}}>
+            </View>
+            <View style={{marginLeft: "5%"}}>
               <FlatList
-                windowSize={10}
                 horizontal={true}
                 data={trending}
+                showsHorizontalScrollIndicator={false}
+                key={item => item._id}
                 renderItem={({ item }) => (
                   <TouchableOpacity
                     style={{
                       marginHorizontal: -10,
                     }}
                     onPress={() => {
-                      navigation.navigate('ProductDetail', { item });
+                      const id = item._id;
+                      navigation.navigate('ProductDetail', { id });
                     }}>
                     <ProductView
-                      source={item.HinhAnhSP}
+                      source={item.HinhAnhSP[0]}
                       title={item.TenSP}
-                      price={item.GiaSP} />
+                      quantity={item.SoLuongDaBan}
+                      price={item.GiaGiam} />
                   </TouchableOpacity>
                 )}
-                keyExtractor={item => item.MaSP} />
-            </View><View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                />
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <Text style={styles.textView}>Orther categories</Text>
               <TouchableOpacity>
                 <Text style={styles.text}>Explore now</Text>
@@ -374,39 +266,12 @@ function HomeScreen({navigation}) {
                   onPress={() => {
                     navigation.navigate('DetailCategory', { item });
                   }}
-                  key={item.MaDM}>
-                  <Categories source={item.AnhDM} title={item.TenDM} />
+                  key={item._id}>
+                  <Categories source={item.image} title={item.name} />
                 </TouchableOpacity>
               ))
               : null}
           </ScrollView>
-        </>
-      ) : (
-        <View style={{ flex: 1 }}>
-          <FlatList
-            data={searchTerm ? filteredItems : sanpham}
-            renderItem={({ item }) => {
-              return (
-                <TouchableOpacity style={{
-                  flexDirection: 'row',
-                  //justifyContent: 'space-around'
-                }}
-                  onPress={() => { navigation.navigate('ProductDetail', { item }) }}
-                >
-                  <ProductView
-                    source={item.HinhAnhSP}
-                    title={item.TenSP}
-                    price={item.GiaSP}
-                  />
-                </TouchableOpacity>
-              )
-            }}
-
-            numColumns={2}
-          //keyExtractor={(item) => item.MASP}
-          />
-        </View>
-      )}
 
     </View>
   );

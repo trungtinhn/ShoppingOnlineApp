@@ -174,7 +174,7 @@ function NotificationScreen({ navigation }) {
               borderRadius: 10,
             }}
             onPress={() => {
-              navigation.navigate('ShoppingCard', { idUser });
+              navigation.navigate('ShoppingCard');
             }}>
                 {badgeCart != 0 ? (
                 <Badge
