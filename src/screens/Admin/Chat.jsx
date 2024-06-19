@@ -1,16 +1,41 @@
 import { View, Text, Image, SafeAreaView, FlatList } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Search from '../../components/Admin/Search'
 import UserChat from '../../components/Admin/UserChat'
 import CUSTOM_COLOR from '../../constants/color'
 import { Acount } from './ViewShopScreen'
 import { IC_User } from '../../../assets/Admin/icons'
 import { PR_1 } from '../../../assets/Customer/images'
+import { getAllUsers, getUserType } from '../../api/UserApi'
+import {firebase} from '../../../firebase/firebase';
 
 function Chat({navigation}){
   const [imageUrl, setImageUrl] = useState();
   const [users, setUsers ] = useState();
-  
+  const [userInfo, setUserInfo] = useState({});
+  const fetchUsers = async () => {
+    try {
+      const user = firebase.auth().currentUser;
+      // Gọi hai API song song
+      const [allUsersRes, userTypeRes] = await Promise.all([
+        getAllUsers(),
+        getUserType({ MaND: user.uid }),
+      ]);
+
+      if (allUsersRes.status === 200) {
+        setUsers(allUsersRes.data);
+      }
+
+      if (userTypeRes.status === 200) {
+        setUserInfo(userTypeRes.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  useEffect(() => {
+    fetchUsers();
+  },[])
   const clone_users = [
     {
       _id: "666a0efb627c6dd4031fd437",
@@ -84,8 +109,9 @@ function Chat({navigation}){
           <View style={{ width: '100%', height: 10 }} />
           <View style={{ width: '100%', height: '73%' }}>
             <FlatList
-              data={clone_users}
+              data={users}
               renderItem={({ item }) => {
+                if (item._id === userInfo._id) return null;
                 const hour = null;
                 const minute =  null;
                 return (

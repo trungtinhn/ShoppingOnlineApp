@@ -36,7 +36,7 @@ function ChatScreen({navigation, route}) {
       const user = firebase.auth().currentUser;
       const res = await getUserType({MaND: user.uid});
       setUserInfo(res.data);
-      if(userInfo.role === "admin"){
+      if(res.data.LoaiND === "admin"){
         setupSocketListeners(res.data, item);
       }
       else{

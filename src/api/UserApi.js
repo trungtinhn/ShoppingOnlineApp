@@ -109,7 +109,7 @@ const getCurrentUserData = async({MaND}) => {
 const getAllUsers = async() => {
   try {
       const idToken = await getIdToken();
-      const url = `/user`;
+      const url = `/user/users`;
       const config = {
           method: "GET",
           headers: {
