@@ -21,6 +21,8 @@ import CUSTOM_COLOR from '../../constants/color';
 
 import {firebase} from '../../../firebase/firebase';
 import {getUserType} from '../../api/UserApi';
+import { BackIcon } from '../../../assets/Customer/svgs';
+import FONT_FAMILY from '../../constants/font';
 
 const socket = io(`http://172.16.15.209:8000`, {
   path: "/api/Chat/",
@@ -84,10 +86,10 @@ function ChatScreen({navigation, route}) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={IC_Back} style={styles.backIcon} resizeMode="stretch" />
+        <TouchableOpacity style={{padding: 10}} onPress={() => navigation.goBack()}>
+          <BackIcon />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Fauget</Text>
+        <Text style={styles.headerText}>Customer Support</Text>
       </View>
 
       <ScrollView style={styles.messageContainer}>
@@ -141,7 +143,8 @@ const styles = StyleSheet.create({
   headerText: {
     marginHorizontal: '5%',
     fontSize: 17,
-    fontWeight: 'bold',
+    fontFamily: FONT_FAMILY.Bold,
+    color: CUSTOM_COLOR.Black,
   },
   messageContainer: {
     backgroundColor: CUSTOM_COLOR.Gallery,
