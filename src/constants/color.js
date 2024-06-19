@@ -26,7 +26,8 @@ const CUSTOM_COLOR = {
     RoseBud: '#FAA9A9',
     Gallery: '#F0F0F0',
     Yellow: '#FFFF00',
-    WhitePorcelain: '#F8F9FA'
+    WhitePorcelain: '#F8F9FA',
+    Green: '#00FF00'
   };
   
   export default CUSTOM_COLOR;

@@ -561,10 +561,7 @@ function ChangeProfile({navigation}) {
                 </>
 
                 <View style={{width: '100%', height: 15}} />
-
-                <></>
-              </ScrollView>
-              <View style={{width: '100%', height: 65}}>
+                <View style={{width: '100%', height: 65}}>
                 <View style={styles.buttonContainer}>
                   <CustomButton
                     type="primary"
@@ -575,6 +572,8 @@ function ChangeProfile({navigation}) {
                   />
                 </View>
               </View>
+                <></>
+              </ScrollView>
             </View>
           </>
         </>
@@ -611,7 +610,6 @@ const styles = StyleSheet.create({
     width: '60%',
     height: '70%',
     marginRight: '5%',
-    // backgroundColor: CUSTOM_COLOR.FlushOrange,
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
@@ -628,7 +626,6 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     width: '90%',
-    height: 450,
     marginHorizontal: '5%',
   },
   inputContainer: {
@@ -659,10 +656,6 @@ const styles = StyleSheet.create({
   comboType: {
     width: '90%',
     height: '90%',
-    // borderColor: CUSTOM_COLOR.MineShaft,
-    // borderWidth: 0.5,
-    // borderRadius: 1,
-    // paddingHorizontal: '5%',
   },
   inputSearchStyle: {
     height: 40,
@@ -683,16 +676,12 @@ const styles = StyleSheet.create({
   dateStyle: {
     width: '90%',
     height: '90%',
-    // borderColor: CUSTOM_COLOR.MineShaft,
-    // borderWidth: 0.5,
-    // borderRadius: 1,
-    // paddingHorizontal: '5%',
     justifyContent: 'center',
   },
   buttonContainer: {
     width: '200%',
     height: '100%',
-    bottom: '0%',
+    bottom: '4%',
     alignItems: 'center',
     justifyContent: 'center',
     left: '-50%',

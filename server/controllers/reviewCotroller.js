@@ -1,5 +1,5 @@
 const Review = require('../models/Review');
-
+const User = require('../models/User')
 const reviewController = {
     addReview: async (req, res) => {
         try {
@@ -36,15 +36,32 @@ const reviewController = {
     },
     getReviewById: async (req, res) => {
         try {
-            const review = await Review.findById(req.params.id);
-            if (!review) {
+            const reviews = await Review.find({ MaSP: req.params.id }).lean();
+            
+            if (reviews.length === 0) {
                 return res.status(404).json('Review not found!');
             }
-            res.status(200).json(review);
+            
+            const reviewsWithUserDetails = await Promise.all(reviews.map(async (review) => {
+                const user = await User.findOne({ MaND: review.MaND });
+                if (user) {
+                    review.TenND = user.TenND;
+                    review.Avatar = user.Avatar;
+                } else {
+                    // Handle case where user is not found
+                    review.TenND = 'Unknown';
+                    review.Avatar = ''; // Provide a default image if necessary
+                }
+                return review;
+            }));
+            
+            console.log(reviewsWithUserDetails);
+            res.status(200).json(reviewsWithUserDetails);
         } catch (error) {
             res.status(500).json({ message: 'Failed to get review!', error });
         }
     }
+    
 };
 
 module.exports = reviewController;

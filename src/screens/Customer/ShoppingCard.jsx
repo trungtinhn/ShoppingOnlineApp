@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { View, Text, StyleSheet,FlatList, TouchableOpacity, Image, ScrollView, RefreshControl, Alert } from "react-native";
+import React, { useEffect, useState, useCallback, useContext } from "react";
+import { View, Text, StyleSheet,FlatList, TouchableOpacity, Image, ScrollView, RefreshControl, Alert, Switch } from "react-native";
 import ProductCheckOut from "../../components/Customer/ProductCheckout";
 import { IC_Back } from "../../../assets/Customer/icons";
 import { PR_1, PR_2, PR_3, PR_4, PR_5 } from "../../../assets/Customer/images";
@@ -11,7 +11,11 @@ import { getCartByUser, removeProductFromCart, updateProductInCart } from "../..
 import {firebase} from "../../../firebase/firebase"
 import LoadingScreen from "../LoadingScreen";
 import { id } from "date-fns/locale";
+import CheckBox from "@react-native-community/checkbox";
+import { OrderContext } from "../../context/OrderContext";
+
 const ShoppingCard = ({navigation}) => {
+    const {product, setProduct, setPromoCode} = useContext(OrderContext)
     const idUser = firebase.auth().currentUser.uid;
     const [items, setItems] = useState([]);
     const [isLoading, setLoading] = useState(true)
@@ -148,7 +152,7 @@ const ShoppingCard = ({navigation}) => {
     }
     const LoadItemsCheckout = () => {
         const data = items.filter((product) => product.checkSelect == true)
-        setItemsCheckout(data)
+        setProduct(data)
     }
 
     
@@ -232,29 +236,7 @@ const ShoppingCard = ({navigation}) => {
                         justifyContent: 'center',
                         alignItems: 'center'
                     }}>
-                        <TouchableOpacity style={{
-                            width: 23,
-                            height: 23,
-                            borderWidth: 1,
-                            borderRadius: 20,
-                            marginRight: 20,
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}
-                            onPress={() => {
-                                ChooseAll()
-                            }}
-                        >
-                            {checkChooseAll ?
-                                <View style={{
-                                    width: 10,
-                                    height: 10,
-                                    borderRadius: 10,
-                                    backgroundColor: CUSTOM_COLOR.Black
-                                }}>
-
-                                </View> : null}
-                        </TouchableOpacity>
+                        <CheckBox value={checkChooseAll} onValueChange={() => ChooseAll()} onCheckColor={CUSTOM_COLOR.FlushOrange} />
 
                         <Text style={{
                             fontSize: 17,
@@ -288,17 +270,15 @@ const ShoppingCard = ({navigation}) => {
                     type="primary"
                     text="CHECK OUT"
                     onPress={() => {
-                        if(itemsCheckout.length > 0){
-                            navigation.navigate('Checkout', {itemsCheckout: itemsCheckout})
-                            //setItemsCheckout([])
-                            //ResetProduct()
+                        if(product.length > 0){
+                            setPromoCode(null)
+                            navigation.navigate('Checkout')
                         }
                         else{
                             Alert.alert('Warning', 'Please choose product')
                         }
                     }}
                  />
-                        
                 </View>
             </View>
         </View>

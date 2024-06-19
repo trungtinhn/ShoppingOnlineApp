@@ -11,7 +11,6 @@ const userController = {
     },
     getUserTypeByMaND :async (req, res) => {
         try {
-          console.log("Req ne")
           const { MaND } = req.params;
           const user = await User.findOne({ MaND });
           if (user) {

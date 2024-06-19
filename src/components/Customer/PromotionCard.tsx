@@ -21,7 +21,7 @@ const PromotionCard = (props: any) => {
           style={styles.image}>
           <View style={styles.avataContainer}>
             <Image
-              source={props.source}
+              source={{uri:props.source}}
               style={{
                 width: 200,
                 height: 100,

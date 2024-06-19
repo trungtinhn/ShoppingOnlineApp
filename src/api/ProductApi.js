@@ -270,6 +270,28 @@ const setProductStatus = async ({productId, status}) => {
     }
   }
 };
+const checkAvailable = async ({data}) => {
+  try {
+    const idToken = await getIdToken();
+    const url = '/products/checkAvailable';
+    const config = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${idToken}`,
+      },
+      data: data,
+    };
+    const res = await api(url, config);
+    return res;
+  } catch (error) {
+    if (error.response) {
+      return error.response.data;
+    } else {
+      throw error;
+    }
+  }
+}
 export {
   addProduct,
   updateProduct,
@@ -283,4 +305,5 @@ export {
   getProductOnwait,
   getProductOutofstock,
   setProductStatus,
+  checkAvailable
 };

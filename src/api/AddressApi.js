@@ -118,4 +118,27 @@ const getAddressById = async ({ addressId }) => {
   }
 };
 
-export { addAddress, updateAddress, deleteAddress, getAllAddresses, getAddressById };
+const getAddressByMaND = async ({ MaND }) => {
+  try {
+    const idToken = await getIdToken();
+    const url = `/addresses/getAddressByMaND/MaND=${MaND}`;
+    const config = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${idToken}`
+      },
+    };
+
+    const res = await api(url, config);
+    return res;
+  } catch (error) {
+    if (error.response) {
+      return error.response.data;
+    } else {
+      throw error;
+    }
+  }
+};
+
+export { addAddress, updateAddress, deleteAddress, getAllAddresses, getAddressById, getAddressByMaND };

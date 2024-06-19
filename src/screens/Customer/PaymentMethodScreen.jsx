@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, Text, TextInput, View, Image, FlatList, TouchableOpacity } from "react-native";
 import { IC_Back, IC_Banking, IC_HandMoney, IC_Location, IC_Momo, IC_MyLocation } from "../../../assets/Customer/icons";
 import Button from "../../components/Customer/Button";
 import InputData from "../../components/Customer/InputData";
 import CUSTOM_COLOR from "../../constants/color";
 import { BackIcon } from "../../../assets/Customer/svgs";
+import { OrderContext } from "../../context/OrderContext";
 
-function PaymentMethodScreen({ navigation, route }) {
+function PaymentMethodScreen({ navigation}) {
 
-    const { itemsCheckout, totalMoney, delivery, promotion } = route.params
-
-    const [choosePayment, setChoosePayment] = useState()
-
-
+    const {payment, setPayment} = useContext(OrderContext);
 
     return (
         <View style={styles.container}>
@@ -21,7 +18,8 @@ function PaymentMethodScreen({ navigation, route }) {
                 flexDirection: 'row',
                 alignItems: 'center',
                 backgroundColor: CUSTOM_COLOR.White,
-                height: 40
+                height: 40,
+                marginTop: 10
             }}>
                 <TouchableOpacity
                     style={{ padding: 20 }} 
@@ -40,7 +38,7 @@ function PaymentMethodScreen({ navigation, route }) {
             </View>
 
 
-            <View style={styles.viewMethod}>
+            {/* <View style={styles.viewMethod}>
                 <TouchableOpacity style={styles.radBtn}
                     onPress={() => setChoosePayment('MomoWallet')}
                 >
@@ -59,14 +57,14 @@ function PaymentMethodScreen({ navigation, route }) {
                     source={IC_Momo}
                 />
                 <Text style={styles.text}>MOMO Wallet</Text>
-            </View>
+            </View> */}
 
 
             <View style={styles.viewMethod}>
                 <TouchableOpacity style={styles.radBtn}
-                    onPress={() => setChoosePayment('CashPayment')}
+                    onPress={() => setPayment('CashPayment')}
                 >
-                    {choosePayment === 'CashPayment' ?
+                    {payment === 'CashPayment' ?
                         <View
                             style={{
                                 ...styles.chooseRadio
@@ -87,9 +85,9 @@ function PaymentMethodScreen({ navigation, route }) {
 
             <View style={styles.viewMethod}>
                 <TouchableOpacity style={styles.radBtn}
-                    onPress={() => setChoosePayment('OnlineBanking')}
+                    onPress={() => setPayment('OnlineBanking')}
                 >
-                    {choosePayment === 'OnlineBanking' ?
+                    {payment === 'OnlineBanking' ?
                         <View
                             style={{
                                 ...styles.chooseRadio
@@ -120,7 +118,7 @@ function PaymentMethodScreen({ navigation, route }) {
                     <Button
                         title='Continue'
                         color={CUSTOM_COLOR.FlushOrange}
-                        onPress={() => navigation.navigate('Checkout', { itemsCheckout, totalMoney, delivery, choosePayment, promotion })}
+                        onPress={() => navigation.navigate('Checkout')}
                     />
                 </View>
             </View>

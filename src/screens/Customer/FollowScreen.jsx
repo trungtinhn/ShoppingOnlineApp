@@ -19,12 +19,12 @@ import { ShoppingCartIcon } from '../../../assets/Customer/svgs';
 import MessengerLogo from '../../../assets/Admin/svgs/Messenger.svg'
 const url = 'https://firebasestorage.googleapis.com/v0/b/shoppingapp-a20a4.appspot.com/o/images%2Fcategories%2Fproduct_1.jpg?alt=media&token=6c835337-a643-4c0d-98bd-34957a39045b'
 function FollowScreen({navigation}) {
-  //
+
   const avatar = 'https://i.pinimg.com/originals/0d/dc/ca/0ddccae723d85a703b798a5e682c23c1.png';
   const [chatUser, setChatUser] = useState();
   const [loadingChatUser, setLoadingChatUser] = useState(false);
   const [idUser, setIdUser] = useState();
-  const [badgeCart, setBadgeCart] = useState(0);
+  const [badgeCart, setBadgeCart] = useState(5);
   const [searchTerm, setSearchTerm] = useState('');
   //
   const [sanpham, setSanPham] = useState([]);
@@ -243,7 +243,9 @@ function FollowScreen({navigation}) {
             style={{
               width: 45,
               height: 45,
-              backgroundColor: CUSTOM_COLOR.Mercury,
+              backgroundColor: CUSTOM_COLOR.White,
+              borderColor: CUSTOM_COLOR.LightGray,
+              borderWidth: 1,
               alignItems: 'center',
               justifyContent: 'center',
               // marginVertical: 10,
@@ -270,7 +272,9 @@ function FollowScreen({navigation}) {
             style={{
               width: 45,
               height: 45,
-              backgroundColor: CUSTOM_COLOR.Mercury,
+              backgroundColor: CUSTOM_COLOR.White,
+              borderColor: CUSTOM_COLOR.LightGray,
+              borderWidth: 1,
               alignItems: 'center',
               justifyContent: 'center',
               // marginVertical: 10,

@@ -8,7 +8,7 @@ const LikeSchema = new mongoose.Schema({
   },
   danhSachSanPham: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'SanPham' // Tham chiếu tới model SanPham
+    ref: 'Product' // Tham chiếu tới model SanPham
   }]
 });
 

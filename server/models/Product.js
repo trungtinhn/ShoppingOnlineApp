@@ -102,9 +102,11 @@ const ProductSchema = new mongoose.Schema({
     },
     MoTaSP: {
         type: String,
-        default: "Không có mô tả cho sản phẩm này"
+        default: "Không có mô tả cho sản phẩm này",
         required: true
     }
 }, { timestamps: true });
+
+
 
 module.exports = mongoose.model('Product', ProductSchema);

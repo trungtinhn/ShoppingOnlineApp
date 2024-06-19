@@ -13,7 +13,6 @@ const createOrder = async({data}) => {
             },
             data: data,
         };
-        console.log("Token client " + idToken);
         const res = await api(url, config);
         return res;
     } catch (error) {
@@ -36,7 +35,6 @@ const getAllOrders = async() => {
                 Authorization: `Bearer ${idToken}`
             },
         };
-        console.log("Token client " + idToken);
         const res = await api(url, config);
         return res;
     } catch (error) {
@@ -59,7 +57,6 @@ const getOrderById = async({id}) => {
                 Authorization: `Bearer ${idToken}`
             },
         };
-        console.log("Token client " + idToken);
         const res = await api(url, config);
         return res;
     } catch (error) {
@@ -82,7 +79,6 @@ const getOrdersByUserId = async({userId}) => {
                 Authorization: `Bearer ${idToken}`
             },
         };
-        console.log("Token client " + idToken);
         const res = await api(url, config);
         return res;
     } catch (error) {
@@ -105,7 +101,6 @@ const getOrdersByUserIdAndStatus = async({userId, status}) => {
                 Authorization: `Bearer ${idToken}`
             },
         };
-        console.log("Token client " + idToken);
         const res = await api(url, config);
         return res;
     } catch (error) {
@@ -129,7 +124,6 @@ const updateOrderById = async({id, data}) => {
             },
             data: data,
         };
-        console.log("Token client " + idToken);
         const res = await api(url, config);
         return res;
     } catch (error) {
@@ -141,7 +135,7 @@ const updateOrderById = async({id, data}) => {
     }
 };
 
-const updateOrderStatus = async({id, data}) => {
+const updateOrderStatus = async({id, status}) => {
     try {
         const idToken = await getIdToken();
         const url = `/order/${id}/status`;
@@ -151,9 +145,8 @@ const updateOrderStatus = async({id, data}) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${idToken}`
             },
-            data: data,
+            data: {status},
         };
-        console.log("Token client " + idToken);
         const res = await api(url, config);
         return res;
     } catch (error) {
@@ -176,7 +169,6 @@ const deleteOrderById = async({id}) => {
                 Authorization: `Bearer ${idToken}`
             },
         };
-        console.log("Token client " + idToken);
         const res = await api(url, config);
         return res;
     } catch (error) {

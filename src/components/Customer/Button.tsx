@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import CUSTOM_COLOR from '../../constants/color';
+import FONT_FAMILY from '../../constants/font';
 
 const Button = (props: any) => {
   return (
@@ -16,7 +17,7 @@ const Button = (props: any) => {
       style={{
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 25,
+        borderRadius: 10,
         backgroundColor: props.color,
         paddingHorizontal: 20,
         paddingVertical: 8,
@@ -28,8 +29,8 @@ const Button = (props: any) => {
       <Text
         style={{
           color: CUSTOM_COLOR.White,
-          fontWeight: 'bold',
           fontSize: 17,
+          fontFamily: FONT_FAMILY.CeraPro,
         }}>
         {props.title}
       </Text>

@@ -15,5 +15,5 @@ router.get('/getProductAvailable', verifyToken ,productController.getProductAvai
 router.get('/getProductOnwait', verifyToken ,productController.getProductOnwait);
 router.get('/getProductOutofstock', verifyToken ,productController.getProductOutofstock);
 router.put('/setProductStatus/status/:id',verifyToken, productController.setProductStatus);
-
+router.put('/checkAvailable', verifyToken ,productController.checkAvailable);
 module.exports = router;
