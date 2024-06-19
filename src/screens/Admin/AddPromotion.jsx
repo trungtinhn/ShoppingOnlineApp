@@ -37,7 +37,7 @@ function AddPromotion({navigation}) {
   const [value, setValue] = useState(null);
   const [showPicker, setShowPicker] = useState(false);
 
-  const [image, setImage] = useState();
+  const [image, setImage] = useState(null);
   const [lengthName, setLengthName] = useState(0);
   const [lengthDescription, setLengthDescription] = useState(0);
   const [typeOfPromotion, setTpyeOfPromotion] = useState();
@@ -129,18 +129,20 @@ function AddPromotion({navigation}) {
       DonToiThieu: minimumOrder,
       HinhAnhKM: imageUri,
       Loai: typeOfPromotion,
-      NgayBatDau: Date(startDate),
-      NgayKetThuc: Date(endDate),
+      NgayBatDau: startDate,
+      NgayKetThuc: endDate,
       TenKM: name,
-      HinhAnhKhuyenMai: imageUri,
+      AnhNenKhuyenMai: imageUri,
       TiLe: discount/100,
-      Soluotdung: 1,
+      SoluotSuDung: 1,
       SoLuong: 1,
     }
     const res = await addPromotion({data: newPromotion});
-    if(res === 200){
-      console.log("Đã thêm thành công")
-    }else{
+    if(res.status === 200){
+      console.log("Đã thêm thành công");
+      Alert.alert('Notification', 'Successfully added new Promotion!', [
+        {text: 'OK', onPress: () => navigation.goBack(), style: 'cancel'},
+      ]);    }else{
       console.log(res.error);
     }
   };
@@ -291,7 +293,7 @@ function AddPromotion({navigation}) {
                 </TouchableOpacity>
                 <View style={{ width: 25, height: '100%' }} />
 
-                {image ? (
+                {image != null ? (
                   <Image
                     source={image}
                     style={{
@@ -689,7 +691,6 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     width: '90%',
-    height: '85%',
     marginHorizontal: '5%',
   },
   inputSearchStyle: {

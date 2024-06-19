@@ -16,7 +16,7 @@ const orders = [
     DatHang: [
       {
         SanPham: {
-          HinhAnhSP: ['https://example.com/product1.jpg'],
+          HinhAnhSP: ['https://firebasestorage.googleapis.com/v0/b/shoppingapp-a20a4.appspot.com/o/test%2Fproduct_1.jpg?alt=media&token=9f6e7804-abbd-4a94-9f2e-1a4c5c985c9f'],
           TenSP: 'Áo phông nam',
           GiaSP: 250000,
         },
@@ -27,7 +27,7 @@ const orders = [
       },
       {
         SanPham: {
-          HinhAnhSP: ['https://example.com/product2.jpg'],
+          HinhAnhSP: ['https://firebasestorage.googleapis.com/v0/b/shoppingapp-a20a4.appspot.com/o/test%2Fproduct_1.jpg?alt=media&token=9f6e7804-abbd-4a94-9f2e-1a4c5c985c9f'],
           TenSP: 'Quần jeans nữ',
           GiaSP: 300000,
         },
@@ -41,13 +41,13 @@ const orders = [
   {
     MaDH: 'DH002',
     TrangThai: 'OnWait',
-    Avatar: 'https://example.com/avatar2.jpg',
+    Avatar: 'https://firebasestorage.googleapis.com/v0/b/shoppingapp-a20a4.appspot.com/o/test%2Fproduct_1.jpg?alt=media&token=9f6e7804-abbd-4a94-9f2e-1a4c5c985c9f',
     TenND: 'Tran Thi B',
     MaND: 'ND002',
     DatHang: [
       {
         SanPham: {
-          HinhAnhSP: ['https://example.com/product3.jpg'],
+          HinhAnhSP: ['https://firebasestorage.googleapis.com/v0/b/shoppingapp-a20a4.appspot.com/o/test%2Fproduct_1.jpg?alt=media&token=9f6e7804-abbd-4a94-9f2e-1a4c5c985c9f'],
           TenSP: 'Giày thể thao',
           GiaSP: 500000,
         },
@@ -61,13 +61,13 @@ const orders = [
   {
     MaDH: 'DH003',
     TrangThai: 'Delivering',
-    Avatar: 'https://example.com/avatar3.jpg',
+    Avatar: 'https://firebasestorage.googleapis.com/v0/b/shoppingapp-a20a4.appspot.com/o/test%2Fproduct_1.jpg?alt=media&token=9f6e7804-abbd-4a94-9f2e-1a4c5c985c9f',
     TenND: 'Le Van C',
     MaND: 'ND003',
     DatHang: [
       {
         SanPham: {
-          HinhAnhSP: ['https://example.com/product4.jpg'],
+          HinhAnhSP: ['https://firebasestorage.googleapis.com/v0/b/shoppingapp-a20a4.appspot.com/o/test%2Fproduct_1.jpg?alt=media&token=9f6e7804-abbd-4a94-9f2e-1a4c5c985c9f'],
           TenSP: 'Túi xách nữ',
           GiaSP: 700000,
         },
@@ -81,13 +81,13 @@ const orders = [
   {
     MaDH: 'DH004',
     TrangThai: 'Delivered',
-    Avatar: 'https://example.com/avatar4.jpg',
+    Avatar: 'https://firebasestorage.googleapis.com/v0/b/shoppingapp-a20a4.appspot.com/o/test%2Fproduct_1.jpg?alt=media&token=9f6e7804-abbd-4a94-9f2e-1a4c5c985c9f',
     TenND: 'Pham Thi D',
     MaND: 'ND004',
     DatHang: [
       {
         SanPham: {
-          HinhAnhSP: ['https://example.com/product5.jpg'],
+          HinhAnhSP: ['https://firebasestorage.googleapis.com/v0/b/shoppingapp-a20a4.appspot.com/o/test%2Fproduct_1.jpg?alt=media&token=9f6e7804-abbd-4a94-9f2e-1a4c5c985c9f'],
           TenSP: 'Áo khoác nam',
           GiaSP: 800000,
         },

@@ -15,6 +15,7 @@ import LoadingComponent from '../../components/LoadingComponent';
 import CUSTOM_COLOR from '../../constants/color';
 import FONT_FAMILY from '../../constants/font';
 import Search from '../../components/Admin/Search';
+import { getAllUsers } from '../../api/UserApi';
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',
@@ -72,7 +73,8 @@ function ManageUser({navigation}){
       // setData(fetchedData);
       setIsLoading(false);
     }, 2000);
-
+    
+    handleGetAllUser();
     // fetchUserData(firebase.auth().currentUser.uid);
     // fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
     //   setImageUrl(url),
@@ -80,8 +82,6 @@ function ManageUser({navigation}){
 
     
   }, []);
-
-
 
   const handleUserPress = user => {
     // Navigate to the edit screen with the selected user data
@@ -92,6 +92,12 @@ function ManageUser({navigation}){
   const handleResetPassword = () => {
     
   };
+
+  const handleGetAllUser = async () => {
+    const res = await getAllUsers();
+    console.log(res.data);
+    setUsers(res.data);
+  }
 
   const renderUser = ({ item }) => (
     <TouchableOpacity onPress={() => handleUserPress(item)}>

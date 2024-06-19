@@ -85,11 +85,31 @@ const deleteUser = async({MaND}) => {
       }
   }
 };
-
+const getCurrentUserData = async({MaND}) => {
+  try{
+    const idToken = await getIdToken();
+    const url = `/user/getUser/MaND=${MaND}`;
+    const config = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${idToken}`
+        },
+    };
+    const res = await api(url, config);
+    return res;
+  } catch (error) {
+      if (error.response) {
+          return error.response;
+      } else {
+          throw error;
+      }
+  }
+}
 const getAllUsers = async() => {
   try {
       const idToken = await getIdToken();
-      const url = `/user`;
+      const url = `/user/users`;
       const config = {
           method: "GET",
           headers: {
@@ -109,4 +129,4 @@ const getAllUsers = async() => {
 };
 
 
-export {registerUser, getUserType, updateUser, deleteUser, getAllUsers}
+export {registerUser, getUserType, updateUser, deleteUser, getAllUsers, getCurrentUserData}

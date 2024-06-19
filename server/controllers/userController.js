@@ -55,7 +55,21 @@ const userController = {
       } catch (error) {
           return res.status(500).json({ message: error.message });
       }
-  }
+  },
+  getCurrentUserData: async (req, res) => {
+    try {
+        const { MaND } = req.params;
+        console.log(MaND)
+        const user = await User.find({MaND: MaND});
+        if (user) {
+            return res.status(200).json(user);
+        } else {
+            return res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
 }
 
 module.exports = userController

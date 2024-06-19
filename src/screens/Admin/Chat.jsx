@@ -1,32 +1,59 @@
 import { View, Text, Image, SafeAreaView, FlatList } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Search from '../../components/Admin/Search'
 import UserChat from '../../components/Admin/UserChat'
 import CUSTOM_COLOR from '../../constants/color'
 import { Acount } from './ViewShopScreen'
 import { IC_User } from '../../../assets/Admin/icons'
 import { PR_1 } from '../../../assets/Customer/images'
+import { getAllUsers, getUserType } from '../../api/UserApi'
+import {firebase} from '../../../firebase/firebase';
 
 function Chat({navigation}){
   const [imageUrl, setImageUrl] = useState();
-  const users = [
+  const [users, setUsers ] = useState();
+  const [userInfo, setUserInfo] = useState({});
+  const fetchUsers = async () => {
+    try {
+      const user = firebase.auth().currentUser;
+      // Gọi hai API song song
+      const [allUsersRes, userTypeRes] = await Promise.all([
+        getAllUsers(),
+        getUserType({ MaND: user.uid }),
+      ]);
+
+      if (allUsersRes.status === 200) {
+        setUsers(allUsersRes.data);
+      }
+
+      if (userTypeRes.status === 200) {
+        setUserInfo(userTypeRes.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  useEffect(() => {
+    fetchUsers();
+  },[])
+  const clone_users = [
     {
-      MaChat: "1",
+      _id: "666a0efb627c6dd4031fd437",
       Avatar: "https://www.vietscape.com/wp-content/uploads/2024/02/mot-so-hinh-anh-ve-lucas-4.jpg",
-      TenND: "John Doe",
+      TenND: "Nguyễn Trung Tính",
       NoiDungMessageMoi: null, // Không có tin nhắn mới
-      ThoiGian: new Date("2024-05-18T08:30:00"), // Thời gian tạo tài khoản
+      //ThoiGian: new Date("2024-05-18T08:30:00"), // Thời gian tạo tài khoản
       SoLuongChuaDoc: 0, // Số lượng tin nhắn chưa đọc
       MoiKhoiTao: true, // Tài khoản mới được tạo
     },
     {
-      MaChat: "2",
+      _id: "6657db6f3624258be376fd41",
       Avatar: "https://www.vietscape.com/wp-content/uploads/2024/02/mot-so-hinh-anh-ve-lucas-4.jpg",
-      TenND: "Jane Doe",
+      TenND: "PhatTran",
       NoiDungMessageMoi: {
         NoiDung: "Hello, how can I help you?", // Tin nhắn mới
       },
-      ThoiGian: new Date("2024-05-18T10:15:00"), // Thời gian gửi tin nhắn
+      //ThoiGian: new Date("2024-05-18T10:15:00"), // Thời gian gửi tin nhắn
       SoLuongChuaDoc: 2, // Số lượng tin nhắn chưa đọc
       MoiKhoiTao: false, // Không phải tài khoản mới được tạo
     },
@@ -84,15 +111,12 @@ function Chat({navigation}){
             <FlatList
               data={users}
               renderItem={({ item }) => {
-                const hour = item.NoiDungMessageMoi
-                  ? item.ThoiGian.getHours()
-                  : null;
-                const minute = item.NoiDungMessageMoi
-                  ? item.ThoiGian.getMinutes()
-                  : null;
+                if (item._id === userInfo._id) return null;
+                const hour = null;
+                const minute =  null;
                 return (
                   <UserChat
-                    //key={item.MaChat}
+                    key={item._id}
                     source={item.Avatar}
                     name={item.TenND}
                     message={
@@ -118,7 +142,7 @@ function Chat({navigation}){
                   />
                 );
               }}
-              keyExtractor={item => item.MaChat}
+              keyExtractor={item => item._id}
             />
           </View>
       </SafeAreaView>

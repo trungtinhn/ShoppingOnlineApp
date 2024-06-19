@@ -1,5 +1,5 @@
 import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import LoadingComponent from '../../components/LoadingComponent';
 import CUSTOM_COLOR from '../../constants/color';
 import FONT_FAMILY from '../../constants/font';
@@ -9,10 +9,19 @@ import { IC_Catgory, IC_User, IC_financial, IC_logout, IC_messenger, IC_order, I
 import ViewNowStatus from '../../components/Admin/ViewNowStatus';
 import { IC_Bell, IC_Order } from '../../../assets/Customer/icons';
 import {firebase} from '../../../firebase/firebase';
+import { getCurrentUserData, getUserType } from '../../api/UserApi';
 export default function OverViewScreen({navigation}) {
 
     const [userData, setUserData] = useState('Tinh');   
     const [imageUrl, setImageUrl] = useState('https://media.viez.vn/prod/2021/8/26/large_image_cea52c0e2f.png'); 
+    const handleGetCurrentUser = async () =>{
+      const user = firebase.auth().currentUser;
+      const res =  await getCurrentUserData({MaND: user.uid});
+      console.log(res.data);
+    }
+    useEffect(()=>{
+      handleGetCurrentUser();
+    },[])
     return (
     <SafeAreaView style={styles.container}>
       {userData ? (
@@ -149,10 +158,10 @@ export default function OverViewScreen({navigation}) {
                   }}
                 /> */}
 
-                <ViewNowStatus number={0} status={"Confirm"} />
-                <ViewNowStatus number={0} status={"On wait"} />
-                <ViewNowStatus number={0} status={"Delovering"} />
-                <ViewNowStatus number={0} status={"Delivered"} />
+                <ViewNowStatus number={1} status={"Confirm"} />
+                <ViewNowStatus number={1} status={"On wait"} />
+                <ViewNowStatus number={1} status={"Delovering"} />
+                <ViewNowStatus number={1} status={"Delivered"} />
               </View>
             </View>
           </>
@@ -196,8 +205,8 @@ export default function OverViewScreen({navigation}) {
                 <View style={styles.unitContainer}>
                   <FunctionCard
                     onPress={() => navigation.navigate('ManageUser')}
-                    source={IC_order}
-                    text="Order"
+                    source={IC_financial}
+                    text="Statistical"
                   />
                 </View>
                 <View style={styles.unitContainer}>
