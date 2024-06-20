@@ -8,6 +8,7 @@ import MessengerLogo from '../../../assets/Admin/svgs/Messenger.svg'
 import ShoppingCartLogo from '../../../assets/Customer/svgs/shopping-cart.svg'
 import LogoApp from '../../../assets/Customer/svgs/Logo.svg'
 import { Badge } from 'react-native-elements';
+import { OrderContext } from "../../context/OrderContext";
 const datasGeneral = [
   {
     id: '1',
@@ -89,7 +90,7 @@ const dataRecomanded = [
 function NotificationScreen({ navigation }) {
   const [chatUser, setChatUser] = useState();
   const [isGeneral, setIsCeneral] = useState(1)
-  const [badgeCart, setBadgeCart] = useState(5);
+  const {numCart} = React.useContext(OrderContext)
   const [notificationPromotion, setNotificationPromotion] = useState([])
 
   const getDataNotificationPromotion = () => {
@@ -176,9 +177,9 @@ function NotificationScreen({ navigation }) {
             onPress={() => {
               navigation.navigate('ShoppingCard');
             }}>
-                {badgeCart != 0 ? (
+                {numCart != 0 ? (
                 <Badge
-                  value={badgeCart}
+                  value={numCart}
                   status="error"
                   containerStyle={{ position: 'absolute', top: -5, right: -5 }}
                 />

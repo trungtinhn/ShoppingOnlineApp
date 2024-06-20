@@ -65,7 +65,9 @@ const CustomerOrder = ({ navigation }) => {
     }, []);
 
     const renderOrderList = (data) => (
-        loading ? <LoadingComponent/> :
+        loading ?
+        <LoadingComponent/> 
+        :
         <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchOrders} />}>
         {data.map(item => (
             <View key={item._id} style={styles.background}>
@@ -99,7 +101,11 @@ const CustomerOrder = ({ navigation }) => {
     );
 
     const renderOrderConfirm = (data) => (
-        loading ? <LoadingComponent/> :
+        loading ?
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <LoadingComponent/> 
+        </View>
+        :
         <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchOrders} />}>
         {data.map(item => (
             <View key={item._id} style={styles.background}>

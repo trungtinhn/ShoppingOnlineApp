@@ -24,7 +24,7 @@ import {getUserType} from '../../api/UserApi';
 import { BackIcon } from '../../../assets/Customer/svgs';
 import FONT_FAMILY from '../../constants/font';
 
-const socket = io(`http://172.16.15.209:8000`, {
+const socket = io(`http://192.168.1.253:8000`, {
   path: "/api/Chat/",
 });
 
