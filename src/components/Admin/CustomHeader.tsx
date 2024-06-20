@@ -1,16 +1,16 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import {View, StyleSheet, Text, Pressable, TouchableOpacity} from 'react-native';
 import PreviousButton from '../Login_SignUp/PreviousButton';
 import FONT_FAMILY from '../../constants/font';
 import CUSTOM_COLOR from '../../constants/color';
-
+import {BackIcon} from '../../../assets/Customer/svgs';
 
 const CustomHeader = (props: any) => {
   return (
     <View style={styles.header}>
-      <View style={styles.buttonContainer}>
-        <PreviousButton onPress={props.onPress}> </PreviousButton>
-      </View>
+      <TouchableOpacity style={styles.buttonContainer} onPress={props.onPress}>
+        <BackIcon fill={CUSTOM_COLOR.FlushOrange}></BackIcon>
+      </TouchableOpacity>
       <View style={styles.titleConatiner}>
         <Text style={styles.titleStyle}>{props.title}</Text>
       </View>
@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 1,
+    justifyContent: 'center'
   },
   titleConatiner: {
     flex: 7,

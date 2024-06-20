@@ -33,7 +33,7 @@ function ChatScreen({navigation, route}) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [userInfo, setUserInfo] = useState();
-  const adminId = "hRXiJhj9x5Os3ClIypL4AcsxInA2";
+  const admin = {_id: "66541fed38d9e79683b0b700"};
   useEffect(() => {
     const fetchUserData = async () => {
       const user = firebase.auth().currentUser;
@@ -43,7 +43,8 @@ function ChatScreen({navigation, route}) {
         setupSocketListeners(res.data, item);
       }
       else{
-        setupSocketListeners(res.data, adminId);
+        console.log(res.data)
+        setupSocketListeners(res.data, admin);
       }
     };
 

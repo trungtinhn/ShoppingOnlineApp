@@ -46,7 +46,7 @@ app.use('/api/like', likeRoutes);
 app.use('/api/order', orderRoutes);
 app.use('/api/payment', paymentRoutes);
 socketSetup(server);
-app.listen(8000, () => {
+server.listen(8000, () => {
     console.log("Server running on port 8000");
 });
     

@@ -28,6 +28,7 @@ import Chat from '../../screens/Admin/Chat';
 import ChatScreen from '../../screens/Customer/ChatSreen';
 import Categories from '../../screens/Admin/Categories';
 import EditCategory from '../../screens/Admin/EditCategory';
+import FunctionPermisson from '../../screens/Admin/FunctionPermission';
 const Stack = createNativeStackNavigator();
 
 const AdminNavigation = () => {
@@ -63,6 +64,7 @@ const AdminNavigation = () => {
             <Stack.Screen name="DetailsCategory" component={DetailCategory} />
             <Stack.Screen name="AddNewCategory" component={AddNewCategory} />
             <Stack.Screen name="EditCategory" component={EditCategory} />
+            <Stack.Screen name="FuctionPermisson" component={FunctionPermisson} />
         </Stack.Navigator>
     </NavigationContainer>
   )
