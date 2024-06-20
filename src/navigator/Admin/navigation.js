@@ -25,10 +25,10 @@ import Order from '../../screens/Admin/Order';
 import ReviewScreen from '../../screens/Admin/ReView';
 import Setting from '../../screens/Admin/Setting';
 import Chat from '../../screens/Admin/Chat';
-import ChatScreen from '../../screens/Customer/ChatSreen';
 import Categories from '../../screens/Admin/Categories';
 import EditCategory from '../../screens/Admin/EditCategory';
 import FunctionPermisson from '../../screens/Admin/FunctionPermission';
+import DetailChatScreen from '../../screens/Admin/DetailChat';
 const Stack = createNativeStackNavigator();
 
 const AdminNavigation = () => {
@@ -47,7 +47,7 @@ const AdminNavigation = () => {
             <Stack.Screen name="Chat" component={Chat} />
             <Stack.Screen name="ChatScreenStaff" component={ChatScreenStaff} />
             <Stack.Screen name="DeTailsDelivery" component={DeTailDelivery} />
-            <Stack.Screen name="DetailChat" component={ChatScreen} />
+            <Stack.Screen name="DetailChat" component= {DetailChatScreen} />
             <Stack.Screen name="EditAccount" component={EditAccount} />
             <Stack.Screen name="EditProduct" component={EditProduct} />
             <Stack.Screen name="ImportProduct" component={ImportProduct} />
