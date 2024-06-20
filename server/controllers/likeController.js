@@ -18,7 +18,7 @@ const likeController = {
             yeuThich.danhSachSanPham.push(_id);
             await yeuThich.save();
             
-            res.status(201).json({ message: 'Đã thêm sản phẩm vào danh sách yêu thích' });
+            res.status(200).json({ message: 'Đã thêm sản phẩm vào danh sách yêu thích' });
         } catch (error) {
             console.error(error);
             res.status(500).json({ message: 'Đã xảy ra lỗi khi thêm sản phẩm vào danh sách yêu thích' });

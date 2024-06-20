@@ -1,4 +1,3 @@
-
 import React, {useEffect, useState} from 'react';
 import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
 import { IC_Back } from '../../../assets/Customer/icons';
@@ -6,14 +5,18 @@ import ProductView from '../../components/Customer/ProductView';
 import SearchInput from '../../components/Customer/SearchInput';
 import SortDropdown from '../../components/Customer/SortDropDown';
 import CUSTOM_COLOR from '../../constants/color';
-import { BackIcon } from '../../../assets/Customer/svgs';
-const url = 'https://firebasestorage.googleapis.com/v0/b/shoppingapp-a20a4.appspot.com/o/images%2Fcategories%2Fproduct_1.jpg?alt=media&token=6c835337-a643-4c0d-98bd-34957a39045b'
+import { BackIcon, ShoppingCartIcon } from '../../../assets/Customer/svgs';
+import { getProductByCategory } from '../../api/ProductApi';
+import LoadingComponent from '../../components/LoadingComponent';
+import { OrderContext } from '../../context/OrderContext';
+import { Badge } from 'react-native-elements';
+
 function DetailCategoryScreen({navigation, route}) {
   const {item} = route.params;
-
-  //const [items, setItems] = useState([]);
+  const {numCart, setNumCart} = React.useContext(OrderContext);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortType, setSortType] = useState('');
+  const [isLoading, setLoading] = useState(true);
 
   const handleSearch = searchTerm => {
     setSearchTerm(searchTerm);
@@ -21,76 +24,17 @@ function DetailCategoryScreen({navigation, route}) {
   const handleSort = type => {
     setSortType(type);
   };
-  const items = [
-    {
-      MaSP: 1,
-      TenSP: 'San Pham 1',
-      HinhAnhSP: url,
-      GiaSP: '10000'
-    },
-    {
-      MaSP: 2,
-      TenSP: 'San Pham 2',
-      HinhAnhSP: url,
-      GiaSP: '10000'
-    },
-    {
-      MaSP: 3,
-      TenSP: 'San Pham 3',
-      HinhAnhSP: url,
-      GiaSP: '10000'
-    },
-    {
-      MaSP: 4,
-      TenSP: 'San Pham 4',
-      HinhAnhSP: url,
-      GiaSP: '10000'
-    },
-    {
-      MaSP: 5,
-      TenSP: 'San Pham 5',
-      HinhAnhSP: url,
-      GiaSP: '10000'
-    },
-  ];
+  const [items, setItems ]= useState([]);
 
   const getDataCategory = async () => {
-    // const q = query(
-    //   collection(Firestore, 'SANPHAM'),
-    //   where('MaDM', '==', item.MaDM),
-    //   where('TrangThai', '==', 'Inventory'),
-    // );
-
-    // const unsubscribe = onSnapshot(q, querySnapshot => {
-    //   const data = [];
-    //   querySnapshot.forEach(doc => {
-    //     data.push({
-    //       ...doc.data(),
-    //     });
-    //   });
-    //   let sortedItems = data;
-
-    //   if (sortType === 'a-z') {
-    //     sortedItems = data.sort((a, b) => a.TenSP.localeCompare(b.TenSP));
-    //   } else if (sortType === 'z-a') {
-    //     sortedItems = data.sort((a, b) => b.TenSP.localeCompare(a.TenSP));
-    //   } else if (sortType === 'low-to-high') {
-    //     sortedItems = data.sort((a, b) => a.GiaSP - b.GiaSP);
-    //   } else if (sortType === 'high-to-low') {
-    //     sortedItems = data.sort((a, b) => b.GiaSP - a.GiaSP);
-    //   }
-    //   console.log(item.MaDM);
-
-    //   let filteredItems = data;
-    //   if (searchTerm != null) {
-    //     filteredItems = data.filter(item =>
-    //       item.TenSP.toLowerCase().includes(searchTerm.toLowerCase()),
-    //     );
-    //   } else {
-    //     setItems(data);
-    //   }
-    //   setItems(filteredItems);
-    // });
+    const res = await getProductByCategory({MaDM: item._id});
+    if(res.status === 200){
+      setItems(res.data);
+      setLoading(false);
+      console.log(res.data);
+    }else{
+      console.log(res);
+    }
   };
   useEffect(() => {
     getDataCategory();
@@ -121,22 +65,26 @@ function DetailCategoryScreen({navigation, route}) {
           }}>
             <BackIcon/>
         </TouchableOpacity>
-        <View style={{width: '1%', height: '100%'}} />
-        <View style={{width: '85%', height: '70%'}}>
+        <View style={{width: '75%', height: '70%'}}>
           <SearchInput onSearch={handleSearch} />
         </View>
-        <View style={{width: '5%', height: '100%'}} />
-        {/* <TouchableOpacity
+        <TouchableOpacity
           style={{
-            backgroundColor: CUSTOM_COLOR.Mercury,
             alignItems: 'center',
             justifyContent: 'center',
-            // margin: 10,
             padding: 8,
             borderRadius: 10,
           }}>
-          <Image source={IC_ShoppingCart} />
-        </TouchableOpacity> */}
+             {numCart != 0 ? (
+                <Badge
+                  value={numCart}
+                  status="error"
+                  containerStyle={{ position: 'absolute', top: -5, right: -5 }}
+                />
+              ) : null}
+          <ShoppingCartIcon/>
+        </TouchableOpacity>
+        <View style={{width: '1%', height: '100%'}} />
       </View>
 
       <View
@@ -152,7 +100,7 @@ function DetailCategoryScreen({navigation, route}) {
             fontWeight: 'bold',
             marginBottom: 10,
           }}>
-          Quần
+          {item.name}
         </Text>
 
         <Text
@@ -162,11 +110,16 @@ function DetailCategoryScreen({navigation, route}) {
             fontWeight: 'bold',
             marginBottom: 0,
           }}>
-          9 sản phẩm
+          {item.numProduct} products
         </Text>
       </View>
       <SortDropdown onChangeText={handleSort} />
-      <View
+      {isLoading ? (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <LoadingComponent />
+          </View>
+      ) : (
+        <View
         style={{
           height: '100%',
         }}>
@@ -181,13 +134,13 @@ function DetailCategoryScreen({navigation, route}) {
                   margin: 0
                 }}
                 onPress={() => {
-                  navigation.navigate('ProductDetail', {item});
+                  navigation.navigate('ProductDetail', {id: item._id});
                 }}>
                 <ProductView
-                  quantity={1000}
-                  source={item.HinhAnhSP}
+                  quantity={item.SoLuongDaBan}
+                  source={item.HinhAnhSP[0]}
                   title={item.TenSP}
-                  price={item.GiaSP}
+                  price={item.GiaGiam}
                 />
               </TouchableOpacity>
             );
@@ -196,6 +149,7 @@ function DetailCategoryScreen({navigation, route}) {
           //keyExtractor={(item) => item.MASP}
         />
       </View>
+      )}
     </View>
   );
 }
