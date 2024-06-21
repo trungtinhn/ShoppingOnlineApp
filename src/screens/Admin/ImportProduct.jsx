@@ -29,6 +29,7 @@ function ImportProduct({navigation, route}) {
     if (isNumeric(quantity)) return true;
     return false;
   };
+
   const getNewAmount = () => {
     let totalQuantity = 0;
     types.forEach(item => {
@@ -36,6 +37,7 @@ function ImportProduct({navigation, route}) {
     });
     setQuantity(totalQuantity);
   };
+
   const CapNhatSoLuong = async () => {
     if (!KiemTraNhapLieu()) {
       Alert.alert(
@@ -71,6 +73,7 @@ function ImportProduct({navigation, route}) {
       console.log(res.error);
     }
   };
+
   const updateQuantity = (itemToUpdate, newQuantity) => {
     if (newQuantity) {
       setTypes(prevTypes =>
@@ -88,33 +91,24 @@ function ImportProduct({navigation, route}) {
       );
     }
   };
+
+  useEffect(() => {
+    getNewAmount();
+  }, [types]);
+
   return (
     <View style={styles.container}>
       <View style={{width: '100%', height: 60}}>
         <CustomHeader
           onPress={() => navigation.goBack()}
-          title="Product/ Add product"
+          title="Product/ Import product"
         />
       </View>
-      <View style={[styles.comboxContainer, {height: 150}]}>
-        <Image
-          style={{
-            height: 140,
-            width: 140,
-          }}
-          source={{uri: item.HinhAnhSP[0]}}
-        />
-        <View>
-          <Text
-            style={{
-              fontSize: 20,
-              padding: 8,
-              fontWeight: 'bold',
-            }}
-            adjustsFontSizeToFit
-            numberOfLines={4}>
-            {item.TenSP}
-          </Text>
+      <View style={styles.headerContainer}>
+        <Image source={{uri: item.HinhAnhSP[0]}} style={styles.productImage} />
+        <View style={styles.headerTextContainer}>
+          <Text style={styles.productName}>{item.TenSP}</Text>
+          <Text style={styles.totalQuantity}>Total Quantity: {quantity}</Text>
         </View>
       </View>
       <FlatList
@@ -129,7 +123,7 @@ function ImportProduct({navigation, route}) {
                 justifyContent: 'space-between',
                 gap: 10,
               }}>
-              <View style={{flexDirection: 'row', j: 'center'}}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Text style={styles.text}> Màu sắc: </Text>
                 <View
                   style={[styles.colorBox, {backgroundColor: item.color}]}
@@ -166,6 +160,29 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'center',
   },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  productImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+  },
+  headerTextContainer: {
+    marginLeft: 20,
+  },
+  productName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    flexWrap: 'wrap',
+    width: 200, 
+  },
+  totalQuantity: {
+    fontSize: 16,
+    marginTop: 10,
+  },
   itemContainer: {
     padding: 10,
     marginVertical: 5,
@@ -179,6 +196,8 @@ const styles = StyleSheet.create({
     height: 30,
     marginBottom: 10,
     borderRadius: 5,
+    borderColor: CUSTOM_COLOR.Gray,
+    borderWidth: 1,
   },
   text: {
     fontSize: 16,

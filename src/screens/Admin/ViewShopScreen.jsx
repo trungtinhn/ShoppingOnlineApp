@@ -93,6 +93,7 @@ export default function ViewShopScreen({ navigation }) {
                 source={item.HinhAnhSP[0]}
                 title={item.TenSP}
                 price={item.GiaGoc}
+                quantity={item.SoLuongDaBan}
               />
             )}
           />

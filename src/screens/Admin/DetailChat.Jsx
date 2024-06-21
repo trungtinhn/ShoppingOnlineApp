@@ -1,128 +1,188 @@
-import React, { useState, useEffect } from "react";
-import { SafeAreaView, View, Image, Text, FlatList } from "react-native";
-import LoadingComponent from "../../components/LoadingComponent";
-import CUSTOM_COLOR from "../../constants/color";
-import Size from "../../constants/size";
-import Search from "../../components/Admin/Search";
-export default function DetailChat({ navigation }) {
-  const [users, setUser] = useState([]);
-  const [imageUrl, setImageUrl] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const handleSearch = searchTerm => {
-    setSearchTerm(searchTerm);
-  };
-  const getUser = async item => {
-    //item = item.trim();
+import React, {useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
+import {
+  IC_Attachment,
+  IC_Back,
+  IC_Camera,
+  IC_Emo,
+  IC_Send,
+} from '../../../assets/Customer/icons';
+import io from 'socket.io-client';
+import Message from '../../components/Customer/Message';
+import CUSTOM_COLOR from '../../constants/color';
 
-  };
-  const getDataChat = async () => {
-    
-  };
+import {firebase} from '../../../firebase/firebase';
+import {getUserType} from '../../api/UserApi';
+import { BackIcon } from '../../../assets/Customer/svgs';
+import FONT_FAMILY from '../../constants/font';
+import { API_URL } from '../../api/AppApi';
 
-  const fetchImageUrl = async (documentId, fieldName) => {
-    try {
-      
-    } catch (error) {
-      console.error('Error fetching image URL:', error);
-      return null;
+const socket = io(API_URL.slice(0, -4), {
+  path: "/api/Chat/",
+});
+function DetailChatScreen({navigation, route}) {
+  const {item} = route.params;
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [userInfo, setUserInfo] = useState();
+  const setupSocketListeners = (userInfo, item) => {
+    if (userInfo && item) {
+      socket.emit('getMessages', {userId: userInfo._id, friendId: item._id});
+
+      socket.on('messages', messages => {
+        setMessages(messages);
+      });
+
+      socket.on('receiveMessage', message => {
+        setMessages(prevMessages => [...prevMessages, message]);
+      });
+
+      return () => {
+        socket.off('messages');
+        socket.off('receiveMessage');
+      };
+    }
+  };
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const user = firebase.auth().currentUser;
+      const res = await getUserType({MaND: user.uid});
+      setUserInfo(res.data);
+        setupSocketListeners(res.data, item);
+    };
+    console.log("hello")
+    fetchUserData();
+  }, [item]);
+
+  const handleSendMessage = () => {
+    if (userInfo && item) {
+      const message = {
+        senderId: userInfo._id,
+        recipientId: item._id,
+        message: newMessage,
+        timeStamp: new Date().toISOString(),
+      };
+      console.log(message);
+      socket.emit('sendMessage', message);
+      //setMessages(prevMessages => [...prevMessages, message]); // Optimistic update
+      setNewMessage('');
     }
   };
 
   return (
-    <SafeAreaView
-      style={{ backgroundColor: CUSTOM_COLOR.White, height: Size.DeviceHeight }}>
-      {imageUrl ? (
-        <>
-          <View
-            style={{
-              flexDirection: 'row',
-              marginTop: 20,
-              width: '100%',
-              height: 70,
-            }}>
-            {imageUrl ? (
-              <Image
-                source={{ uri: imageUrl }}
-                style={{
-                  aspectRatio: 1,
-                  borderRadius: 55,
-                  width: '15%',
-                  marginLeft: 15,
-                }}
-              />
-            ) : (
-              <Image
-                style={{
-                  aspectRatio: 1,
-                  borderRadius: 55,
-                  width: '15%',
-                  marginLeft: 15,
-                  borderColor: CUSTOM_COLOR.Black,
-                  borderWidth: 1,
-                }}
-              />
-            )}
-            <Text
-              style={{
-                fontWeight: 'bold',
-                fontSize: 40,
-                marginLeft: 10,
-                color: CUSTOM_COLOR.Black,
-              }}>
-              Chat
-            </Text>
-          </View>
-          <View style={{ width: '100%', height: 10 }} />
-          <View style={{ width: '90%', height: 45, marginHorizontal: '5%' }}>
-            <Search placeholder="Search" onSearch={handleSearch} />
-          </View>
-          <View style={{ width: '100%', height: 10 }} />
-          <View style={{ width: '100%', height: '73%' }}>
-            <FlatList
-              data={users}
-              renderItem={({ item }) => {
-                const hour = item.NoiDungMessageMoi
-                  ? item.ThoiGian.toDate().getHours()
-                  : null;
-                const minute = item.NoiDungMessageMoi
-                  ? item.ThoiGian.toDate().getMinutes()
-                  : null;
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity style={{padding: 10}} onPress={() => navigation.goBack()}>
+          <BackIcon />
+        </TouchableOpacity>
+        <Text style={styles.headerText}>Customer Support</Text>
+      </View>
 
-                return (
-                  <UserChat
-                    //key={item.MaChat}
-                    source={item.Avatar}
-                    name={item.TenND}
-                    message={
-                      !item.NoiDungMessageMoi
-                        ? 'Customer just created an account'
-                        : item.NoiDungMessageMoi.NoiDung
-                    }
-                    onPress={() => {
-                      setSoLuongChuaDoc(item);
+      <ScrollView style={styles.messageContainer}>
+        {messages.map((message, index) => (
+          <Message
+            key={message._id}
+            content={message.message}
+            time={new Date(message.timeStamp).toLocaleTimeString()}
+            isRight={message.senderId === userInfo._id}
+          />
+        ))}
+      </ScrollView>
 
-                      navigation.navigate('ChatScreenStaff', { item });
-                    }}
-                    time={!item.NoiDungMessageMoi ? null : `${hour}:${minute}`}
-                    notification={
-                      !item.NoiDungMessageMoi ? 0 : item.SoLuongChuaDoc
-                    }
-                    //notification={item.SoLuongChuaDoc}
-                    justCreate={
-                      !item.NoiDungMessageMoi
-                        ? item.MoiKhoiTao
-                        : item.MoiKhoiTao
-                    }
-                  />
-                );
-              }}
-              keyExtractor={item => item.MaChat}
-            />
-          </View>
-        </>
-      ) : (
-        <LoadingComponent text="Loading data..." />
-      )}
-    </SafeAreaView>
+      <View style={styles.inputContainer}>
+        <View style={styles.inputWrapper}>
+          <Image source={IC_Emo} style={styles.emojiIcon} />
+          <TextInput
+            placeholder="Hello, I have a problem"
+            style={styles.textInput}
+            onChangeText={setNewMessage}
+            value={newMessage}
+          />
+          <Image source={IC_Attachment} style={styles.attachmentIcon} resizeMode="stretch" />
+          <Image source={IC_Camera} style={styles.cameraIcon} />
+        </View>
+        <TouchableOpacity style={styles.sendButton} onPress={handleSendMessage}>
+          <Image source={IC_Send} />
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: CUSTOM_COLOR.White,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: CUSTOM_COLOR.White,
+    paddingVertical: '1%',
+  },
+  backIcon: {
+    width: 10,
+    height: 20,
+    marginHorizontal: 20,
+    marginVertical: 15,
+  },
+  headerText: {
+    marginHorizontal: '5%',
+    fontSize: 17,
+    fontFamily: FONT_FAMILY.Bold,
+    color: CUSTOM_COLOR.Black,
+  },
+  messageContainer: {
+    backgroundColor: CUSTOM_COLOR.Gallery,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: CUSTOM_COLOR.Gallery,
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: CUSTOM_COLOR.White,
+    paddingHorizontal: '2%',
+    borderRadius: 25,
+    marginHorizontal: '3%',
+    marginVertical: '2%',
+    width: '80%',
+  },
+  emojiIcon: {
+    width: 20,
+    height: 20,
+    marginHorizontal: '2%',
+  },
+  textInput: {
+    width: '70%',
+  },
+  attachmentIcon: {
+    width: 10,
+    height: 20,
+    marginHorizontal: '2%',
+  },
+  cameraIcon: {
+    width: 22,
+    height: 20,
+    marginLeft: '2%',
+  },
+  sendButton: {
+    height: 45,
+    width: 45,
+    borderRadius: 30,
+    backgroundColor: CUSTOM_COLOR.ChathamsBlue,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+export default DetailChatScreen;

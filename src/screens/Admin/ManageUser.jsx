@@ -15,7 +15,8 @@ import LoadingComponent from '../../components/LoadingComponent';
 import CUSTOM_COLOR from '../../constants/color';
 import FONT_FAMILY from '../../constants/font';
 import Search from '../../components/Admin/Search';
-import { getAllUsers } from '../../api/UserApi';
+import { getAllUsers, getCurrentUserData, getUserType } from '../../api/UserApi';
+import { firebase } from '../../../firebase/firebase';
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',
@@ -32,32 +33,13 @@ export const Acount = {
 
 function ManageUser({navigation}){
   const [isLoading, setIsLoading] = useState(true);
-  const [userData, setUserData] = useState(Acount);
+  const [userData, setUserData] = useState({});
   const [imageUrl, setImageUrl] = useState(null);
-  const [users, setUsers] = useState([
-    {
-      Avatar: 'https://example.com/avatar1.jpg',
-      TenND: 'John Doe',
-      LoaiND: 'Admin',
-      Email: 'john.doe@example.com',
-    },
-    {
-      Avatar: 'https://example.com/avatar2.jpg',
-      TenND: 'Jane Smith',
-      LoaiND: 'User',
-      Email: 'jane.smith@example.com',
-    },
-    {
-      Avatar: 'https://example.com/avatar3.jpg',
-      TenND: 'Michael Johnson',
-      LoaiND: 'Moderator',
-      Email: 'michael.johnson@example.com',
-    },
-  ]);
+  const [users, setUsers] = useState([]);
   const [userAvata, setUserAvata] = useState([]);
   const [searchTerm, setSearchTerm] = useState();
-  const [filteredItems, setFilteredItems] = useState([
-  ]);
+  const [filteredItems, setFilteredItems] = useState([]);
+
   const handleSearch = searchTerm => {
     setSearchTerm(searchTerm);
     // const filteredItems = users.filter(item =>
@@ -71,15 +53,14 @@ function ManageUser({navigation}){
       // Assume data is fetched here
       // const fetchedData = 'Sample Data';
       // setData(fetchedData);
+      getUserData();
+      handleGetAllUser();
       setIsLoading(false);
     }, 2000);
-    
-    handleGetAllUser();
     // fetchUserData(firebase.auth().currentUser.uid);
     // fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
     //   setImageUrl(url),
     // );
-
     
   }, []);
 
@@ -89,27 +70,32 @@ function ManageUser({navigation}){
   };
 
 
-  const handleResetPassword = () => {
-    
+  const handleFunctionPermisson = (item) => {
+    navigation.navigate("FuctionPermisson", {item})
   };
 
   const handleGetAllUser = async () => {
     const res = await getAllUsers();
-    console.log(res.data);
     setUsers(res.data);
   }
-
+const getUserData = async () => {
+  const user = firebase.auth().currentUser;
+  const res =  await getUserType({MaND: user.uid});
+  console.log(res.data)
+  setUserData(res.data);
+};
   const renderUser = ({ item }) => (
-    <TouchableOpacity onPress={() => handleUserPress(item)}>
+    
+   (userData._id === item._id)?(<></>) : (<TouchableOpacity onPress={() => handleUserPress(item)}>
       <View style={{}}>
         <AccountCard
           source={{ uri: item.Avatar }}
           name={item.TenND}
           userType={item.LoaiND}
-          onPress={() => handleResetPassword(item.Email)}
+          onPress={() => handleFunctionPermisson(item)}
         />
       </View>
-    </TouchableOpacity>
+    </TouchableOpacity>)
   );
 
   return (
@@ -120,9 +106,9 @@ function ManageUser({navigation}){
         <>
           <View style={styles.accountContainer}>
             <View style={styles.avataContainer}>
-              {imageUrl ? (
+              {userData.Avatar ? (
                 <Image
-                  source={{ uri: imageUrl }}
+                  source={{ uri: userData.Avatar }}
                   style={{
                     width: '80%',
                     height: '80%',
@@ -151,11 +137,11 @@ function ManageUser({navigation}){
             <View style={{ width: 15, height: '100%' }} />
             <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
               <Text style={[styles.textViewStyles, { fontSize: 20 }]}>
-                {userData.name}
+                {userData.TenND}
               </Text>
               <View style={{ width: '100%', height: 5 }} />
               <Text style={[styles.textViewStyles, { fontSize: 15 }]}>
-                Admin
+                {userData.LoaiND}
               </Text>
             </View>
           </View>
