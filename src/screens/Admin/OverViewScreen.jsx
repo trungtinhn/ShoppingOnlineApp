@@ -162,7 +162,7 @@ export default function OverViewScreen({navigation}) {
 
                 <ViewNowStatus number={1} status={"Confirm"} />
                 <ViewNowStatus number={1} status={"On wait"} />
-                <ViewNowStatus number={1} status={"Delovering"} />
+                <ViewNowStatus number={1} status={"Delivering"} />
                 <ViewNowStatus number={1} status={"Delivered"} />
               </View>
             </View>

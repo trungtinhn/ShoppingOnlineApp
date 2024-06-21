@@ -2,8 +2,6 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, ActivityIndicator, use
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import BackTo from '../../components/Admin/BackTo';
-import Status from '../../components/Admin/Status';
 import CUSTOM_COLOR from '../../constants/color';
 import PerSon from '../../components/Admin/PerSon';
 import OneOrder from '../../components/Admin/OneOrder';
