@@ -74,6 +74,7 @@ export default function DeTailDelivery({navigation, route}) {
                 <Text
                   style={{
                     color: CUSTOM_COLOR.Black,
+                    fontFamily: FONT_FAMILY.CeraPro,
                     marginLeft: 5,
                     fontSize: 20,
                   }}>
@@ -112,6 +113,7 @@ export default function DeTailDelivery({navigation, route}) {
                 <Text
                   style={{
                     color: CUSTOM_COLOR.Black,
+                    fontFamily: FONT_FAMILY.CeraPro,
                     marginLeft: 5,
                     fontSize: 20,
                   }}>
@@ -120,6 +122,30 @@ export default function DeTailDelivery({navigation, route}) {
               </View>
             </View>
             <View style={{marginLeft: 30, marginTop: 5, marginRight: 20}}>
+            <View
+                style={{
+                  width: '100%',
+                  height: 25,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <Text
+                  style={{
+                    color: CUSTOM_COLOR.Black,
+                    fontWeight: 'bold',
+                    marginLeft: 20,
+                  }}>
+                  Payment Method:
+                </Text>
+                <Text
+                  style={{
+                    color: CUSTOM_COLOR.Black,
+                    fontWeight: 'bold',
+                    marginRight: 10,
+                  }}>
+                  {item.paymentMethod}
+                </Text>
+              </View>
               <View
                 style={{
                   width: '100%',

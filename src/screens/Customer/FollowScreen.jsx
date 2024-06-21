@@ -135,7 +135,7 @@ function FollowScreen({ navigation }) {
           style={styles.iconButton}
           onPress={() => {
             //setSoLuongChuaDocCuaCustomer();
-            navigation.navigate('Chat');
+            navigation.navigate('ChatScreen');
           }}>
           {/* {chatUser && chatUser.SoLuongChuaDocCuaCustomer != 0 && (
             <Badge
@@ -149,7 +149,7 @@ function FollowScreen({ navigation }) {
         <View style={{ width: 10, height: '100%' }} />
         <TouchableOpacity
           style={styles.iconButton}
-          onPress={() => navigation.navigate('ShoppingCard', { idUser })}>
+          onPress={() => navigation.navigate('ShoppingCard')}>
           {numCart != 0 && (
             <Badge
               value={numCart}

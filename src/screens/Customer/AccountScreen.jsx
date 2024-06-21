@@ -203,7 +203,7 @@ function AccountScreen() {
 
                         <TouchableOpacity
                             onPress={() => {
-                                navigation.navigate('ChangePassword');
+                                navigation.navigate('ForgotPassword');
                             }}
                             style={{
                                 ...styles.option,

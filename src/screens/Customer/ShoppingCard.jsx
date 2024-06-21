@@ -13,6 +13,8 @@ import LoadingScreen from "../LoadingScreen";
 import { id } from "date-fns/locale";
 import CheckBox from "@react-native-community/checkbox";
 import { OrderContext } from "../../context/OrderContext";
+import FONT_FAMILY from "../../constants/font";
+import { formatCurrency } from "../../utils/helpers";
 
 const ShoppingCard = ({navigation}) => {
     const {product, setProduct, setPromoCode} = useContext(OrderContext)
@@ -241,7 +243,8 @@ const ShoppingCard = ({navigation}) => {
                         <Text style={{
                             fontSize: 17,
                             fontWeight: 'bold',
-                            color: CUSTOM_COLOR.Black
+                            color: CUSTOM_COLOR.Black,
+                            fontFamily: FONT_FAMILY.CeraPro
                         }}>Choose all</Text>
                     </View>
 
@@ -250,7 +253,8 @@ const ShoppingCard = ({navigation}) => {
                         marginHorizontal: 20,
                         fontSize: 17,
                         fontWeight: 'bold',
-                        color: CUSTOM_COLOR.Black
+                        color: CUSTOM_COLOR.Black,
+                        fontFamily: FONT_FAMILY.CeraPro
                     }}>Total</Text>
                 </View>
 
@@ -261,8 +265,8 @@ const ShoppingCard = ({navigation}) => {
 
                 }}>
                     <Text style={{
-                        fontSize: 17, marginHorizontal: 15, color: CUSTOM_COLOR.FlushOrange
-                    }}>{totalMoney}</Text>
+                        fontSize: 17, marginHorizontal: 15, color: CUSTOM_COLOR.FlushOrange, fontFamily: FONT_FAMILY.CeraPro
+                    }}>{formatCurrency(totalMoney)}đ</Text>
                 </View>
 
                 <View style={styles.buttonContainer}>

@@ -29,7 +29,7 @@ import EditCategory from '../../screens/Admin/EditCategory';
 import DeliveryScreen from '../../screens/Customer/DeliveryScreen';
 import DeTailDelivery from '../../screens/Customer/DetailDelivery';
 import FunctionPermisson from '../../screens/Admin/FunctionPermission';
-import DetailChatScreen from '../../screens/Admin/DetailChat';
+//import DetailChatScreen from '../../screens/Admin/DetailChat';
 const Stack = createNativeStackNavigator();
 
 const AdminNavigation = () => {
@@ -48,7 +48,7 @@ const AdminNavigation = () => {
             <Stack.Screen name="Chat" component={Chat} />
             <Stack.Screen name="ChatScreenStaff" component={ChatScreenStaff} />
             <Stack.Screen name="DeTailsDelivery" component={DeTailDelivery} />
-            <Stack.Screen name="DetailChat" component= {DetailChatScreen} />
+            {/* <Stack.Screen name="DetailChat" component= {DetailChatScreen} /> */}
             <Stack.Screen name="EditAccount" component={EditAccount} />
             <Stack.Screen name="EditProduct" component={EditProduct} />
             <Stack.Screen name="ImportProduct" component={ImportProduct} />

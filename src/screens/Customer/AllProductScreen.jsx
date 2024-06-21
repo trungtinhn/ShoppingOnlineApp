@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import { Badge } from 'react-native-elements';
-import { getProductByCategory } from '../../api/ProductApi';
+import { getProductByCategory, getProductTrending } from '../../api/ProductApi';
 import { BackIcon, ShoppingCartIcon } from '../../../assets/Customer/svgs';
 import SortDropdown from '../../components/Admin/SortDropdown';
 import ProductView from '../../components/Customer/ProductView';
@@ -10,8 +10,7 @@ import LoadingComponent from '../../components/LoadingComponent';
 import { OrderContext } from '../../context/OrderContext';
 import navigation from '../../navigator/Login_SignUp/navigation';
 
-function DetailCategoryScreen({ navigation, route }) {
-  const { item } = route.params;
+function AllProductScreen({ navigation, route }) {
   const { numCart, setNumCart } = useContext(OrderContext);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortType, setSortType] = useState('');
@@ -28,7 +27,7 @@ function DetailCategoryScreen({ navigation, route }) {
   };
 
   const getDataCategory = async () => {
-    const res = await getProductByCategory({ MaDM: item._id });
+    const res = await getProductTrending();
     if (res.status === 200) {
       setItems(res.data);
       setLoading(false);
@@ -116,32 +115,6 @@ function DetailCategoryScreen({ navigation, route }) {
         <View style={{ width: '1%', height: '100%' }} />
       </View>
 
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}>
-        <Text
-          style={{
-            fontSize: 20,
-            marginHorizontal: 30,
-            fontWeight: 'bold',
-            marginBottom: 10,
-          }}>
-          {item.name}
-        </Text>
-
-        <Text
-          style={{
-            fontSize: 17,
-            marginHorizontal: 20,
-            fontWeight: 'bold',
-            marginBottom: 0,
-          }}>
-          {item.numProduct} products
-        </Text>
-      </View>
       <SortDropdown onSelectSort={handleSort} />
       {isLoading ? (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -179,4 +152,4 @@ function DetailCategoryScreen({ navigation, route }) {
   );
 }
 
-export default DetailCategoryScreen;
+export default AllProductScreen;

@@ -12,6 +12,7 @@ import PromotionScreen from '../../screens/Customer/PromotionScreen';
 import DeliveryScreen from '../../screens/Customer/DeliveryScreen';
 import ThankScreen from '../../screens/Customer/ThankScreen';
 import ReviewScreen from '../../screens/Customer/ReviewScreen';
+import AllProductScreen from '../../screens/Customer/AllProductScreen';
 const HomeStack = createNativeStackNavigator();
 const HomeNavigation = () => {
   return (
@@ -28,6 +29,7 @@ const HomeNavigation = () => {
       <HomeStack.Screen name="Delivery" component={DeliveryScreen}/>
       <HomeStack.Screen name="Review" component={ReviewScreen}/>
       <HomeStack.Screen name="ThankScreen" component={ThankScreen}/>
+      <HomeStack.Screen name="AllProduct" component={AllProductScreen}/>
     </HomeStack.Navigator>
   )
 }
