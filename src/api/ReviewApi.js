@@ -1,7 +1,7 @@
 import { getIdToken } from "../middleware/getToken";
 import { api } from "./AppApi";
 
-const addReview = async({data}) => {
+const addReviewApi = async({data}) => {
     try {
         const idToken = await getIdToken();
         const url = "/reviews/addReview";
@@ -113,4 +113,4 @@ const deleteReview = async({id}) => {
     }
 };
 
-export {addReview, getAllReviews, getReviewById, updateReview, deleteReview}
+export {addReviewApi, getAllReviews, getReviewById, updateReview, deleteReview}

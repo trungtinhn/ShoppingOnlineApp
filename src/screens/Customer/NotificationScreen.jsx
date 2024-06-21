@@ -20,7 +20,8 @@ function NotificationScreen({ navigation }) {
   const [notificationPromotion, setNotificationPromotion] = useState([])
 
   const getDataNotificationPromotion = () => {
-    // Lấy UID của người dùng hiện tại
+    try{
+      // Lấy UID của người dùng hiện tại
     const userId = firebase.auth().currentUser.uid;
   
     // Tạo truy vấn với điều kiện userId và sắp xếp theo Time
@@ -39,6 +40,10 @@ function NotificationScreen({ navigation }) {
       setNotificationPromotion(data);
       setIsLoading(false);
     });
+    }catch(err){
+      console.log(err);
+      setIsLoading(false);
+    }
   };
 
   

@@ -103,6 +103,7 @@ function FollowScreen({ navigation }) {
       setIsLoading(false);
     } else {
       console.log(res);
+      setIsLoading(false);
     }
   };
 

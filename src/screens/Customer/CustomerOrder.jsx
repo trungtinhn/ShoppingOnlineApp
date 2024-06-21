@@ -97,6 +97,43 @@ const CustomerOrder = ({ navigation }) => {
         ))}
         </ScrollView>
     );
+    const renderOrderDeliveredList = (data) => (
+        loading ?
+        <LoadingComponent/> 
+        :
+        <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchOrders} />}>
+        {data.map(item => (
+            <View key={item._id} style={styles.background}>
+                <TouchableOpacity onPress={() => navigation.navigate('DeliveryDetail', { item })}>
+                    <View style={styles.separatorLine} />
+                    <PerSon avartar={item.Avatar} name={item.TenND} />
+                    <Text style={styles.labelFocus}>Purchased Products</Text>
+                    {item.products.map(product => (
+                        <OneOrder
+                            key={product._id}
+                            source={product.image[0]}
+                            title={product.name}
+                            price={product.price}
+                            number={product.quantity}
+                            totalPrice={product.price * product.quantity}
+                            color={product.color}
+                            size={product.size}
+                            Code={product._id}
+                            onPress={() => {}}
+                            PressConfirm={() => {}}
+                        />
+                    ))}
+                </TouchableOpacity>
+                <View style={styles.itemCodeContainer}>
+                    <Text style={styles.itemCode}>$Total: </Text>
+                    <Text style={styles.itemCodeText}>{formatCurrency(item.totalPrice)} VND</Text>
+                </View>
+                <View style={{ width: '100%', alignItems: 'flex-end', marginBottom: 10 }}>
+            </View>
+            </View>
+        ))}
+        </ScrollView>
+    );
 
     const renderOrderConfirm = (data) => (
         loading ?
@@ -207,7 +244,7 @@ const CustomerOrder = ({ navigation }) => {
         confirm: () => renderOrderConfirm(donHangConfirm),
         onWait: () => renderOrderList(donHangOnWait),
         delivering: () => renderOrderList(donHangDelivering),
-        delivered: () => renderOrderList(donHangDelivered),
+        delivered: () => renderOrderDeliveredList(donHangDelivered),
         cancel: () => renderOrderCancel(donHangCancel),
     });
 

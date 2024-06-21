@@ -12,4 +12,5 @@ router.put('/updateOrders/:id', verifyToken , orderController.updateOrderById);
 router.patch('/:id/status', verifyToken ,orderController.updateOrderStatus);
 router.delete('/deleteOrders/:id', verifyToken  , orderController.deleteOrderById);
 router.get('/getOrderByStatus/status/:status', verifyToken ,orderController.getOrderByStatus);
+router.post('/checkDeliveredProduct', verifyToken ,orderController.checkDeliveredProduct);
 module.exports = router;

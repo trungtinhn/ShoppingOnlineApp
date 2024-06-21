@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ShoppingOnlineApp</string>
+    <string name="facebook_app_id">2216834768662834</string>
+    <string name="facebook_client_token">67ccb89aa2c02c5a3e97420531451317</string>
 </resources>

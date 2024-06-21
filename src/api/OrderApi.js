@@ -200,8 +200,31 @@ const getOrderByStatus = async({status}) => {
         }
     }
 };
+const checkDeliveredProduct = async({userId, productId}) => {
+    try {
+        const idToken = await getIdToken();
+        const url = `/order/checkDeliveredProduct`;
+        const config = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${idToken}`
+            },
+            data: {userId, productId}
+
+        };
+        const res = await api(url, config);
+        return res;
+    } catch (error) {
+        if (error.response) {
+            return error.response;
+        } else {
+            throw error;
+        }
+    }
+}
 
 export {createOrder , getOrderByStatus,
     getAllOrders, getOrderById, getOrdersByUserId, 
-    getOrdersByUserIdAndStatus, updateOrderById, 
+    getOrdersByUserIdAndStatus, updateOrderById, checkDeliveredProduct,
     updateOrderStatus, deleteOrderById}

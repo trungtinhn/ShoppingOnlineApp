@@ -12,6 +12,7 @@ import CUSTOM_COLOR from '../../constants/color'
 import LogoButton from '../../components/Login_SignUp/LogoButton'
 import Size from '../../constants/size'
 import {firebase} from '../../../firebase/firebase'
+import { AccessToken, LoginManager } from 'react-native-fbsdk-next';
 export default function SignInScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -48,6 +49,46 @@ export default function SignInScreen({navigation}) {
       // ...
     });    
   }
+  const handleLoginWithFacebook = async () => {
+    try {
+      const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+
+      if (result.isCancelled) {
+        throw 'Người dùng đã hủy đăng nhập';
+      }
+
+      const data = await AccessToken.getCurrentAccessToken();
+      if (!data) {
+        throw 'Không thể lấy access token';
+      }
+
+      const facebookCredential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
+      const userCredential = await firebase.auth().signInWithCredential(facebookCredential);
+      const user = userCredential.user;
+      console.log(user);
+    } catch (error) {
+      if (error.code === 'auth/account-exists-with-different-credential') {
+        const pendingCred = error.credential;
+        const email = error.email;
+
+        const methods = await firebase.auth().fetchSignInMethodsForEmail(email);
+
+        if (methods.length) {
+          Alert.alert(
+            'Account Exists',
+            `An account already exists with the email address ${email}. Please sign in using one of the following methods: ${methods.join(', ')}`
+          );
+
+          // Implement sign-in with one of the existing providers.
+          // For example, if methods[0] === 'password', you need to ask the user to sign in with their password.
+        }
+      } else {
+        console.error('Facebook Login Error:', error);
+        Alert.alert('Login Error', error.message);
+      }
+    }
+  };
+  
 
   const loginUser = async (email, password) => {
     try {
@@ -135,7 +176,7 @@ export default function SignInScreen({navigation}) {
         </View>
         <View style={[styles.logoContainer]}>
             <LogoButton type='google' onPress={handleLoginWithGoogle}></LogoButton>
-            <LogoButton type='facebook' onPress={()=>{}}></LogoButton>
+            <LogoButton type='facebook' onPress={handleLoginWithFacebook}></LogoButton>
             <LogoButton type='twitter' onPress={()=>{}}></LogoButton>
         </View>
       

@@ -169,6 +169,30 @@ const orderController = {
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
+    },
+    checkDeliveredProduct: async (req, res) => {
+        const { userId, productId } = req.body;
+
+        if (!userId || !productId) {
+            return res.status(400).json({ message: 'userId and productId are required' });
+        }
+
+        try {
+            const order = await Order.findOne({
+                userId: userId,
+                status: 'Delivered',
+                'products.productId': productId
+            });
+
+            if (order) {
+                return res.status(200).json({ message: 'User has purchased this product and it is delivered', delivered: true });
+            } else {
+                return res.status(200).json({ message: 'User has not purchased this product or it is not delivered', delivered: false });
+            }
+        } catch (error) {
+            console.error('Error checking delivered status:', error);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
     }
 }
 
