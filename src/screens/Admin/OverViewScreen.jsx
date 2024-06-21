@@ -11,17 +11,19 @@ import { IC_Bell, IC_Order } from '../../../assets/Customer/icons';
 import {firebase} from '../../../firebase/firebase';
 import { getCurrentUserData, getUserType } from '../../api/UserApi';
 export default function OverViewScreen({navigation}) {
-
-    const [userData, setUserData] = useState('Tinh');   
+    const [userData, setUserData] = useState();   
     const [imageUrl, setImageUrl] = useState('https://media.viez.vn/prod/2021/8/26/large_image_cea52c0e2f.png'); 
     const handleGetCurrentUser = async () =>{
       const user = firebase.auth().currentUser;
-      const res =  await getCurrentUserData({MaND: user.uid});
-      console.log(res.data);
+      const res =  await getUserType({MaND: user.uid});
+      if(res.status === 200){
+        setUserData(res.data);
+        setImageUrl(res.data.Avatar)
+      }
     }
     useEffect(()=>{
       handleGetCurrentUser();
-    },[])
+    }, [])
     return (
     <SafeAreaView style={styles.container}>
       {userData ? (
@@ -99,11 +101,11 @@ export default function OverViewScreen({navigation}) {
                 <View
                   style={{ flexDirection: 'column', justifyContent: 'center' }}>
                   <Text style={[styles.textViewStyles, { fontSize: 20 }]}>
-                    Nguyễn Trung Tính
+                    {userData.TenND}
                   </Text>
                   <View style={{ width: '100%', height: 5 }} />
                   <Text style={[styles.textViewStyles, { fontSize: 15 }]}>
-                    Admin
+                    {userData.LoaiND}
                   </Text>
                 </View>
               </View>
