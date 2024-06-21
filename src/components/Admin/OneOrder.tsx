@@ -73,8 +73,9 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
   totalPrice: {
-    fontWeight: 'bold',
+    //fontWeight: 'bold',
     marginRight: 20,
+    fontFamily: FONT_FAMILY.CeraPro,
     color: CUSTOM_COLOR.FlushOrange,
   },
 });

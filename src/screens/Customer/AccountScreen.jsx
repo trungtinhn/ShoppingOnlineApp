@@ -203,7 +203,7 @@ function AccountScreen() {
 
                         <TouchableOpacity
                             onPress={() => {
-                                navigation.navigate('ChangePassword');
+                                navigation.navigate('ForgotPassword');
                             }}
                             style={{
                                 ...styles.option,
@@ -258,8 +258,9 @@ function AccountScreen() {
                     </View>
                 </>
             ) : (
-                
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <LoadingComponent/>
+                    </View>
                 
             )}
         </SafeAreaView>

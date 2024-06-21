@@ -13,7 +13,6 @@ import AddProduct from '../../screens/Admin/AddProduct';
 import AddPromotion from '../../screens/Admin/AddPromotion';
 import ChangeProfile from '../../screens/Admin/ChangeProfile';
 import ChatScreenStaff from '../../screens/Admin/ChatScreenStaff';
-import DeTailDelivery from '../../screens/Admin/DeTailDelivery';
 import DetailCategory from '../../screens/Admin/DetailsCategory';
 import EditAccount from '../../screens/Admin/EditAccount';
 import EditProduct from '../../screens/Admin/EditProduct';
@@ -29,6 +28,10 @@ import Categories from '../../screens/Admin/Categories';
 import EditCategory from '../../screens/Admin/EditCategory';
 import FunctionPermission from '../../screens/Admin/FunctionPermission';
 import DetailChatScreen from '../../screens/Admin/DetailChat';
+import DeliveryScreen from '../../screens/Customer/DeliveryScreen';
+import DeTailDelivery from '../../screens/Customer/DetailDelivery';
+import FunctionPermisson from '../../screens/Admin/FunctionPermission';
+//import DetailChatScreen from '../../screens/Admin/DetailChat';
 const Stack = createNativeStackNavigator();
 
 const AdminNavigation = () => {
@@ -47,7 +50,7 @@ const AdminNavigation = () => {
             <Stack.Screen name="Chat" component={Chat} />
             <Stack.Screen name="ChatScreenStaff" component={ChatScreenStaff} />
             <Stack.Screen name="DeTailsDelivery" component={DeTailDelivery} />
-            <Stack.Screen name="DetailChat" component= {DetailChatScreen} />
+            {/* <Stack.Screen name="DetailChat" component= {DetailChatScreen} /> */}
             <Stack.Screen name="EditAccount" component={EditAccount} />
             <Stack.Screen name="EditProduct" component={EditProduct} />
             <Stack.Screen name="ImportProduct" component={ImportProduct} />
@@ -65,6 +68,8 @@ const AdminNavigation = () => {
             <Stack.Screen name="AddNewCategory" component={AddNewCategory} />
             <Stack.Screen name="EditCategory" component={EditCategory} />
             <Stack.Screen name="FunctionPermission" component={FunctionPermission} />
+            <Stack.Screen name="DeliveryDetail" component={DeTailDelivery}/>
+            <Stack.Screen name="FuctionPermisson" component={FunctionPermisson} />
         </Stack.Navigator>
     </NavigationContainer>
   )

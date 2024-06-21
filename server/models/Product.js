@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-
+const natural = require('natural');
+const TfIdf = natural.TfIdf;
+const tfidf = new TfIdf();
 const ColorSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -106,6 +108,24 @@ const ProductSchema = new mongoose.Schema({
         required: true
     }
 }, { timestamps: true });
+
+// Tạo các đặc trưng từ giá gốc, giá giảm và tên sản phẩm
+ProductSchema.virtual('features').get(function() {
+    const priceFeature = this.GiaGoc;
+    const discountPriceFeature = this.GiaGiam;
+    
+    // Tạo mảng các giá trị TF-IDF
+    const tfidfValues = [];
+    tfidf.addDocument(this.TenSP);
+    tfidf.tfidfs(this.TenSP, function(i, measure) {
+        tfidfValues.push(measure);
+    });
+
+    // Chuyển đổi tfidfValues thành mảng 1 chiều
+    const flattenedTfidfValues = [].concat(...tfidfValues);
+
+    return [priceFeature, discountPriceFeature, ...flattenedTfidfValues];
+  });
 
 
 

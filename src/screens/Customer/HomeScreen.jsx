@@ -26,21 +26,34 @@ import FONT_FAMILY from '../../constants/font';
 import { getCategory } from '../../api/CategoryApi';
 import { getProductOnsale, getProductTrending } from '../../api/ProductApi';
 import { getPromotionCurrent } from '../../api/PromotionApi';
+import { OrderContext } from '../../context/OrderContext';
+import { getCartByUser } from '../../api/CartApi';
+import {firebase} from '../../../firebase/firebase';
 function HomeScreen({navigation}) {
+  const uidUser = firebase.auth().currentUser.uid
+  const {numCart, setNumCart} = React.useContext(OrderContext);
   const [trending, setTrending] = useState([]);
   const [danhmuc, setDanhMuc] = useState([]);
   const [chatUser, setChatUser] = useState();
   const [loadingChatUser, setLoadingChatUser] = useState(false);
   const [idUser, setIdUser] = useState();
-  const [badgeCart, setBadgeCart] = useState(5);
   const [dataPromotion, setDataPromotion] = useState([]);
-  const [search, setSearch] = useState(true);
   const [sanpham, setSanPham] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const getDanhMuc = async () => {
     const res = await getCategory();
     if(res.status === 200){
       setDanhMuc(res.data);
+    }
+  }
+  const getDataCart = async () => {
+    const res = await getCartByUser(uidUser);
+    if(res.status === 200){
+      if(res.data.products.length > 0){
+        setNumCart(res.data.products.length);
+      }else{
+        setNumCart(0);
+      }
     }
   }
     
@@ -75,6 +88,7 @@ function HomeScreen({navigation}) {
     getSanPhamOnsale();
     getDataPromotion();
     getDanhMuc();
+    getDataCart();
   }, []);
 
 
@@ -107,13 +121,10 @@ function HomeScreen({navigation}) {
             style={{
               width: 50,
               height: 50,
-              //backgroundColor: CUSTOM_COLOR.Mercury,/
               borderWidth: 1,
               borderColor: CUSTOM_COLOR.Mercury,
               alignItems: 'center',
               justifyContent: 'center',
-              // marginVertical: 10,
-              // padding: 8,
               borderRadius: 10,
             }}
             onPress={() => {
@@ -141,16 +152,14 @@ function HomeScreen({navigation}) {
               borderColor: CUSTOM_COLOR.Mercury,
               alignItems: 'center',
               justifyContent: 'center',
-              // marginVertical: 10,
-              // padding: 8,
               borderRadius: 10,
             }}
             onPress={() => {
-              navigation.navigate('ShoppingCard', { idUser });
+              navigation.navigate('ShoppingCard');
             }}>
-                {badgeCart != 0 ? (
+                {numCart != 0 ? (
                 <Badge
-                  value={badgeCart}
+                  value={numCart}
                   status="error"
                   containerStyle={{ position: 'absolute', top: -5, right: -5 }}
                 />
@@ -219,7 +228,7 @@ function HomeScreen({navigation}) {
               <Text style={styles.textView}>Trending now</Text>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('Trending');
+                  navigation.navigate('AllProduct');
                 }}>
                 <Text style={styles.text}>See all</Text>
               </TouchableOpacity>

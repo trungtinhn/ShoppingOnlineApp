@@ -2,8 +2,6 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, ActivityIndicator, use
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import BackTo from '../../components/Admin/BackTo';
-import Status from '../../components/Admin/Status';
 import CUSTOM_COLOR from '../../constants/color';
 import PerSon from '../../components/Admin/PerSon';
 import OneOrder from '../../components/Admin/OneOrder';
@@ -65,7 +63,9 @@ const CustomerOrder = ({ navigation }) => {
     }, []);
 
     const renderOrderList = (data) => (
-        loading ? <LoadingComponent/> :
+        loading ?
+        <LoadingComponent/> 
+        :
         <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchOrders} />}>
         {data.map(item => (
             <View key={item._id} style={styles.background}>
@@ -99,7 +99,11 @@ const CustomerOrder = ({ navigation }) => {
     );
 
     const renderOrderConfirm = (data) => (
-        loading ? <LoadingComponent/> :
+        loading ?
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <LoadingComponent/> 
+        </View>
+        :
         <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchOrders} />}>
         {data.map(item => (
             <View key={item._id} style={styles.background}>

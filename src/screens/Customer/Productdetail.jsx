@@ -19,7 +19,8 @@ import { addProductToCart } from "../../api/CartApi";
 import { OrderContext } from "../../context/OrderContext";
 import { get } from "mongoose";
 import { addLike, checkLike, deleteLike } from "../../api/LikeApi";
-const url = 'https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.jpg';
+import { knnRecommendSell } from "../../api/KnnApi";
+
 function ProductDetail({ navigation, route }) {
     const { id } = route.params;
     const userId = firebase.auth().currentUser.uid;
@@ -27,7 +28,7 @@ function ProductDetail({ navigation, route }) {
     const [isLoading, setLoading] = useState(true);
     const [isLoadingCart, setLoadingCart] = useState(false);
     const [love, setLove] = useState(true);
-    const [badgeCart, setBadgeCart] = useState(1);
+    const {numCart, setNumCart} = React.useContext(OrderContext);
     const [chooseColor, setChooseColor] = useState('');
     const [chooseSize, setChooseSize] = useState('');
     const [numProduct, setNumProduct] = useState(1);
@@ -35,6 +36,7 @@ function ProductDetail({ navigation, route }) {
     const [modalVisible, setModalVisible] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const {product, setProduct} = useContext(OrderContext);
+    const [itemsRecommend, setItemsRecommend] = useState([]);
     const getDataLove = async () => {
         const res = await checkLike({data: {MaND: userId, _id: id}});
         if (res.status === 200) {
@@ -62,38 +64,15 @@ function ProductDetail({ navigation, route }) {
             }
         }
     };
-    const itemsRe = [
-        {
-          MaSP: 1,
-          TenSP: 'San Pham 1',
-          HinhAnhSP: url,
-          GiaSP: '10000'
-        },
-        {
-          MaSP: 2,
-          TenSP: 'San Pham 2',
-          HinhAnhSP: url,
-          GiaSP: '10000'
-        },
-        {
-          MaSP: 3,
-          TenSP: 'San Pham 3',
-          HinhAnhSP: url,
-          GiaSP: '10000'
-        },
-        {
-          MaSP: 4,
-          TenSP: 'San Pham 4',
-          HinhAnhSP: url,
-          GiaSP: '10000'
-        },
-        {
-          MaSP: 5,
-          TenSP: 'San Pham 5',
-          HinhAnhSP: url,
-          GiaSP: '10000'
-        },
-      ];
+
+    const getDataRecommend = async () => {
+        const res = await knnRecommendSell({userId: userId})
+        if(res.status === 200){
+            setItemsRecommend(res.data);
+        }else{
+            console.log(res)
+        }
+    }
 
     const setDataGioHang = async () => {
         if(chooseColor === '' || chooseSize === ''){
@@ -111,13 +90,12 @@ function ProductDetail({ navigation, route }) {
                 price: dataSanPham.GiaGiam,
                 totalPrice: dataSanPham.GiaGiam * numProduct
             }
-            console.log(data);
             const res = await addProductToCart({data: data});
             if(res.status === 200){
                 setLoadingCart(false);
                 Alert.alert('Thông báo','Sản phẩm đã thêm vào giỏ hàng');
                 resetType();
-                setBadgeCart(badgeCart + 1);
+                setNumCart(numCart + 1);
             }else{
                 console.log(res);
             }
@@ -131,6 +109,7 @@ function ProductDetail({ navigation, route }) {
 
     const getDataById = async (id) => {
         await getDataLove(id);
+        await getDataRecommend();
         try{
             const res = await getProductById({productId: id});
             if(res.status === 200){
@@ -165,7 +144,7 @@ function ProductDetail({ navigation, route }) {
     };
     const onRefresh = useCallback(() => {
         setRefreshing(true);
-        Promise.all([getDataById(id)])
+        Promise.all([getDataById(id), getDataLove(), getDataRecommend()])
           .then(() => setRefreshing(false))
           .catch(() => setRefreshing(false));
     }, []);
@@ -224,9 +203,9 @@ function ProductDetail({ navigation, route }) {
                         onPress={() => {
                             navigation.navigate('ShoppingCard', { item: dataSanPham });
                         }}>
-                        {badgeCart != 0 ? (
+                        {numCart != 0 ? (
                             <Badge
-                                value={badgeCart}
+                                value={numCart}
                                 status="error"
                                 containerStyle={{ position: 'absolute', top: -5, right: -5 }}
                             />
@@ -689,26 +668,26 @@ function ProductDetail({ navigation, route }) {
                    
                 
         <Text style={styles.textView}>Có thể bạn sẽ thích</Text>
-        <FlatList
-                windowSize={10}
-                horizontal={true}
-                data={itemsRe}
+        <View style={styles.productListContainer}>
+              <FlatList
+                data={itemsRecommend}
+                scrollEnabled={false}
                 renderItem={({ item }) => (
                   <TouchableOpacity
-                    style={{
-                      marginHorizontal: -10,
-                    }}
-                    onPress={() => {
-                      navigation.navigate('ProductDetail', { item });
-                    }}>
+                    style={styles.productItemContainer}
+                    onPress={() => navigation.navigate('ProductDetail', { id: item._id })}>
                     <ProductView
-                      quantity={1000}
-                      source={item.HinhAnhSP}
+                      quantity={item.SoLuongDaBan}
+                      source={item.HinhAnhSP[0]}
                       title={item.TenSP}
-                      price={item.GiaSP} />
+                      price={item.GiaGiam}
+                    />
                   </TouchableOpacity>
                 )}
-                keyExtractor={item => item.MaSP} />
+                numColumns={2}
+                keyExtractor={(item) => item._id}
+              />
+            </View>
         </View>
     </ScrollView>
 
@@ -758,6 +737,9 @@ const styles = StyleSheet.create({
         backgroundColor: CUSTOM_COLOR.FlushOrange,
         marginHorizontal: 15
     },
+    productListContainer: {
+        marginTop: 20,
+      },
     textView: {
         marginHorizontal: 18,
         marginVertical: 15,

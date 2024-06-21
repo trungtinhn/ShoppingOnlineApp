@@ -179,5 +179,29 @@ const deleteOrderById = async({id}) => {
         }
     }
 };
+const getOrderByStatus = async({status}) => {
+    try {
+        const idToken = await getIdToken();
+        const url = `/order/getOrderByStatus/status/${status}`;
+        const config = {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${idToken}`
+            },
+        };
+        const res = await api(url, config);
+        return res;
+    } catch (error) {
+        if (error.response) {
+            return error.response;
+        } else {
+            throw error;
+        }
+    }
+};
 
-export {createOrder , getAllOrders, getOrderById, getOrdersByUserId, getOrdersByUserIdAndStatus, updateOrderById, updateOrderStatus, deleteOrderById}
+export {createOrder , getOrderByStatus,
+    getAllOrders, getOrderById, getOrdersByUserId, 
+    getOrdersByUserIdAndStatus, updateOrderById, 
+    updateOrderStatus, deleteOrderById}
