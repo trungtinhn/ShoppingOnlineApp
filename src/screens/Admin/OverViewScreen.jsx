@@ -5,11 +5,12 @@ import CUSTOM_COLOR from '../../constants/color';
 import FONT_FAMILY from '../../constants/font';
 import FunctionCard from '../../components/Admin/FunctionCard';
 import MenuIcon from '../../components/Admin/MenuIcon';
-import { IC_Catgory, IC_User, IC_financial, IC_logout, IC_messenger, IC_order, IC_product, IC_promotions, IC_user } from '../../../assets/Admin/icons';
+import { IC_Catgory, IC_FunctionPermission, IC_User, IC_logout, IC_messenger, IC_order, IC_product, IC_promotions, IC_user } from '../../../assets/Admin/icons';
 import ViewNowStatus from '../../components/Admin/ViewNowStatus';
 import { IC_Bell, IC_Order } from '../../../assets/Customer/icons';
 import {firebase} from '../../../firebase/firebase';
 import { getCurrentUserData, getUserType } from '../../api/UserApi';
+
 export default function OverViewScreen({navigation}) {
     const [userData, setUserData] = useState();   
     const [imageUrl, setImageUrl] = useState('https://media.viez.vn/prod/2021/8/26/large_image_cea52c0e2f.png'); 
@@ -206,9 +207,9 @@ export default function OverViewScreen({navigation}) {
                 </View>
                 <View style={styles.unitContainer}>
                   <FunctionCard
-                    onPress={() => navigation.navigate('ManageUser')}
-                    source={IC_financial}
-                    text="Statistical"
+                    onPress={() => navigation.navigate('FunctionPermission')}
+                    source={IC_FunctionPermission}
+                    text="Permission"
                   />
                 </View>
                 <View style={styles.unitContainer}>

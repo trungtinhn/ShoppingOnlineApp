@@ -26,6 +26,8 @@ import Setting from '../../screens/Admin/Setting';
 import Chat from '../../screens/Admin/Chat';
 import Categories from '../../screens/Admin/Categories';
 import EditCategory from '../../screens/Admin/EditCategory';
+import FunctionPermission from '../../screens/Admin/FunctionPermission';
+import DetailChatScreen from '../../screens/Admin/DetailChat';
 import DeliveryScreen from '../../screens/Customer/DeliveryScreen';
 import DeTailDelivery from '../../screens/Customer/DetailDelivery';
 import FunctionPermisson from '../../screens/Admin/FunctionPermission';
@@ -65,6 +67,7 @@ const AdminNavigation = () => {
             <Stack.Screen name="DetailsCategory" component={DetailCategory} />
             <Stack.Screen name="AddNewCategory" component={AddNewCategory} />
             <Stack.Screen name="EditCategory" component={EditCategory} />
+            <Stack.Screen name="FunctionPermission" component={FunctionPermission} />
             <Stack.Screen name="DeliveryDetail" component={DeTailDelivery}/>
             <Stack.Screen name="FuctionPermisson" component={FunctionPermisson} />
         </Stack.Navigator>

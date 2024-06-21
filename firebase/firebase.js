@@ -8,6 +8,7 @@ import { getStorage } from 'firebase/storage';
 import firebase from 'firebase/compat/app';
 import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import { getDatabase } from 'firebase/database';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
@@ -22,7 +23,8 @@ const firebaseConfig = {
   storageBucket: "shoppingapp-a20a4.appspot.com",
   messagingSenderId: "290796953622",
   appId: "1:290796953622:web:19baaa4f754afa99a6d537",
-  measurementId: "G-GS65ZJ605C"
+  measurementId: "G-GS65ZJ605C",
+  databaseURL: "https://shoppingapp-a20a4-default-rtdb.asia-southeast1.firebasedatabase.app"
 };
 
 if (!firebase.apps.length) {
@@ -43,5 +45,6 @@ const auth = initializeAuth(app, {
     persistence: getReactNativePersistence(ReactNativeAsyncStorage)
   });
 export const FirebaseApp = initializeApp(firebaseConfig);
+export const database = getDatabase(FirebaseApp)
 export const Firestore = getFirestore(FirebaseApp);
 export const Storage = getStorage(FirebaseApp);
