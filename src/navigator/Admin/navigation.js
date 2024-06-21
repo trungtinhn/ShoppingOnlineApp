@@ -13,7 +13,6 @@ import AddProduct from '../../screens/Admin/AddProduct';
 import AddPromotion from '../../screens/Admin/AddPromotion';
 import ChangeProfile from '../../screens/Admin/ChangeProfile';
 import ChatScreenStaff from '../../screens/Admin/ChatScreenStaff';
-import DeTailDelivery from '../../screens/Admin/DeTailDelivery';
 import DetailCategory from '../../screens/Admin/DetailsCategory';
 import EditAccount from '../../screens/Admin/EditAccount';
 import EditProduct from '../../screens/Admin/EditProduct';
@@ -28,6 +27,8 @@ import Chat from '../../screens/Admin/Chat';
 import ChatScreen from '../../screens/Customer/ChatSreen';
 import Categories from '../../screens/Admin/Categories';
 import EditCategory from '../../screens/Admin/EditCategory';
+import DeliveryScreen from '../../screens/Customer/DeliveryScreen';
+import DeTailDelivery from '../../screens/Customer/DetailDelivery';
 const Stack = createNativeStackNavigator();
 
 const AdminNavigation = () => {
@@ -63,6 +64,7 @@ const AdminNavigation = () => {
             <Stack.Screen name="DetailsCategory" component={DetailCategory} />
             <Stack.Screen name="AddNewCategory" component={AddNewCategory} />
             <Stack.Screen name="EditCategory" component={EditCategory} />
+            <Stack.Screen name="DeliveryDetail" component={DeTailDelivery}/>
         </Stack.Navigator>
     </NavigationContainer>
   )

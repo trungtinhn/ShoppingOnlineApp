@@ -100,7 +100,6 @@ function FollowScreen({ navigation }) {
     const res = await knnRecommendLike({ userId: uidUser });
     if (res.status === 200) {
       setDataRecommendLike(res.data);
-      console.log(res.data);
       setIsLoading(false);
     } else {
       console.log(res);

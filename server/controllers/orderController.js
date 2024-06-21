@@ -147,6 +147,28 @@ const orderController = {
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
+    },
+    getOrderByStatus: async (req, res) => {
+        try {
+            const orders = await Order.find({ status: req.params.status }).lean();
+
+            const ordersWithUserDetails = await Promise.all(orders.map(async (order) => {
+                const user = await User.findOne({ MaND: order.userId });
+                if (user) {
+                    order.TenND = user.TenND;
+                    order.Avatar = user.Avatar;
+                } else {
+                    // Handle case where user is not found
+                    order.TenND = 'Unknown';
+                    order.Avatar = ''; // Provide a default image if necessary
+                }
+                return order;
+            }));
+
+            res.json(ordersWithUserDetails);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
     }
 }
 
