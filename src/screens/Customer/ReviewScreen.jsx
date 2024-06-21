@@ -84,7 +84,7 @@ function ReviewScreen({navigation, route}) {
                         }}>{dataSanPham.Rating}/5</Text>
                         <StarRating
                             maxStars = {5}
-                            rating={4.5}
+                            rating={dataSanPham.Rating}
                         />
                     </View>
 
@@ -100,7 +100,7 @@ function ReviewScreen({navigation, route}) {
                         borderBottomColor: CUSTOM_COLOR.Alto,
                         paddingBottom: '2%'
                     }}
-                    key={review.id}
+                    key={review._id}
                     >
                         <Review
                             key = {review._id}

@@ -155,7 +155,7 @@ function HomeScreen({navigation}) {
               borderRadius: 10,
             }}
             onPress={() => {
-              navigation.navigate('ShoppingCard', { idUser });
+              navigation.navigate('ShoppingCard');
             }}>
                 {numCart != 0 ? (
                 <Badge
@@ -228,7 +228,7 @@ function HomeScreen({navigation}) {
               <Text style={styles.textView}>Trending now</Text>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('Trending');
+                  navigation.navigate('AllProduct');
                 }}>
                 <Text style={styles.text}>See all</Text>
               </TouchableOpacity>

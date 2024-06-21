@@ -156,10 +156,9 @@ function CheckoutScreen({ navigation }) {
         const res = await checkAvailable({data: product});
         if(res.status === 200){
           const data = res.data;
-          console.log(data);
           data.map((item) => {
             if(!item.available){
-              Alert.alert('Notification', 'Sản phẩm' + item.name + 'đã hết hàng. Vui lòng chọn sản phẩm khác!');
+              Alert.alert('Notification', 'Sản phẩm ' + item.productId.TenSP + ' đã hết hàng. Vui lòng chọn sản phẩm khác!');
               hasUnavailableProduct = true;
             }
           })
@@ -421,9 +420,9 @@ function CheckoutScreen({ navigation }) {
               }}
             />
             {payment ? (
-              payment === 'CashPayment' ? (
+              payment === 'Cash Payment' ? (
                 <Text style={{ ...styles.textPayment }}>Cash Payment</Text>
-              ) : payment === 'OnlineBanking' ? (
+              ) : payment === 'Online Banking' ? (
                 <Text style={{ ...styles.textPayment }}>Online Banking</Text>
               ) : null
             ) : (

@@ -62,9 +62,9 @@ function PaymentMethodScreen({ navigation}) {
 
             <View style={styles.viewMethod}>
                 <TouchableOpacity style={styles.radBtn}
-                    onPress={() => setPayment('CashPayment')}
+                    onPress={() => setPayment('Cash Payment')}
                 >
-                    {payment === 'CashPayment' ?
+                    {payment === 'Cash Payment' ?
                         <View
                             style={{
                                 ...styles.chooseRadio
@@ -85,9 +85,9 @@ function PaymentMethodScreen({ navigation}) {
 
             <View style={styles.viewMethod}>
                 <TouchableOpacity style={styles.radBtn}
-                    onPress={() => setPayment('OnlineBanking')}
+                    onPress={() => setPayment('Online Banking')}
                 >
-                    {payment === 'OnlineBanking' ?
+                    {payment === 'Online Banking' ?
                         <View
                             style={{
                                 ...styles.chooseRadio

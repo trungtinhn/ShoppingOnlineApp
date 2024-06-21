@@ -5,7 +5,7 @@ import OneOrder from '../../components/Admin/OneOrder';
 import PerSon from '../../components/Admin/PerSon';
 import CUSTOM_COLOR from '../../constants/color';
 import Status from '../../components/Admin/Status';
-import {firebase} from '../../../firebase/firebase';
+import {firebase, Firestore} from '../../../firebase/firebase';
 import LoadingComponent from '../../components/LoadingComponent';
 import Button from '../../components/Customer/Button';
 import { formatCurrency } from '../../utils/helpers';
@@ -13,6 +13,7 @@ import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import { BackIcon } from '../../../assets/Customer/svgs';
 import { getOrderByStatus, getOrdersByUserIdAndStatus, updateOrderStatus } from '../../api/OrderApi';
 import FONT_FAMILY from '../../constants/font';
+import { addDoc, collection } from 'firebase/firestore';
 const Order = ({ navigation }) => {
   const userId = firebase.auth().currentUser.uid;
   const layout = useWindowDimensions();
@@ -55,6 +56,51 @@ const Order = ({ navigation }) => {
           console.error(error);
       }
   };
+  const addNotificationConfirm = async (item) => {
+    try{
+        const docRef = await addDoc(collection(Firestore, 'notification'), {
+            description: "Đơn hàng của bạn đã được xác nhận, người bạn đang chuẩn bị hàng. Vui lòng kiểm tra thời gian nhận hàng.",
+            image: item.products[0].image[0],
+            name: "Đơn hàng của bạn đã được xác nhận",
+            orderId: item._id,
+            time: new Date(), // Định dạng thời gian chuẩn
+            userId: item.userId,
+        })
+        console.log("Document successfully written!");
+    }catch(error){
+        console.log(error);
+    }
+  };
+  const addNotificationOnwait = async (item) => {
+    try{
+        const docRef = await addDoc(collection(Firestore, 'notification'), {
+            description: "Đơn hàng của bạn đã được người bán giao cho đơn vị vận chuyển. Vui lòng kiểm tra thời gian nhận hàng.",
+            image: item.products[0].image[0],
+            name: "Đơn hàng của bạn đã được vận chuyển",
+            orderId: item._id,
+            time: new Date(), // Định dạng thời gian chuẩn
+            userId: item.userId,
+        })
+        console.log("Document successfully written!");
+    }catch(error){
+        console.log(error);
+    }
+  };
+  const addNotificationDelivering = async (item) => {
+    try{
+        const docRef = await addDoc(collection(Firestore, 'notification'), {
+            description: "Đơn hàng của bạn đã được giao. Vui lòng kiểm tra hàng và liên hệ chúng tôi nếu cần hỗ trợ. Xin cảm ơn!",
+            image: item.products[0].image[0],
+            name: "Đơn hàng của bạn đã được giao",
+            orderId: item._id,
+            time: new Date(), // Định dạng thời gian chuẩn
+            userId: item.userId,
+        })
+        console.log("Document successfully written!");
+    }catch(error){
+        console.log(error);
+    }
+  }
 
   useEffect(() => {
       fetchOrders();
@@ -99,6 +145,7 @@ const Order = ({ navigation }) => {
                           setHandle(true);
                           const res = await updateOrderStatus({ id: item._id, status: 'Delivering' });
                           if (res.status === 200) {
+                              addNotificationOnwait(item);
                               fetchOrders();
                               setHandle(false);
                           } else {
@@ -150,6 +197,7 @@ const Order = ({ navigation }) => {
                         setHandle(true);
                         const res = await updateOrderStatus({ id: item._id, status: 'Delivered' });
                         if (res.status === 200) {
+                            addNotificationDelivering(item);
                             fetchOrders();
                             setHandle(false);
                         } else {
@@ -239,8 +287,9 @@ const Order = ({ navigation }) => {
                           setHandle(true);
                           const res = await updateOrderStatus({ id: item._id, status: 'On Wait' });
                           if (res.status === 200) {
-                              fetchOrders();
-                              setHandle(false);
+                                addNotificationConfirm(item);
+                                fetchOrders();
+                                setHandle(false);
                           } else {
                               console.log(res);
                           }

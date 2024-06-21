@@ -21,7 +21,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import CustomHeader from '../../components/Admin/CustomHeader';
 import { IMG_Rectangle } from '../../../assets/Login_SignUp/images';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { Acount } from './ViewShopScreen';
+import { Account } from './ViewShopScreen';
 function ChangeProfile({navigation}) {
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -36,7 +36,7 @@ function ChangeProfile({navigation}) {
   const [text, setText] = useState('01/01/2023');
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
-  const [userData, setUserData] = useState(Acount);
+  const [userData, setUserData] = useState(Account);
   const [imageUrl, setImageUrl] = useState(null);
   const [backgroundUrl, setBackgroundUrl] = useState(null);
   const [image, setImage] = useState();
@@ -253,8 +253,7 @@ function ChangeProfile({navigation}) {
           </>
           <View style={{width: '100%', height: '3%'}} />
           <>
-            <View style={styles.bodyContainer}>
-              <ScrollView style={{width: '100%', height: '100%'}}>
+              <ScrollView style={{width: '90%', marginHorizontal: '5%',}}>
                 <>
                   <View style={[styles.inputContainer, {height: 90}]}>
                     <View style={{width: '100%', height: 10}} />
@@ -574,7 +573,6 @@ function ChangeProfile({navigation}) {
               </View>
                 <></>
               </ScrollView>
-            </View>
           </>
         </>
       ) : (
@@ -585,7 +583,6 @@ function ChangeProfile({navigation}) {
 };
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: CUSTOM_COLOR.White,
   },
   headerContainer: {

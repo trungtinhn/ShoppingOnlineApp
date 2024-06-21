@@ -67,7 +67,6 @@ function ProductDetail({ navigation, route }) {
 
     const getDataRecommend = async () => {
         const res = await knnRecommendSell({userId: userId})
-        console.log(res)
         if(res.status === 200){
             setItemsRecommend(res.data);
         }else{
@@ -91,7 +90,6 @@ function ProductDetail({ navigation, route }) {
                 price: dataSanPham.GiaGiam,
                 totalPrice: dataSanPham.GiaGiam * numProduct
             }
-            console.log(data);
             const res = await addProductToCart({data: data});
             if(res.status === 200){
                 setLoadingCart(false);

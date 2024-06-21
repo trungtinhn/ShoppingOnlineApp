@@ -9,112 +9,43 @@ import ShoppingCartLogo from '../../../assets/Customer/svgs/shopping-cart.svg'
 import LogoApp from '../../../assets/Customer/svgs/Logo.svg'
 import { Badge } from 'react-native-elements';
 import { OrderContext } from "../../context/OrderContext";
-const datasGeneral = [
-  {
-    id: '1',
-    source: IM_AnhGiay1,
-    title: "Thông báo khuyến mãi",
-    content: "Khuyến mãi siêu ưu đãi sale lến đến 50%",
-    time: '11:30 AM'
-  },
-  {
-    id: '2',
-    source: IM_AnhGiay1,
-    title: "Thông báo khuyến mãi",
-    content: "Khuyến mãi siêu ưu đãi sale lến đến 50%",
-    time: '11:30 AM'
-  },
-  {
-    id: '3',
-    source: IM_AnhGiay1,
-    title: "Thông báo khuyến mãi",
-    content: "Khuyến mãi siêu ưu đãi sale lến đến 50%",
-    time: '11:30 AM'
-  },
-  {
-    id: '4',
-    source: IM_AnhGiay1,
-    title: "Thông báo khuyến mãi",
-    content: "Khuyến mãi siêu ưu đãi sale lến đến 50%",
-    time: '11:30 AM'
-  },
-  {
-    id: '5',
-    source: IM_AnhGiay1,
-    title: "Thông báo khuyến mãi",
-    content: "Khuyến mãi siêu ưu đãi sale lến đến 50%",
-    time: '11:30 AM'
-  },
-
-]
-
-const dataRecomanded = [
-  {
-    id: '1',
-    source: IM_AnhGiay2,
-    title: "Thông báo giảm giá",
-    content: "Khuyến mãi siêu ưu đãi giảm giá cực sốc",
-    time: '11:30 AM'
-  },
-  {
-    id: '2',
-    source: IM_AnhGiay2,
-    title: "Thông báo khuyến mãi",
-    content: "Khuyến mãi siêu ưu đãi sale lến đến 50%",
-    time: '11:30 AM'
-  },
-  {
-    id: '3',
-    source: IM_AnhGiay4,
-    title: "Thông báo giảm giá",
-    content: "Khuyến mãi siêu ưu đãi giảm giá cực sốc",
-    time: '11:30 AM'
-  },
-  {
-    id: '4',
-    source: IM_AnhGiay2,
-    title: "Thông báo khuyến mãi",
-    content: "Khuyến mãi siêu ưu đãi giảm giá cực sốc",
-    time: '11:30 AM'
-  },
-  {
-    id: '5',
-    source: IM_AnhGiay3,
-    title: "Thông báo giảm giá",
-    content: "Khuyến mãi siêu ưu đãi sale lến đến 50%",
-    time: '11:30 AM'
-  },
-
-]
+import { collection, orderBy, query, where, onSnapshot } from "firebase/firestore";
+import LoadingComponent from "../../components/LoadingComponent";
+import { Firestore, firebase } from "../../../firebase/firebase";
 
 function NotificationScreen({ navigation }) {
   const [chatUser, setChatUser] = useState();
-  const [isGeneral, setIsCeneral] = useState(1)
+  const [isLoading, setIsLoading] = useState(false);
   const {numCart} = React.useContext(OrderContext)
   const [notificationPromotion, setNotificationPromotion] = useState([])
 
   const getDataNotificationPromotion = () => {
-    const data = [
-      {
-        TenKM: 'Khuyến mãi 1',
-        ChiTietKM: 'Chi tiết khuyến mãi 1',
-        HinhAnhKM: IM_AnhGiay1,
-        thoiGianTao: new Date(2024, 3, 24, 10, 30) // Ngày 24/04/2024, lúc 10:30 AM
-      },
-      {
-        TenKM: 'Khuyến mãi 2',
-        ChiTietKM: 'Chi tiết khuyến mãi 2',
-        HinhAnhKM: IM_AnhGiay2,
-        thoiGianTao: new Date(2024, 3, 25, 15, 45) // Ngày 25/04/2024, lúc 3:45 PM
-      },
-    ];
-    setNotificationPromotion(data)
-  }
+    // Lấy UID của người dùng hiện tại
+    const userId = firebase.auth().currentUser.uid;
+  
+    // Tạo truy vấn với điều kiện userId và sắp xếp theo Time
+    const q = query(
+      collection(Firestore, "notification"), 
+      where("userId", "==", userId),
+      orderBy("time", 'desc')
+    );
+  
+    // Lắng nghe thay đổi trong truy vấn
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
+      setNotificationPromotion(data);
+      setIsLoading(false);
+    });
+  };
 
+  
   useEffect(() => {
+    setIsLoading(true)
     getDataNotificationPromotion()
   }, [])
-
 
   return (
     <View style={{
@@ -190,26 +121,30 @@ function NotificationScreen({ navigation }) {
           <View style={{marginLeft: "5%"}}></View>
         </View>
       </View>
-
       <View style={{ width: '100%', height: 10 }} />
+
+      {isLoading ? 
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <LoadingComponent />
+      </View>
+      :
       <FlatList
         data={notificationPromotion}
         renderItem={({ item }) => {
-
-          const hour = item.thoiGianTao.getHours();
-          const minute = item.thoiGianTao.getMinutes();
-          const day = item.thoiGianTao.getDate();
-          const month = item.thoiGianTao.getMonth() + 1; // Month starts from 0
-          const year = item.thoiGianTao.getFullYear();
+          const time = item.time.toDate();
+          const hour = time.getHours();
+          const minute = time.getMinutes();
+          const day = time.getDate();
+          const month = time.getMonth() + 1; // Month starts from 0
+          const year = time.getFullYear();
 
 
           return (
             <TouchableOpacity>
-
               <Notify
-                source={item.HinhAnhKM}
-                title={item.TenKM}
-                content={item.ChiTietKM}
+                source={item.image}
+                title={item.name}
+                content={item.description}
                 time={`${day}-${month}-${year} ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`}
               />
 
@@ -217,6 +152,7 @@ function NotificationScreen({ navigation }) {
           )
         }}
       />
+    }
 
 
     </View>

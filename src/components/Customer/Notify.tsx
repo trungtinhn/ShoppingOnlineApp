@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, View, Image } from "react-native";
+import CUSTOM_COLOR from "../../constants/color";
 
 
 const Notify = (props: any) => {
@@ -7,14 +8,17 @@ const Notify = (props: any) => {
   return (
     <View style={{
       flexDirection: 'row',
-      alignItems: 'center'
+      alignItems: 'center',
+      borderBottomWidth: 1,
+      borderColor: CUSTOM_COLOR.LightGray,
+      backgroundColor: CUSTOM_COLOR.WhitePorcelain,
+      padding: 10
     }}>
 
-      <Image source={props.source}
+      <Image source={{uri: props.source}}
         style={{
-          width: 50,
-          height: 50,
-          borderRadius: 30,
+          width: 60,
+          height: 60,
           margin: 10,
 
         }}
@@ -31,15 +35,16 @@ const Notify = (props: any) => {
         }}>
           <Text style={{
             fontSize: 17,
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            
           }}>{props.title}</Text>
-          <Text style={{
-
-
-          }}>{props.time}</Text>
         </View>
 
         <Text>{props.content}</Text>
+        <Text style={{
+
+
+        }}>{props.time}</Text>
       </View>
 
     </View>
