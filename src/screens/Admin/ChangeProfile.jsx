@@ -36,7 +36,7 @@ function ChangeProfile({navigation}) {
   const [text, setText] = useState('01/01/2023');
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
-  const [userData, setUserData] = useState(Acount);
+  const [userData, setUserData] = useState({});
   const [imageUrl, setImageUrl] = useState(null);
   const [backgroundUrl, setBackgroundUrl] = useState(null);
   const [image, setImage] = useState();
@@ -595,7 +595,7 @@ const styles = StyleSheet.create({
   },
   backgroundContainer: {
     width: '100%',
-    height: 185,
+    height: 180,
   },
   image: {
     flex: 1,

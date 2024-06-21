@@ -27,18 +27,14 @@ import {
 } from '../../../assets/Admin/icons';
 import { ref, onValue } from "firebase/database";
 import ViewNowStatus from '../../components/Admin/ViewNowStatus';
-import {IC_Bell, IC_Order} from '../../../assets/Customer/icons';
 import {database, firebase} from '../../../firebase/firebase';
-import {getCurrentUserData, getUserType} from '../../api/UserApi';
-import {getPermissions} from '../../api/PermissonApi';
+import {getUserType} from '../../api/UserApi';
 
 function OverViewScreenStaff({navigation}) {
   const [userData, setUserData] = useState();
-  const [imageUrl, setImageUrl] = useState(
-    'https://media.viez.vn/prod/2021/8/26/large_image_cea52c0e2f.png',
-  );
+  const [imageUrl, setImageUrl] = useState('https://media.viez.vn/prod/2021/8/26/large_image_cea52c0e2f.png',);
   const [permissions, setPermissions] = useState(null);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const handleGetCurrentUser = async () => {
     const user = firebase.auth().currentUser;

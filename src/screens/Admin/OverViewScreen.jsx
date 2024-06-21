@@ -10,6 +10,7 @@ import ViewNowStatus from '../../components/Admin/ViewNowStatus';
 import { IC_Bell, IC_Order } from '../../../assets/Customer/icons';
 import {firebase} from '../../../firebase/firebase';
 import { getCurrentUserData, getUserType } from '../../api/UserApi';
+
 export default function OverViewScreen({navigation}) {
     const [userData, setUserData] = useState();   
     const [imageUrl, setImageUrl] = useState('https://media.viez.vn/prod/2021/8/26/large_image_cea52c0e2f.png'); 

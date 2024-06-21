@@ -3,6 +3,7 @@ import { View, Text, Switch, StyleSheet, Button, Alert } from 'react-native';
 import { ref, onValue, set } from 'firebase/database';
 import { database } from '../../../firebase/firebase'; // Adjust the import based on your file structure
 import CUSTOM_COLOR from '../../constants/color';
+import ButtonDetail from '../../components/Admin/ButtonDetail';
 
 const FunctionPermission = ({ navigation }) => {
   const [permissions, setPermissions] = useState({
@@ -66,7 +67,17 @@ const FunctionPermission = ({ navigation }) => {
           </View>
         ))}
       </View>
-      <Button title="Lưu Thay Đổi" onPress={handleSave} />
+      <ButtonDetail
+          title={'Update Permisson'}
+          color={CUSTOM_COLOR.DarkOrange}
+          onPress={() => navigation.navigate('AddNewCategory')}
+          style={{
+            width: '90%',
+            height: 55,
+            marginVertical: 10,
+            padding: 10,
+          }}
+        />
     </View>
   );
 };
