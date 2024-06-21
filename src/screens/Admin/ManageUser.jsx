@@ -70,10 +70,7 @@ function ManageUser({navigation}){
   };
 
 
-  const handleFunctionPermisson = (item) => {
-    navigation.navigate("FuctionPermisson", {item})
-  };
-
+  const handleFunctionPermisson = (item) => {};
   const handleGetAllUser = async () => {
     const res = await getAllUsers();
     setUsers(res.data);

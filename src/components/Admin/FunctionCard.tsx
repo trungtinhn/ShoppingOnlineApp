@@ -8,8 +8,8 @@ const FunctionCard = (props: any) => {
     <TouchableOpacity style={styles.iconContainer} onPress={props.onPress}>
     <View
       style={{
-        width: '50%',
-        height: '80%',
+        width: 70,
+        height: 70,
         backgroundColor: CUSTOM_COLOR.FlushOrange,
         borderRadius: 10,
         justifyContent: 'center',

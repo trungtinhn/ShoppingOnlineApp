@@ -1,160 +1,113 @@
-import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Switch, StyleSheet, Button, Alert } from 'react-native';
+import { ref, onValue, set } from 'firebase/database';
+import { database } from '../../../firebase/firebase'; // Adjust the import based on your file structure
 import CUSTOM_COLOR from '../../constants/color';
-import FONT_FAMILY from '../../constants/font';
-import { useRoute } from '@react-navigation/native';
 
-export default function FuctionPermisson({ navigation }) {
-  const route = useRoute();
-  const { item } = route.params;
-  const user = item;
-
+const FunctionPermission = ({ navigation }) => {
   const [permissions, setPermissions] = useState({
-    category: user.PhanQuyen.includes('category'),
-    order: user.PhanQuyen.includes('order'),
-    promotion: user.PhanQuyen.includes('promotion'),
-    product: user.PhanQuyen.includes('product'),
+    category: false,
+    promotion: false,
+    product: false,
+    order: false,
+    user: false,
   });
 
-  const handlePermissionChange = (permission) => {
-    setPermissions((prevPermissions) => {
-      const updatedPermissions = {
-        ...prevPermissions,
-        [permission]: !prevPermissions[permission],
-      };
-      user.PhanQuyen = Object.keys(updatedPermissions).filter((key) => updatedPermissions[key]);
-      return updatedPermissions;
-    });
+  // Fetch permissions from Firebase
+  const fetchPermissions = async () => {
+    try {
+      const permissionsRef = ref(database, 'Permission');
+      onValue(permissionsRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          setPermissions(data);
+        } else {
+          Alert.alert('Error', 'No permissions data found');
+        }
+      });
+    } catch (error) {
+      Alert.alert('Error', 'Could not fetch permissions');
+    }
   };
 
-  const handleSave = () => {
-    // Save the updated permissions to the database or backend here
-    console.log('Updated Permissions:', user.PhanQuyen);
-    Alert.alert('Success', 'Permissions updated successfully');
-    navigation.goBack();
+  useEffect(() => {
+    fetchPermissions();
+  }, []);
+
+  // Handle save button press
+  const handleSave = async () => {
+    try {
+      const permissionsRef = ref(database, 'Permission');
+      await set(permissionsRef, permissions);
+      Alert.alert('Success', 'Permissions updated successfully', [
+        { text: 'OK', onPress: () => navigation.goBack() },
+      ]);
+    } catch (error) {
+      Alert.alert('Error', 'Could not update permissions');
+    }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.userInfoContainer}>
-        <Image source={{ uri: user.Avatar }} style={styles.avatar} />
-        <Text style={styles.userName}>{user.TenND}</Text>
+    <View style={styles.container}>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>Quản lý Quyền Hạn</Text>
       </View>
-      <View style={styles.permissionsContainer}>
-        <Text style={styles.permissionsTitle}>Assign Permissions</Text>
-        <View style={styles.permissionItem}>
-          <TouchableOpacity
-            style={[
-              styles.permissionButton,
-              permissions.category ? styles.permissionButtonActive : styles.permissionButtonInactive,
-            ]}
-            onPress={() => handlePermissionChange('category')}
-          >
-            <Text style={styles.permissionText}>Category</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.permissionItem}>
-          <TouchableOpacity
-            style={[
-              styles.permissionButton,
-              permissions.order ? styles.permissionButtonActive : styles.permissionButtonInactive,
-            ]}
-            onPress={() => handlePermissionChange('order')}
-          >
-            <Text style={styles.permissionText}>Order</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.permissionItem}>
-          <TouchableOpacity
-            style={[
-              styles.permissionButton,
-              permissions.promotion ? styles.permissionButtonActive : styles.permissionButtonInactive,
-            ]}
-            onPress={() => handlePermissionChange('promotion')}
-          >
-            <Text style={styles.permissionText}>Promotion</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.permissionItem}>
-          <TouchableOpacity
-            style={[
-              styles.permissionButton,
-              permissions.product ? styles.permissionButtonActive : styles.permissionButtonInactive,
-            ]}
-            onPress={() => handlePermissionChange('product')}
-          >
-            <Text style={styles.permissionText}>Product</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={styles.contentContainer}>
+        {Object.keys(permissions).map((key) => (
+          <View style={styles.switchContainer} key={key}>
+            <Text style={styles.switchLabel}>{`Quản lý ${key.charAt(0).toUpperCase() + key.slice(1)}`}</Text>
+            <Switch
+              value={permissions[key]}
+              onValueChange={(value) => setPermissions({ ...permissions, [key]: value })}
+              trackColor={{ false: CUSTOM_COLOR.Gray, true: CUSTOM_COLOR.FlushOrange }}
+              thumbColor={permissions[key] ? CUSTOM_COLOR.White : CUSTOM_COLOR.LightGray}
+              ios_backgroundColor="#3e3e3e"
+            />
+          </View>
+        ))}
       </View>
-
-      <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-        <Text style={styles.saveButtonText}>Save</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+      <Button title="Lưu Thay Đổi" onPress={handleSave} />
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
-    backgroundColor: CUSTOM_COLOR.White,
-    padding: 20,
-  },
-  userInfoContainer: {
+    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+    paddingHorizontal: 20,
+  },
+  titleContainer: {
     marginBottom: 20,
   },
-  avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 10,
-    resizeMode: 'cover',
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
-  userName: {
-    fontSize: 20,
-    fontFamily: FONT_FAMILY.Bold,
-    color: CUSTOM_COLOR.Black,
+  contentContainer: {
+    width: '100%',
   },
-  permissionsContainer: {
-    flex: 1,
-    marginBottom: 20,
-  },
-  permissionsTitle: {
-    fontSize: 18,
-    fontFamily: FONT_FAMILY.Bold,
-    color: CUSTOM_COLOR.Black,
-    marginBottom: 10,
-  },
-  permissionItem: {
-    marginBottom: 10,
-  },
-  permissionButton: {
-    padding: 15,
-    borderRadius: 10,
+  switchContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  permissionButtonActive: {
-    backgroundColor: CUSTOM_COLOR.Green,
-  },
-  permissionButtonInactive: {
-    backgroundColor: CUSTOM_COLOR.Gray,
-  },
-  permissionText: {
-    fontSize: 25,
-    color: CUSTOM_COLOR.White,
-  },
-  saveButton: {
-    backgroundColor: CUSTOM_COLOR.Blue,
-    padding: 15,
+    marginBottom: 15,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: '#ffffff',
     borderRadius: 10,
-    alignItems: 'center',
+    elevation: 3,
+    shadowColor: '#000', 
+    shadowOffset: { width: 0, height: 2 }, 
+    shadowOpacity: 0.25, 
+    shadowRadius: 3.84, 
   },
-  saveButtonText: {
+  switchLabel: {
     fontSize: 16,
-    fontFamily: FONT_FAMILY.Bold,
-    color: CUSTOM_COLOR.White,
   },
 });
+
+export default FunctionPermission;
