@@ -29,18 +29,16 @@ const socket = io("https://shoppingserver-yhbt.onrender.com", {
 });
 
 function ChatScreen({navigation, route}) {
-  const {item} = route.params;
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [userInfo, setUserInfo] = useState();
-  const adminId = {_id: "hRXiJhj9x5Os3ClIypL4AcsxInA2"};
+  const adminId = {_id: "66541fed38d9e79683b0b700"};
   useEffect(() => {
     const fetchUserData = async () => {
       const user = firebase.auth().currentUser;
       const res = await getUserType({MaND: user.uid});
       setUserInfo(res.data);
       setupSocketListeners(res.data, adminId);
-      
     };
 
     const setupSocketListeners = (userInfo, item) => {
@@ -61,15 +59,14 @@ function ChatScreen({navigation, route}) {
         };
       }
     };
-    console.log("hello")
     fetchUserData();
-  }, [item]);
+  }, []);
 
   const handleSendMessage = () => {
-    if (userInfo && item) {
+    if (userInfo && adminId) {
       const message = {
         senderId: userInfo._id,
-        recipientId: item._id,
+        recipientId: adminId._id,
         message: newMessage,
         timeStamp: new Date().toISOString(),
       };
