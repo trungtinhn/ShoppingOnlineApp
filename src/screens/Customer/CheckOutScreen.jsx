@@ -83,7 +83,7 @@ function CheckoutScreen({ navigation }) {
   };
 
   const HandlePayment = async () => {
-    if(payment === 'OnlineBanking'){
+    if(payment === 'Online Banking'){
       await initializePaymentSheet();
       await openPaymentSheet();
     }else{
