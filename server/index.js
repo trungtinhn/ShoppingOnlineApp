@@ -21,6 +21,7 @@ const orderRoutes = require("./routes/routesOrder");
 const paymentRoutes = require("./routes/routePayment");
 const permissionRoutes = require("./routes/routePermission");
 const knnRoutes = require('./routes/routeKnn');
+const messageRoutes = require('./routes/routeMessage');
 dotenv.config()
 mongoose.connect(process.env.MONGODB_URL.replace("<password>", process.env.MONGODB_PASSWORD)).then(() => {
     console.log("Database connected");
@@ -49,6 +50,8 @@ app.use('/api/order', orderRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/permissions', permissionRoutes);
 app.use('/api/knn', knnRoutes);
+app.use('/api/messages', messageRoutes);
+
 socketSetup(server);
 server.listen(8000, () => {
     console.log("Server running on port 8000");
