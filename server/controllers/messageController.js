@@ -9,7 +9,6 @@ const MessageController = {
       const users = await User.find({_id: {$ne: userId}});
       const summaries = await Promise.all(
         users.map(async user => {
-            console.log(user._id + userId)
           const latestMessage = await Message.findOne({
             $or: [
               {senderId: user._id, recipientId: userId},
@@ -27,7 +26,7 @@ const MessageController = {
             _id: user._id,
             Avatar: user.Avatar,
             TenND: user.TenND,
-            latestMessage: latestMessage ? latestMessage.message : null,
+            latestMessage: latestMessage ? latestMessage : null,
             latestTime: latestMessage ? latestMessage.timeStamp : null,
             unreadCount: unreadCount,
           };

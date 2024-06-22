@@ -1,5 +1,5 @@
 import {View, Text, Image, SafeAreaView, FlatList} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Search from '../../components/Admin/Search';
 import UserChat from '../../components/Admin/UserChat';
 import CUSTOM_COLOR from '../../constants/color';
@@ -9,12 +9,20 @@ import {PR_1} from '../../../assets/Customer/images';
 import {getAllUsers, getUserType} from '../../api/UserApi';
 import {firebase} from '../../../firebase/firebase';
 import {getChatSummary} from '../../api/MessageApi';
+import { useFocusEffect } from '@react-navigation/native';
 
 function Chat({navigation}) {
   const [imageUrl, setImageUrl] = useState();
   const [users, setUsers] = useState([]);
   const [userInfo, setUserInfo] = useState({});
   const [sumaryChat, setSumaryChat] = useState([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchUsers();
+    }, [])
+  );
+
   const fetchUsers = async () => {
     try {
       const user = firebase.auth().currentUser;
@@ -41,6 +49,7 @@ function Chat({navigation}) {
   useEffect(() => {
     fetchUsers();
   }, []);
+  
   return (
     <SafeAreaView style={{backgroundColor: CUSTOM_COLOR.White, flex: 1}}>
       <View
@@ -104,7 +113,7 @@ function Chat({navigation}) {
                 message={
                   !item.latestMessage
                     ? 'Customer just created an account'
-                    : item.latestMessage
+                    : item.latestMessage.senderId === userInfo._id ? `Bạn: ${item.latestMessage.message}`: item.latestMessage.message
                 }
                 onPress={() => {
                   // setSoLuongChuaDoc(item);
@@ -113,7 +122,6 @@ function Chat({navigation}) {
                 }}
                 time={!item.latestMessage ? null : `${hour}:${minute}p`}
                 notification={!item.latestMessage ? 0 : item.unreadCount}
-                //notification={item.SoLuongChuaDoc}
                 justCreate={
                   !item.latestMessage ? true : false
                 }

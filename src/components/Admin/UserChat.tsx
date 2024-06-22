@@ -28,6 +28,7 @@ const UserChat = (props: any) => {
           <Text style={{
             marginTop: 5,
             fontStyle: 'italic',
+            fontSize: 14, 
             fontWeight: props.notification == 0 && !props.justCreate ? 'normal' : "bold",
             color: props.notification == 0 && !props.justCreate ? CUSTOM_COLOR.Sliver : CUSTOM_COLOR.Black
 

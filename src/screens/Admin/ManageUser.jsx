@@ -65,12 +65,13 @@ function ManageUser({navigation}){
   }, []);
 
   const handleUserPress = user => {
-    // Navigate to the edit screen with the selected user data
     navigation.navigate('EditAccount', { user });
   };
 
 
-  const handleFunctionPermisson = (item) => {};
+  const handleRessetPassword = (item) => {
+    navigation.navigate("ForgetPassWord", {item: item});
+  };
   const handleGetAllUser = async () => {
     const res = await getAllUsers();
     setUsers(res.data);
@@ -89,7 +90,7 @@ const getUserData = async () => {
           source={{ uri: item.Avatar }}
           name={item.TenND}
           userType={item.LoaiND}
-          onPress={() => handleFunctionPermisson(item)}
+          onPress={() => handleRessetPassword(item)}
         />
       </View>
     </TouchableOpacity>)

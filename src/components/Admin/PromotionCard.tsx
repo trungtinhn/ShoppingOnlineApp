@@ -32,7 +32,7 @@ const PromotionCard = (props: any) => {
   const status = getPromotionStatus(props.start, props.end);
 
   return (
-    <TouchableOpacity style={styles.container} onPress={props.onPress}>
+    <TouchableOpacity style={styles.container} onPress={props.onPress} onLongPress={props.onLongPress}>
       <View style={styles.accountContainer}>
         <ImageBackground
           source={IMG_backgroundCard}

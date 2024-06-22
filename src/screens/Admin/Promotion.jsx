@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,7 +6,8 @@ import {
   View,
   Image,
   FlatList,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 
 import { IC_Back } from '../../../assets/Admin/icons'
@@ -14,40 +15,36 @@ import dayjs from 'dayjs';
 import PromotionButton from '../../components/Admin/PromotionButton';
 import CUSTOM_COLOR from '../../constants/color';
 import PromotionCard from '../../components/Admin/PromotionCard';
-import { getAllPromotions } from '../../api/PromotionApi';
-const sampleDataPromotion = [
-  {
-    NgayBatDau: new Date('2023-01-01T00:00:00Z'),
-    NgayKetThuc: new Date('2023-01-31T23:59:59Z'),
-    HinhAnhKM: 'https://example.com/image1.jpg',
-    TenKM: 'New Year Sale',
-    TiLe: 0.2,
-    DonToiThieu: 100,
-    Loai: 'Discount',
-  },
-  {
-    NgayBatDau: new Date('2023-02-01T00:00:00Z'),
-    NgayKetThuc: new Date('2023-02-14T23:59:59Z'),
-    HinhAnhKM: 'https://example.com/image2.jpg',
-    TenKM: 'Valentine Special',
-    TiLe: 0.3,
-    DonToiThieu: 50,
-    Loai: 'Discount',
-  },
-  {
-    NgayBatDau: new Date('2023-03-01T00:00:00Z'),
-    NgayKetThuc: new Date('2023-03-31T23:59:59Z'),
-    HinhAnhKM: 'https://example.com/image3.jpg',
-    TenKM: 'Spring Sale',
-    TiLe: 0.15,
-    DonToiThieu: 75,
-    Loai: 'Discount',
-  },
-];
+import { getAllPromotions, deletePromotion  } from '../../api/PromotionApi';
+import { useFocusEffect } from '@react-navigation/native';
 
 function Promotion({navigation}){
   const [dataPromotion, setDataPromotion] = useState([]);
-
+  useFocusEffect(
+    useCallback(() => {
+      getDataPromotion();
+    }, []),
+  );
+  const handleDelete = (item) => {
+    Alert.alert(
+      'Confirm Delete',
+      `Do you want to delete the promotion "${item.TenKM}"?`,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: async () => {
+            const res = await deletePromotion(item._id);
+            getDataPromotion();
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
   const getDataPromotion = async () => {
     const dataPromotion = await getAllPromotions();
     setDataPromotion(dataPromotion.data);
@@ -136,6 +133,7 @@ function Promotion({navigation}){
                   end={`${dayKT}/${monthKT}/${yearKT}`}
                   type={item.Loai}
                   onPress={() => navigation.navigate('EditPromotion', { item })}
+                  onLongPress={() => handleDelete(item)}
                 />
               );
             }}

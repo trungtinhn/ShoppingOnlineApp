@@ -70,7 +70,7 @@ const FunctionPermission = ({ navigation }) => {
       <ButtonDetail
           title={'Update Permisson'}
           color={CUSTOM_COLOR.DarkOrange}
-          onPress={() => navigation.navigate('AddNewCategory')}
+          onPress={() => navigation.goBack()}
           style={{
             width: '90%',
             height: 55,

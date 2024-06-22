@@ -31,6 +31,7 @@ import DetailChatScreen from '../../screens/Admin/DetailChat';
 import DeliveryScreen from '../../screens/Customer/DeliveryScreen';
 import DeTailDelivery from '../../screens/Customer/DetailDelivery';
 import FunctionPermisson from '../../screens/Admin/FunctionPermission';
+import ForgetPasswordScreen from '../../screens/Login_SignUp/ForgetPasswordScreen';
 const Stack = createNativeStackNavigator();
 
 const AdminNavigation = () => {
@@ -69,6 +70,7 @@ const AdminNavigation = () => {
             <Stack.Screen name="FunctionPermission" component={FunctionPermission} />
             <Stack.Screen name="DeliveryDetail" component={DeTailDelivery}/>
             <Stack.Screen name="FuctionPermisson" component={FunctionPermisson} />
+            <Stack.Screen name="ForgetPassWord" component={ForgetPasswordScreen} />
         </Stack.Navigator>
     </NavigationContainer>
   )

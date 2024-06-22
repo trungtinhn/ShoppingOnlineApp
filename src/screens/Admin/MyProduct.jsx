@@ -1,12 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { SafeAreaView, View, FlatList, StyleSheet } from "react-native";
-import BackTo from "../../components/Admin/BackTo";
-import ButtonDetail from "../../components/Admin/ButtonDetail";
-import Status from "../../components/Admin/Status";
-import CUSTOM_COLOR from "../../constants/color";
-import SearchButton from "../../components/Admin/SearchButton";
-import MyProductOne from "../../components/Admin/MyProductOne";
-import { getProductAvailable, getProductOnwait, getProductOutofstock, setProductStatus } from "../../api/ProductApi";
+import React, {useState, useEffect, useCallback} from 'react';
+import {SafeAreaView, View, FlatList, StyleSheet} from 'react-native';
+import BackTo from '../../components/Admin/BackTo';
+import ButtonDetail from '../../components/Admin/ButtonDetail';
+import Status from '../../components/Admin/Status';
+import CUSTOM_COLOR from '../../constants/color';
+import SearchButton from '../../components/Admin/SearchButton';
+import MyProductOne from '../../components/Admin/MyProductOne';
+import {
+  getProductAvailable,
+  getProductOnwait,
+  getProductOutofstock,
+  setProductStatus,
+} from '../../api/ProductApi';
+import {useFocusEffect} from '@react-navigation/native';
 export default function MyProduct({navigation}) {
   const [inventory, setinventory] = useState(true);
   const [Out, setOut] = useState(false);
@@ -16,26 +22,31 @@ export default function MyProduct({navigation}) {
   const [dataOutOfStock, setDataOutOfStock] = useState([]);
   const [dataInventory, setDataInventory] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
-  const handleSearch = (searchTerm, data) => {
-    
-  };
-  const ConfirmProduct = item => {
-    
-  };
-
+  const handleSearch = (searchTerm, data) => {};
+  const ConfirmProduct = item => {};
+  useFocusEffect(
+    useCallback(() => {
+      getDadaInventory();
+      getDadaOnWait();
+      getDadaOutOfStock();
+    }, []),
+  );
   const HideSanPham = async item => {
-    const res = await setProductStatus({productId: item._id, status: "onwait"});
-    if(res.status === 200){
-     getDadaOnWait();
-    }else{
+    const res = await setProductStatus({productId: item._id, status: 'onwait'});
+    if (res.status === 200) {
+      getDadaOnWait();
+    } else {
       console.log(res);
     }
   };
   const ShowSanPham = async item => {
-    const res = await setProductStatus({productId: item._id, status: "available"});
-    if(res.status === 200){
+    const res = await setProductStatus({
+      productId: item._id,
+      status: 'available',
+    });
+    if (res.status === 200) {
       getDadaInventory();
-    }else{
+    } else {
       console.log(res);
     }
   };
@@ -53,18 +64,22 @@ export default function MyProduct({navigation}) {
   const getDadaInventory = async () => {
     const res = await getProductAvailable();
     setDataInventory(res.data);
-    if(res.status === 200){
-      
-    }else{
-      console.log(res.err)
+    if (res.status === 200) {
+    } else {
+      console.log(res.err);
     }
   };
 
   useEffect(() => {
-    getDadaInventory()
-    getDadaOnWait()
+    getDadaInventory();
+    getDadaOnWait();
     getDadaOutOfStock();
-  }, [dataOnWait.length, dataInventory.length, dataOutOfStock.length, searchTerm]);
+  }, [
+    dataOnWait.length,
+    dataInventory.length,
+    dataOutOfStock.length,
+    searchTerm,
+  ]);
 
   if (inventory == true) {
     return (

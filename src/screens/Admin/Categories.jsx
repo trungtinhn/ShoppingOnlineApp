@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Image,
   SafeAreaView,
@@ -14,6 +14,7 @@ import { id } from 'date-fns/locale';
 import { IC_Back } from '../../../assets/Admin/icons';
 import BackTo from '../../components/Admin/BackTo';
 import { getCategory } from '../../api/CategoryApi';
+import { useFocusEffect } from '@react-navigation/native';
 export default function Categories({ navigation }) {
   const [dataCategories, setDataCategories] = useState([]);
 
@@ -21,7 +22,11 @@ export default function Categories({ navigation }) {
     const dataCategories = await getCategory();
     setDataCategories(dataCategories.data);
   };
-
+  useFocusEffect(
+    useCallback(() => {
+      getDataCategories();
+    }, [])
+  );
   useEffect(() => {
     getDataCategories();
   }, []);
