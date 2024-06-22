@@ -1,5 +1,5 @@
 import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback  } from 'react'
 import LoadingComponent from '../../components/LoadingComponent';
 import CUSTOM_COLOR from '../../constants/color';
 import FONT_FAMILY from '../../constants/font';
@@ -10,225 +10,210 @@ import ViewNowStatus from '../../components/Admin/ViewNowStatus';
 import { IC_Bell, IC_Order } from '../../../assets/Customer/icons';
 import {firebase} from '../../../firebase/firebase';
 import { getCurrentUserData, getUserType } from '../../api/UserApi';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function OverViewScreen({navigation}) {
-    const [userData, setUserData] = useState();   
-    const [imageUrl, setImageUrl] = useState('https://media.viez.vn/prod/2021/8/26/large_image_cea52c0e2f.png'); 
-    const handleGetCurrentUser = async () =>{
-      const user = firebase.auth().currentUser;
-      const res =  await getUserType({MaND: user.uid});
-      if(res.status === 200){
-        setUserData(res.data);
-        setImageUrl(res.data.Avatar)
-      }
+  const [userData, setUserData] = useState();   
+  const [imageUrl, setImageUrl] = useState('https://media.viez.vn/prod/2021/8/26/large_image_cea52c0e2f.png'); 
+  
+  const handleGetCurrentUser = async () => {
+    const user = firebase.auth().currentUser;
+    const res =  await getUserType({MaND: user.uid});
+    if(res.status === 200){
+      setUserData(res.data);
+      setImageUrl(res.data.Avatar);
     }
-    useEffect(()=>{
+  }
+
+  useFocusEffect(
+    useCallback(() => {
       handleGetCurrentUser();
     }, [])
-    return (
+  );
+
+  useEffect(() => {
+    handleGetCurrentUser();
+  }, []);
+
+  return (
     <SafeAreaView style={styles.container}>
       {userData ? (
         <>
-          <>
-            <View style={styles.menuContainer}>
-              <View style={{ width: 32, height: 37 }}>
-                <MenuIcon
-                  onPress={() => navigation.navigate('ChangeProfile')}
-                  source={IC_User}
-                />
-              </View>
+          <View style={styles.menuContainer}>
+            <View style={{ width: 32, height: 37 }}>
+              <MenuIcon
+                onPress={() => navigation.navigate('ChangeProfile')}
+                source={IC_User}
+              />
+            </View>
+            <View style={{ width: 10, height: '100%' }} />
+            <View style={{ width: 30, height: 30 }}>
+              <MenuIcon
+                onPress={() => navigation.navigate('Chat')}
+                source={IC_messenger}
+              />
+            </View>
+            <View style={{ width: 5, height: '100%' }} />
+            <View style={{ width: 32, height: 32, marginHorizontal: 5 }}>
+              <MenuIcon
+                onPress={() => {
+                  firebase.auth().signOut();
+                }}
+                source={IC_logout}
+              />
+            </View>
+            <View style={{ width: 10, height: '100%' }} />
+          </View>
+
+          <View style={styles.spaceContainer} />
+
+          <View style={styles.accountContainer}>
+            <View style={styles.infoContainer}>
               <View style={{ width: 10, height: '100%' }} />
-              <View style={{ width: 30, height: 30 }}>
-                <MenuIcon
-                  onPress={() => navigation.navigate('Chat')}
-                  source={IC_messenger}
-                />
-              </View>
-              {/* <View style={{width: 5, height: '100%'}} />
-                <View style={{width: 35, height: 35}}>
-                  <MenuIcon
-                    onPress={() => navigation.navigate('Notification')}
-                    source={IC_notification}
+              <View style={styles.avataContainer}>
+                {imageUrl ? (
+                  <Image
+                    source={{ uri: imageUrl }}
+                    style={{
+                      width: 90,
+                      height: 90,
+                      aspectRatio: 1,
+                      borderRadius: 60,
+                      resizeMode: 'center',
+                      borderColor: CUSTOM_COLOR.Black,
+                      borderWidth: 1,
+                    }}
                   />
-                </View> */}
-              <View style={{ width: 5, height: '100%' }} />
-              <View style={{ width: 32, height: 32, marginHorizontal: 5 }}>
-                <MenuIcon
-                  onPress={() => {
-                    firebase.auth().signOut();
-                  }}
-                  source={IC_logout}
-                />
+                ) : (
+                  <Image
+                    source={IC_User}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      aspectRatio: 1,
+                      borderRadius: 60,
+                      resizeMode: 'center',
+                      borderColor: CUSTOM_COLOR.Black,
+                      borderWidth: 1,
+                    }}
+                  />
+                )}
               </View>
-              <View style={{ width: 10, height: '100%' }} />
+              <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
+                <Text style={[styles.textViewStyles, { fontSize: 20 }]}>
+                  {userData.TenND}
+                </Text>
+                <View style={{ width: '100%', height: 5 }} />
+                <Text style={[styles.textViewStyles, { fontSize: 15 }]}>
+                  {userData.LoaiND}
+                </Text>
+              </View>
             </View>
-          </>
+            <View style={styles.viewShopContainer}>
+              <TouchableOpacity style={styles.butViewShopContainer}>
+                <Text
+                  style={{ color: CUSTOM_COLOR.Red }}
+                  onPress={() => navigation.navigate('ViewShopScreen')}
+                >
+                  View Shop
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
 
           <View style={styles.spaceContainer} />
 
-          <>
-            <View style={styles.accountContainer}>
-              <View style={styles.infoContainer}>
-                <View style={{ width: 10, height: '100%' }} />
-                <View style={styles.avataContainer}>
-                  {imageUrl ? (
-                    <Image
-                      source={{ uri: imageUrl }}
-                      style={{
-                        width: 90,
-                        height: 90,
-                        aspectRatio: 1,
-                        borderRadius: 60,
-                        resizeMode: 'center',
-                        borderColor: CUSTOM_COLOR.Black,
-                        borderWidth: 1,
-                      }}
-                    />
-                  ) : (
-                    <Image
-                      source={IC_User}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        aspectRatio: 1,
-                        borderRadius: 60,
-                        resizeMode: 'center',
-                        borderColor: CUSTOM_COLOR.Black,
-                        borderWidth: 1,
-                      }}
-                    />
-                  )}
-                </View>
-                <View
-                  style={{ flexDirection: 'column', justifyContent: 'center' }}>
-                  <Text style={[styles.textViewStyles, { fontSize: 20 }]}>
-                    {userData.TenND}
-                  </Text>
-                  <View style={{ width: '100%', height: 5 }} />
-                  <Text style={[styles.textViewStyles, { fontSize: 15 }]}>
-                    {userData.LoaiND}
-                  </Text>
-                </View>
+          <View style={styles.oderContainer}>
+            <View style={{ width: '100%', height: '5%' }} />
+            <View style={styles.textContainer}>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'flex-start',
+                }}
+              >
+                <Text style={styles.textViewStyles}>Order New</Text>
               </View>
-              <View style={styles.viewShopContainer}>
-                <TouchableOpacity style={styles.butViewShopContainer}>
-                  <Text
-                    style={{ color: CUSTOM_COLOR.Red }}
-                    onPress={() => navigation.navigate('ViewShopScreen')}>
-                    View Shop
-                  </Text>
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'flex-end',
+                }}
+              >
+                <Text
+                  style={styles.textViewStyles}
+                  onPress={() => navigation.navigate('Order')}
+                >
+                  View Now{' '}
+                </Text>
+              </TouchableOpacity>
             </View>
-          </>
+            <View style={styles.listOderConatiner}>
+              <ViewNowStatus number={1} status={"Confirm"} />
+              <ViewNowStatus number={1} status={"On wait"} />
+              <ViewNowStatus number={1} status={"Delivering"} />
+              <ViewNowStatus number={1} status={"Delivered"} />
+            </View>
+          </View>
 
           <View style={styles.spaceContainer} />
 
-          <>
-            <View style={styles.oderContainer}>
-              <View style={{ width: '100%', height: '5%' }} />
-              <View style={styles.textContainer}>
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                  }}>
-                  <Text style={styles.textViewStyles}>Order New</Text>
-                </View>
-                <TouchableOpacity
-                  style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'flex-end',
-                  }}>
-                  <Text
-                    style={styles.textViewStyles}
-                    onPress={() => navigation.navigate('Order')}>
-                    View Now{' '}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.listOderConatiner}>
-                {/* <FlatList
-                  horizontal={true}
-                  data={Order}
-                  keyExtractor={item => item.id}
-                  renderItem={({ item }) => {
-                    return (
-                      <ViewNow number={item.number} status={item.status} />
-                    );
-                  }}
-                /> */}
-
-                <ViewNowStatus number={1} status={"Confirm"} />
-                <ViewNowStatus number={1} status={"On wait"} />
-                <ViewNowStatus number={1} status={"Delivering"} />
-                <ViewNowStatus number={1} status={"Delivered"} />
-              </View>
-            </View>
-          </>
-
-          <View style={styles.spaceContainer} />
-
-          <>
-            <View style={styles.functionContainer}>
+          <View style={styles.functionContainer}>
+            <View style={styles.unitContainer}>
               <View style={styles.unitContainer}>
-                <View style={styles.unitContainer}>
-                  <FunctionCard
-                    onPress={() => navigation.navigate('Categories')}
-                    source={IC_Catgory}
-                    text="Categories"
-                  />
-                </View>
-                <View style={styles.unitContainer}>
-                  <FunctionCard
-                    onPress={() => navigation.navigate('MyProduct')}
-                    source={IC_product}
-                    text="Products"
-                  />
-                </View>
-                <View style={styles.unitContainer}>
-                  <FunctionCard
-                    onPress={() => navigation.navigate('Order')}
-                    source={IC_order}
-                    text="Orders"
-                  />
-                </View>
-
+                <FunctionCard
+                  onPress={() => navigation.navigate('Categories')}
+                  source={IC_Catgory}
+                  text="Categories"
+                />
               </View>
               <View style={styles.unitContainer}>
-                <View style={styles.unitContainer}>
-                  <FunctionCard
-                    onPress={() => navigation.navigate('Promotion')}
-                    source={IC_promotions}
-                    text="Promotions"
-                  />
-                </View>
-                <View style={styles.unitContainer}>
-                  <FunctionCard
-                    onPress={() => navigation.navigate('FunctionPermission')}
-                    source={IC_FunctionPermission}
-                    text="Permission"
-                  />
-                </View>
-                <View style={styles.unitContainer}>
-                  <FunctionCard
-                    onPress={() => navigation.navigate('ManageUser')}
-                    source={IC_user}
-                    text="Manage User"
-                  />
-                </View>
-
+                <FunctionCard
+                  onPress={() => navigation.navigate('MyProduct')}
+                  source={IC_product}
+                  text="Products"
+                />
+              </View>
+              <View style={styles.unitContainer}>
+                <FunctionCard
+                  onPress={() => navigation.navigate('Order')}
+                  source={IC_order}
+                  text="Orders"
+                />
               </View>
             </View>
-          </>
+            <View style={styles.unitContainer}>
+              <View style={styles.unitContainer}>
+                <FunctionCard
+                  onPress={() => navigation.navigate('Promotion')}
+                  source={IC_promotions}
+                  text="Promotions"
+                />
+              </View>
+              <View style={styles.unitContainer}>
+                <FunctionCard
+                  onPress={() => navigation.navigate('FunctionPermission')}
+                  source={IC_FunctionPermission}
+                  text="Permission"
+                />
+              </View>
+              <View style={styles.unitContainer}>
+                <FunctionCard
+                  onPress={() => navigation.navigate('ManageUser')}
+                  source={IC_user}
+                  text="Manage User"
+                />
+              </View>
+            </View>
+          </View>
         </>
       ) : (
         <LoadingComponent text="Loading data..." />
       )}
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({

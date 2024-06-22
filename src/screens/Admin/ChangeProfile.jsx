@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -9,8 +9,8 @@ import {
   Image,
   Text,
   TextInput,
-  Platform,
   Button,
+  Alert,
 } from 'react-native';
 import { IC_Next, IC_User } from '../../../assets/Admin/icons';
 import CUSTOM_COLOR from '../../constants/color';
@@ -21,173 +21,63 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import CustomHeader from '../../components/Admin/CustomHeader';
 import { IMG_Rectangle } from '../../../assets/Login_SignUp/images';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { Account } from './ViewShopScreen';
-function ChangeProfile({navigation}) {
+import { firebase } from '../../../firebase/firebase';
+import { getUserType, updateUser, updateUserProfile } from '../../api/UserApi';
+import {ref, uploadBytes, getDownloadURL} from 'firebase/storage';
+import { Storage } from '../../../firebase/firebase';
+import { updateAddress } from '../../../server/controllers/addressController';
+
+function ChangeProfile({ navigation }) {
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [birth, setBirth] = useState('');
   const [address, setAddress] = useState('');
   const [gender, setGender] = useState('');
   const [isFocus, setIsFocus] = useState(false);
-  const [danhMuc, setDanhMuc] = useState([]);
   const [value, setValue] = useState(null);
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
-  const [text, setText] = useState('01/01/2023');
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState(null);
   const [userData, setUserData] = useState({});
   const [imageUrl, setImageUrl] = useState(null);
   const [backgroundUrl, setBackgroundUrl] = useState(null);
-  const [image, setImage] = useState();
+  const [image, setImage] = useState(null);
 
-  const gioiTinh = [
-    {
-      id: 'Nam',
-      title: 'Nam',
-    },
-    {
-      id: 'Nữ',
-      title: 'Nữ',
-    },
+  const genders = [
+    { id: 'Nam', title: 'Nam' },
+    { id: 'Nữ', title: 'Nữ' },
   ];
 
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
+    const currentDate = selectedDate || date;
     setShowPicker(false);
-
-    let tempDate = new Date(currentDate);
-    let fDate =
-      tempDate.getDate() +
-      '/' +
-      (tempDate.getMonth() + 1) +
-      '/' +
-      tempDate.getFullYear();
-
-    console.log('Date of birth: ', fDate);
-    setBirth(fDate);
-    setDate(selectedDate);
+    setDate(currentDate);
+    const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
+    setBirth(formattedDate);
   };
 
   const showDateTimePicker = () => {
     setShowPicker(true);
   };
 
-  const fetchUserData = async userId => {
+  const fetchUserData = async () => {
     try {
-      
+      const user = firebase.auth().currentUser;
+      const res = await getUserType({ MaND: user.uid });
+      const birthDay = new Date(res.data.NgaySinh);
+      const formattedDate = `${birthDay.getDate()}/${birthDay.getMonth() + 1}/${birthDay.getFullYear()}`;
+      setUserData(res.data);
+      setFullName(res.data.TenND || '');
+      setPhoneNumber(res.data.Phone || '');
+      setBirth(formattedDate || '');
+      setAddress(res.data.DiaChi || '');
+      setGender(res.data.GioiTinh || '');
+      setImageUrl(res.data.Avatar || '');
+      setBackgroundUrl(res.data.backgroundUrl || '');
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
   };
-
-  const fetchImageUrl = async (documentId, fieldName) => {
-    try {
-     
-    } catch (error) {
-      console.error('Error fetching image URL:', error);
-      return null;
-    }
-  };
-
-  const fetchBackgroundUrl = async (documentId, fieldName) => {
-    try {
-    
-      
-    } catch (error) {
-      console.error('Error fetching image URL:', error);
-      return null;
-    }
-  };
-
-  const updateFullname = async (documentId, newData) => {
-    try {
-     
-
-      console.log('Profile updated successfully!');
-    } catch (error) {
-      console.error('Error updating profile:', error);
-    }
-  };
-
-  const updatePhoneNumber = async (documentId, newData) => {
-    try {
-      
-      console.log('Profile updated successfully!');
-    } catch (error) {
-      console.error('Error updating profile:', error);
-    }
-  };
-
-  const updateAddress = async (documentId, newData) => {
-    try {
-      
-    } catch (error) {
-      console.error('Error updating profile:', error);
-    }
-  };
-
-  const updateBirth = async (documentId, newData) => {
-    try {
-    
-
-      console.log('Profile updated successfully!');
-    } catch (error) {
-      console.error('Error updating profile:', error);
-    }
-  };
-
-  const UploadFile = async () => {
-    try {
-      
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const updateAvatar = async (documentId, avatar) => {
-    const urlImage = image ? await UploadFile() : imageUrl;
-    console.log(urlImage);
-
-    try {
-     
-    } catch (error) {
-      console.error('Error updating profile:', error);
-    }
-  };
-
-  const updateGender = async (documentId, newData) => {
-    try {
-     
-    } catch (error) {
-      console.error('Error updating profile:', error);
-    }
-  };
-
-  useEffect(() => {
-    setTimeout(() => {
-      // Assume data is fetched here
-      const fetchedData = 'Sample Data';
-      setData(fetchedData);
-      setIsLoading(false);
-    }, 2000);
-
-    const getCurrentDate = () => {
-      const currentDate = date;
-      let tempDate = new Date(currentDate);
-      let fDate =
-        tempDate.getDate() +
-        '/' +
-        (tempDate.getMonth() + 1) +
-        '/' +
-        tempDate.getFullYear();
-
-      console.log('Current date: ', fDate);
-      setBirth(fDate);
-    };
-
-    getCurrentDate();
-  }, []);
 
   const chooseImage = () => {
     const options = {
@@ -196,8 +86,7 @@ function ChangeProfile({navigation}) {
         skipBackup: true,
         path: 'images',
       },
-
-      selectionLimit: 5,
+      selectionLimit: 1,
       quality: 1,
     };
 
@@ -208,455 +97,307 @@ function ChangeProfile({navigation}) {
         console.log('ImagePicker Error: ', response.error);
       } else {
         setImage(response.assets[0]);
-        console.log(image);
       }
     });
   };
 
+  const upLoadImage = async ({image}) => {
+    try {
+      setIsLoading(true)
+      const blob = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          resolve(xhr.response);
+        };
+        xhr.onerror = function (e) {
+          reject(new TypeError('Network request failed'));
+        };
+        xhr.responseType = 'blob';
+        xhr.open('GET', image.uri, true);
+        xhr.send(null);
+      });
+      const storageRef = ref(Storage, `images/users/image-${Date.now()}`);
+      const snapshot = await uploadBytes(storageRef, blob);
+      console.log('Upload successfully!');
+      const url = await getDownloadURL(snapshot.ref);
+      console.log('Get URL successfully');
+      return url;
+    } catch (error) {
+      console.log("up load error: "  + error);
+    }
+  }
+
+  const handleSave = async () => {
+    try {
+      let uploadedImageUrl = ""
+      if (image) {
+        uploadedImageUrl = await upLoadImage({image: image});
+        setIsLoading(false)
+      }
+      const updatedData = {
+        "_id": userData._id,
+        "TenND": fullName,
+        "Phone": phoneNumber,
+        "NgaySinh": date,
+        "DiaChi": address,
+        "GioiTinh": gender,
+        "Avatar": uploadedImageUrl,
+        "LoaiND": userData.LoaiND,
+        "MaND": userData.MaND,
+        "Email": userData.Email,
+      };
+      console.log(updatedData)
+      const res = await updateUser({MaND: userData.MaND, data: updatedData}); // Assuming updateUserProfile updates the user's profile in your backend
+      if(res.status === 200){
+        Alert.alert('Notification', 'Change Profile Sucess!', [
+          {text: 'OK', onPress: () => navigation.goBack(), style: 'cancel'},
+        ]);
+      }else{
+        console.log(res);
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+    setIsLoading(false);
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
-      {userData ? (
+      {isLoading ? (
+        <LoadingComponent text="Loading data..." />
+      ) : (
         <>
-          <>
-            <TouchableOpacity style={styles.backgroundContainer}>
-              <ImageBackground
-                source={backgroundUrl ? {uri: backgroundUrl} : IMG_Rectangle}
-                resizeMode="cover"
-                style={styles.image}>
-                <>
-                  <View style={styles.headerContainer}>
-                    <CustomHeader
-                      onPress={() => navigation.goBack()}
-                      title="Account/ Change Profile"
-                    />
-                  </View>
-                </>
-
-                <>
-                  <View style={styles.avataContainer}>
-                    <TouchableOpacity
-                      style={styles.avataStyle}
-                      onPress={() => chooseImage()}>
-                      {imageUrl ? (
-                        <Image
-                          source={image ? image : {uri: imageUrl}}
-                          style={styles.avataStyle}
-                        />
-                      ) : (
-                        <Image source={IC_User} style={styles.avataStyle} />
-                      )}
-                    </TouchableOpacity>
-                  </View>
-                </>
-              </ImageBackground>
-            </TouchableOpacity>
-          </>
-          <View style={{width: '100%', height: '3%'}} />
-          <>
-              <ScrollView style={{width: '90%', marginHorizontal: '5%',}}>
-                <>
-                  <View style={[styles.inputContainer, {height: 90}]}>
-                    <View style={{width: '100%', height: 10}} />
-                    <View style={{flex: 1, flexDirection: 'row'}}>
-                      <View
-                        style={[
-                          styles.unitTitleContainer,
-                          {justifyContent: 'flex-start'},
-                        ]}>
-                        <View style={{width: '10%', height: '100%'}} />
-                        <Text style={styles.titleInputStyle}>Full name</Text>
-                        <Text
-                          style={[
-                            styles.titleInputStyle,
-                            {color: CUSTOM_COLOR.Red},
-                          ]}>
-                          {' '}
-                          *
-                        </Text>
-                      </View>
-                      <View
-                        style={[
-                          styles.unitTitleContainer,
-                          {justifyContent: 'flex-end'},
-                        ]}>
-                        {fullName ? (
-                          <Text style={styles.titleInputStyle}>
-                            {fullName.length}/50
-                          </Text>
-                        ) : null}
-                        <View style={{width: '10%', height: '100%'}} />
-                      </View>
-                    </View>
-                    <View style={{flex: 2, flexDirection: 'row'}}>
-                      <View style={{width: '5%', height: '100%'}} />
-                      <TextInput
-                        style={{flex: 1, fontSize: 17}}
-                        onChangeText={setFullName}
-                        value={fullName}
-                      />
-                      <View style={{width: '5%', height: '100%'}} />
-                    </View>
-                  </View>
-                </>
-
-                <View style={{width: '100%', height: 15}} />
-
-                <>
-                  <View style={[styles.inputContainer, {height: 90}]}>
-                    <View style={{width: '100%', height: 10}} />
-                    <View style={{flex: 1, flexDirection: 'row'}}>
-                      <View
-                        style={[
-                          styles.unitTitleContainer,
-                          {justifyContent: 'flex-start'},
-                        ]}>
-                        <View style={{width: '10%', height: '100%'}} />
-                        <Text style={styles.titleInputStyle}>
-                          Date of birth
-                        </Text>
-                        <Text
-                          style={[
-                            styles.titleInputStyle,
-                            {color: CUSTOM_COLOR.Red},
-                          ]}>
-                          {' '}
-                          *
-                        </Text>
-                      </View>
-                      <View
-                        style={[
-                          styles.unitTitleContainer,
-                          {justifyContent: 'flex-end'},
-                        ]}>
-                        <View style={{width: '10%', height: '100%'}} />
-                      </View>
-                    </View>
-                    <View style={{flex: 2, flexDirection: 'row'}}>
-                      <View style={{width: '5%', height: '100%'}} />
-                      <TouchableOpacity
-                        style={styles.dateStyle}
-                        onPress={showDateTimePicker}>
-                        <Text style={{fontSize: 17, color: CUSTOM_COLOR.Black}}>
-                          {' '}
-                          {birth}
-                        </Text>
-                      </TouchableOpacity>
-                      {showPicker && (
-                        <DateTimePicker
-                          value={date}
-                          mode="date" // Can be "date", "time", or "datetime"
-                          display="spinner" // Can be "default", "spinner", or "calendar"
-                          onChange={onChange}
-                        />
-                      )}
-                      <View style={{width: '5%', height: '100%'}} />
-                    </View>
-                  </View>
-                </>
-
-                <View style={{width: '100%', height: 15}} />
-
-                <>
-                  <View style={[styles.inputContainer, {height: 90}]}>
-                    <View style={{width: '100%', height: 10}} />
-                    <View style={{flex: 1, flexDirection: 'row'}}>
-                      <View
-                        style={[
-                          styles.unitTitleContainer,
-                          {justifyContent: 'flex-start'},
-                        ]}>
-                        <View style={{width: '5%', height: '100%'}} />
-                        <Text style={styles.titleInputStyle}>Gender</Text>
-                        <Text
-                          style={[
-                            styles.titleInputStyle,
-                            {color: CUSTOM_COLOR.Red},
-                          ]}>
-                          {' '}
-                          *
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={{flex: 2, flexDirection: 'row'}}>
-                      <View style={{width: '5%', height: '100%'}} />
-                      <Dropdown
-                        style={[
-                          styles.comboType,
-                          isFocus && {borderColor: 'blue'},
-                        ]}
-                        placeholderStyle={styles.placeholderStyle}
-                        selectedTextStyle={styles.selectedTextStyle}
-                        inputSearchStyle={styles.inputSearchStyle}
-                        iconStyle={styles.iconStyle}
-                        data={gioiTinh}
-                        search
-                        maxHeight={200}
-                        labelField="title"
-                        valueField="id"
-                        placeholder={!isFocus ? 'Select item' : '...'}
-                        searchPlaceholder="Search..."
-                        value={value}
-                        onFocus={() => setIsFocus(true)}
-                        onBlur={() => setIsFocus(false)}
-                        onChange={item => {
-                          setValue(item.id);
-                          setIsFocus(false);
-                          setGender(item.id);
-                        }}
-                      />
-                    </View>
-                  </View>
-                </>
-
-                <View style={{width: '100%', height: 15}} />
-
-                <>
-                  <View style={[styles.inputContainer, {height: 90}]}>
-                    <View style={{width: '100%', height: 10}} />
-                    <View style={{flex: 1, flexDirection: 'row'}}>
-                      <View
-                        style={[
-                          styles.unitTitleContainer,
-                          {justifyContent: 'flex-start'},
-                        ]}>
-                        <View style={{width: '10%', height: '100%'}} />
-                        <Text style={styles.titleInputStyle}>Address</Text>
-                        <Text
-                          style={[
-                            styles.titleInputStyle,
-                            {color: CUSTOM_COLOR.Red},
-                          ]}>
-                          {' '}
-                          *
-                        </Text>
-                      </View>
-                      <View
-                        style={[
-                          styles.unitTitleContainer,
-                          {justifyContent: 'flex-end'},
-                        ]}>
-                        {address ? (
-                          <Text style={styles.titleInputStyle}>
-                            {address.length}/150
-                          </Text>
-                        ) : null}
-                        <View style={{width: '10%', height: '100%'}} />
-                      </View>
-                    </View>
-                    <View style={{flex: 2, flexDirection: 'row'}}>
-                      <View style={{width: '5%', height: '100%'}} />
-                      <TextInput
-                        style={{flex: 1, fontSize: 17}}
-                        onChangeText={setAddress}
-                        value={address}
-                      />
-                      <View style={{width: '5%', height: '100%'}} />
-                    </View>
-                  </View>
-                </>
-
-                <View style={{width: '100%', height: 15}} />
-
-                <>
-                  <View style={[styles.inputContainer, {height: 90}]}>
-                    <View style={{width: '100%', height: 10}} />
-                    <View style={{flex: 1, flexDirection: 'row'}}>
-                      <View
-                        style={[
-                          styles.unitTitleContainer,
-                          {justifyContent: 'flex-start'},
-                        ]}>
-                        <View style={{width: '10%', height: '100%'}} />
-                        <Text style={styles.titleInputStyle}>Phone number</Text>
-                        <Text
-                          style={[
-                            styles.titleInputStyle,
-                            {color: CUSTOM_COLOR.Red},
-                          ]}>
-                          {' '}
-                          *
-                        </Text>
-                      </View>
-                      <View
-                        style={[
-                          styles.unitTitleContainer,
-                          {justifyContent: 'flex-end'},
-                        ]}>
-                        {phoneNumber ? (
-                          <Text style={styles.titleInputStyle}>
-                            {phoneNumber.length}/10
-                          </Text>
-                        ) : null}
-                        <View style={{width: '10%', height: '100%'}} />
-                      </View>
-                    </View>
-                    <View style={{flex: 2, flexDirection: 'row'}}>
-                      <View style={{width: '5%', height: '100%'}} />
-                      <TextInput
-                        style={{flex: 1, fontSize: 17}}
-                        onChangeText={setPhoneNumber}
-                        value={phoneNumber}
-                        keyboardType="phone-pad"
-                      />
-                      <View style={{width: '5%', height: '100%'}} />
-                    </View>
-                  </View>
-                </>
-
-                <View style={{width: '100%', height: 15}} />
-
-                <>
-                  <View
-                    style={{
-                      height: 70,
-                      width: '100%',
-                      elevation: 1.5,
-                      borderRadius: 0.5,
-                      shadowColor: CUSTOM_COLOR.Black,
-                      flexDirection: 'row',
-                    }}>
-                    <View style={{flex: 1, flexDirection: 'row'}}>
-                      <View
-                        style={[
-                          styles.unitTitleContainer,
-                          {justifyContent: 'flex-start'},
-                        ]}>
-                        <View style={{width: '10%', height: '100%'}} />
-                        <Text style={styles.titleInputStyle}>Password</Text>
-                        <Text
-                          style={[
-                            styles.titleInputStyle,
-                            {color: CUSTOM_COLOR.Red},
-                          ]}>
-                          {' '}
-                          *
-                        </Text>
-                      </View>
-                    </View>
-                    <View
-                      style={{
-                        flex: 2,
-                        justifyContent: 'center',
-                        alignItems: 'flex-end',
-                      }}>
-                      <TouchableOpacity
-                        style={styles.buttonChangePasswordContainer}>
-                        <Text
-                          style={{
-                            color: CUSTOM_COLOR.Black,
-                            fontWeight: 'bold',
-                          }}
-                          onPress={() => navigation.navigate('ChangePassword')}>
-                          Change Password
-                        </Text>
-                        <Image
-                          source={IC_Next}
-                          style={{width: 25, height: 10}}
-                          resizeMode="center"
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </>
-
-                <View style={{width: '100%', height: 15}} />
-                <View style={{width: '100%', height: 65}}>
-                <View style={styles.buttonContainer}>
-                  <CustomButton
-                    type="primary"
-                    text="Save"
-                    onPress={() => {
-                      
-                    }}
-                  />
+          <TouchableOpacity style={styles.backgroundContainer}>
+            <ImageBackground
+              source={backgroundUrl ? { uri: backgroundUrl } : IMG_Rectangle}
+              resizeMode="cover"
+              style={styles.image}
+            >
+              <View style={styles.headerContainer}>
+                <CustomHeader onPress={() => navigation.goBack()} title="Account/ Change Profile" />
+              </View>
+              <View style={styles.avataContainer}>
+                <TouchableOpacity style={styles.avataStyle} onPress={chooseImage}>
+                  {imageUrl ? (
+                    <Image source={image ? { uri: image.uri } : { uri: imageUrl }} style={styles.avataStyle} />
+                  ) : (
+                    <Image source={IC_User} style={styles.avataStyle} />
+                  )}
+                </TouchableOpacity>
+              </View>
+            </ImageBackground>
+          </TouchableOpacity>
+          <View style={{ width: '100%', height: '3%' }} />
+          <ScrollView style={{ width: '90%', marginHorizontal: '5%' }}>
+            <View style={[styles.inputContainer, { height: 90 }]}>
+              <View style={{ width: '100%', height: 10 }} />
+              <View style={{ flex: 1, flexDirection: 'row' }}>
+                <View style={[styles.unitTitleContainer, { justifyContent: 'flex-start' }]}>
+                  <View style={{ width: '10%', height: '100%' }} />
+                  <Text style={styles.titleInputStyle}>Full name</Text>
+                  <Text style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}> *</Text>
+                </View>
+                <View style={[styles.unitTitleContainer, { justifyContent: 'flex-end' }]}>
+                  {fullName ? (
+                    <Text style={styles.titleInputStyle}>{fullName.length}/50</Text>
+                  ) : null}
+                  <View style={{ width: '10%', height: '100%' }} />
                 </View>
               </View>
-                <></>
-              </ScrollView>
-          </>
+              <View style={{ flex: 2, flexDirection: 'row' }}>
+                <View style={{ width: '5%', height: '100%' }} />
+                <TextInput
+                  style={{ flex: 1, fontSize: 17 }}
+                  onChangeText={setFullName}
+                  value={fullName}
+                />
+                <View style={{ width: '5%', height: '100%' }} />
+              </View>
+            </View>
+            <View style={{ width: '100%', height: 15 }} />
+            <View style={[styles.inputContainer, { height: 90 }]}>
+              <View style={{ width: '100%', height: 10 }} />
+              <View style={{ flex: 1, flexDirection: 'row' }}>
+                <View style={[styles.unitTitleContainer, { justifyContent: 'flex-start' }]}>
+                  <View style={{ width: '10%', height: '100%' }} />
+                  <Text style={styles.titleInputStyle}>Date of birth</Text>
+                  <Text style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}> *</Text>
+                </View>
+                <View style={[styles.unitTitleContainer, { justifyContent: 'flex-end' }]}>
+                  <View style={{ width: '10%', height: '100%' }} />
+                </View>
+              </View>
+              <View style={{ flex: 2, flexDirection: 'row' }}>
+                <View style={{ width: '5%', height: '100%' }} />
+                <TouchableOpacity style={styles.dateStyle} onPress={showDateTimePicker}>
+                  <Text style={{ fontSize: 17, color: CUSTOM_COLOR.Black }}>{birth}</Text>
+                </TouchableOpacity>
+                {showPicker && (
+                  <DateTimePicker
+                    value={date}
+                    mode="date"
+                    display="spinner"
+                    onChange={onChange}
+                  />
+                )}
+                <View style={{ width: '5%', height: '100%' }} />
+              </View>
+            </View>
+            <View style={{ width: '100%', height: 15 }} />
+            <View style={[styles.inputContainer, { height: 90 }]}>
+              <View style={{ width: '100%', height: 10 }} />
+              <View style={{ flex: 1, flexDirection: 'row' }}>
+                <View style={[styles.unitTitleContainer, { justifyContent: 'flex-start' }]}>
+                  <View style={{ width: '5%', height: '100%' }} />
+                  <Text style={styles.titleInputStyle}>Gender</Text>
+                  <Text style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}> *</Text>
+                </View>
+              </View>
+              <View style={{ flex: 2, flexDirection: 'row' }}>
+                <View style={{ width: '5%', height: '100%' }} />
+                <Dropdown
+                  style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  inputSearchStyle={styles.inputSearchStyle}
+                  data={genders}
+                  search
+                  maxHeight={300}
+                  labelField="title"
+                  valueField="id"
+                  placeholder={!isFocus ? 'Select gender' : '...'}
+                  searchPlaceholder="Search..."
+                  value={gender}
+                  onFocus={() => setIsFocus(true)}
+                  onBlur={() => setIsFocus(false)}
+                  onChange={item => {
+                    setGender(item.id);
+                    setIsFocus(false);
+                  }}
+                />
+                <View style={{ width: '5%', height: '100%' }} />
+              </View>
+            </View>
+            <View style={{ width: '100%', height: 15 }} />
+            <View style={[styles.inputContainer, { height: 90 }]}>
+              <View style={{ width: '100%', height: 10 }} />
+              <View style={{ flex: 1, flexDirection: 'row' }}>
+                <View style={[styles.unitTitleContainer, { justifyContent: 'flex-start' }]}>
+                  <View style={{ width: '10%', height: '100%' }} />
+                  <Text style={styles.titleInputStyle}>Phone number</Text>
+                  <Text style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}> *</Text>
+                </View>
+                <View style={[styles.unitTitleContainer, { justifyContent: 'flex-end' }]}>
+                  {phoneNumber ? (
+                    <Text style={styles.titleInputStyle}>{phoneNumber.length}/10</Text>
+                  ) : null}
+                  <View style={{ width: '10%', height: '100%' }} />
+                </View>
+              </View>
+              <View style={{ flex: 2, flexDirection: 'row' }}>
+                <View style={{ width: '5%', height: '100%' }} />
+                <TextInput
+                  style={{ flex: 1, fontSize: 17 }}
+                  onChangeText={setPhoneNumber}
+                  value={phoneNumber}
+                />
+                <View style={{ width: '5%', height: '100%' }} />
+              </View>
+            </View>
+            <View style={{ width: '100%', height: 15 }} />
+            <View style={[styles.inputContainer, { height: 90 }]}>
+              <View style={{ width: '100%', height: 10 }} />
+              <View style={{ flex: 1, flexDirection: 'row' }}>
+                <View style={[styles.unitTitleContainer, { justifyContent: 'flex-start' }]}>
+                  <View style={{ width: '10%', height: '100%' }} />
+                  <Text style={styles.titleInputStyle}>Address</Text>
+                  <Text style={[styles.titleInputStyle, { color: CUSTOM_COLOR.Red }]}> *</Text>
+                </View>
+              </View>
+              <View style={{ flex: 2, flexDirection: 'row' }}>
+                <View style={{ width: '5%', height: '100%' }} />
+                <TextInput
+                  style={{ flex: 1, fontSize: 17 }}
+                  onChangeText={setAddress}
+                  value={address}
+                />
+                <View style={{ width: '5%', height: '100%' }} />
+              </View>
+            </View>
+            <View style={{ width: '100%', height: 15 }} />
+          </ScrollView>
+          <CustomButton type="primary" text="SAVE" onPress={handleSave} />
         </>
-      ) : (
-        <LoadingComponent text="Loading data..." />
       )}
     </SafeAreaView>
   );
-};
+}
+
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: CUSTOM_COLOR.White,
-  },
-  headerContainer: {
-    width: '90%',
-    height: '32%',
-    marginHorizontal: '5%',
+    alignItems: 'center',
   },
   backgroundContainer: {
     width: '100%',
     height: 180,
+    alignItems: 'center',
   },
   image: {
     flex: 1,
+    justifyContent: 'flex-start',
+    width: '100%',
+    alignItems: 'center',
+  },
+  headerContainer: {
+    width: '100%',
+    height: '50%',
   },
   avataContainer: {
-    width: '100%',
-    height: '67%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonChangePasswordContainer: {
-    width: '60%',
-    height: '70%',
-    marginRight: '5%',
-    borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
+    position: 'absolute',
+    bottom: "10%",
   },
   avataStyle: {
-    width: 100,
     height: 100,
-    // aspectRatio: 1,
+    width: 100,
     borderRadius: 50,
-    resizeMode: 'contain',
-    borderColor: CUSTOM_COLOR.Black,
     borderWidth: 1,
-  },
-  bodyContainer: {
-    width: '90%',
-    marginHorizontal: '5%',
+    borderColor: CUSTOM_COLOR.White,
   },
   inputContainer: {
     width: '100%',
-    elevation: 1.5,
-    borderRadius: 0.5,
-    shadowColor: CUSTOM_COLOR.Black,
-    flexDirection: 'column',
+    height: 80,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: CUSTOM_COLOR.Gray,
   },
   unitTitleContainer: {
-    flex: 1,
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  titleInputStyle: {},
-  comboxContainer: {
-    width: '100%',
-    elevation: 1.5,
-    borderRadius: 0.5,
-    shadowColor: CUSTOM_COLOR.Black,
-    flexDirection: 'row',
-  },
-  unitComboContainer: {
+    width: '50%',
     height: '100%',
-    alignItems: 'center',
     flexDirection: 'row',
+    alignItems: 'center',
   },
-  comboType: {
-    width: '90%',
-    height: '90%',
+  titleInputStyle: {
+    color: CUSTOM_COLOR.Black,
+    fontWeight: 'bold',
+    fontSize: 15,
   },
-  inputSearchStyle: {
+  dateStyle: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  dropdown: {
     height: 40,
-    fontSize: 14,
+    borderColor: 'gray',
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    flex: 1,
   },
   placeholderStyle: {
     fontSize: 17,
@@ -666,22 +407,10 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: CUSTOM_COLOR.Black,
   },
-  iconStyle: {
-    width: 20,
-    height: 20,
-  },
-  dateStyle: {
-    width: '90%',
-    height: '90%',
-    justifyContent: 'center',
-  },
-  buttonContainer: {
-    width: '200%',
-    height: '100%',
-    bottom: '4%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    left: '-50%',
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 17,
   },
 });
+
 export default ChangeProfile;
