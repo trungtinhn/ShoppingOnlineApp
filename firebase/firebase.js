@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 //import { getAnalytics } from "firebase/analytics";
 //import { getMessaging } from "firebase/messaging";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, initializeFirestore } from "firebase/firestore";
 import { getStorage } from 'firebase/storage';
 import firebase from 'firebase/compat/app';
 import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
@@ -44,7 +44,11 @@ const app = initializeApp(firebaseConfig);
 const auth = initializeAuth(app, {
     persistence: getReactNativePersistence(ReactNativeAsyncStorage)
   });
+
 export const FirebaseApp = initializeApp(firebaseConfig);
+// export const Firestore = getFirestore(FirebaseApp);
+export const Firestore = initializeFirestore(app, {
+  experimentalForceLongPolling: true,
+});
 export const database = getDatabase(FirebaseApp)
-export const Firestore = getFirestore(FirebaseApp);
 export const Storage = getStorage(FirebaseApp);
