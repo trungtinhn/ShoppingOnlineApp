@@ -49,20 +49,19 @@ function ImportProduct({navigation, route}) {
     }
     getNewAmount();
     const productData = {
-      GiaGoc: item.GiaGoc,
-      GiaGiam: item.GiaGiam,
-      HinhAnhSP: item.HinhAnhSP,
-      MaDM: item.MaDM,
-      MauSac: item.MauSac,
+      OriginalPrice: item.OriginalPrice,
+      DiscountPrice: item.DiscountPrice,
+      ProductImages: item.ProductImages,
+      CategoryId: item.CategoryId,
+      Colors: item.Colors,
       Size: item.Size,
       Type: types,
-      SoLuongSP: quantity,
-      TenSP: item.TenSP,
-      MoTaSP: item.MoTaSP,
+      StockQuantity: quantity,
+      ProductName: item.ProductName,
+      ProductDescription: item.ProductDescription,
       TrangThai: item.TrangThai,
       Trending: item.Trending,
       Onsale: item.Onsale,
-      TiLeKM: item.TiLeKM,
     };
     const res = await updateProduct({productId: item._id, data: productData});
     if (res.status === 200) {
@@ -105,9 +104,9 @@ function ImportProduct({navigation, route}) {
         />
       </View>
       <View style={styles.headerContainer}>
-        <Image source={{uri: item.HinhAnhSP[0]}} style={styles.productImage} />
+        <Image source={{uri: item.ProductImages[0]}} style={styles.productImage} />
         <View style={styles.headerTextContainer}>
-          <Text style={styles.productName}>{item.TenSP}</Text>
+          <Text style={styles.productName}>{item.ProductName}</Text>
           <Text style={styles.totalQuantity}>Total Quantity: {quantity}</Text>
         </View>
       </View>

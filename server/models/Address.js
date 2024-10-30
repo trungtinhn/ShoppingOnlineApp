@@ -1,31 +1,31 @@
 const mongoose = require('mongoose');
 
 const addressSchema = new mongoose.Schema({
-    DiaChi: {
+    Address: {
         type: String,
         required: true
     },
-    MaND: {
+    UserID: {
         type: String,
         required: true
     },
-    PhuongXa: {
+    Ward: {
         type: String,
         required: true
     },
-    QuanHuyen: {
+    District: {
         type: String,
         required: true
     },
-    SDT: {
+    PhoneNumber: {
         type: String,
         required: true
     },
-    TenNguoiMua: {
+    BuyerName: {
         type: String,
         required: true
     },
-    TinhThanhPho: {
+    City: {
         type: String,
         required: true
     }

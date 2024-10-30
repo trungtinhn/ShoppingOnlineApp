@@ -82,13 +82,13 @@ function ProductDetail({ navigation, route }) {
             const data = {
                 userId: firebase.auth().currentUser.uid,
                 productId: id,
-                name: dataSanPham.TenSP,
-                image: dataSanPham.HinhAnhSP,
+                name: dataSanPham.ProductName,
+                image: dataSanPham.ProductImages,
                 quantity: numProduct,
                 size: chooseSize,
                 color: chooseColor,
-                price: dataSanPham.GiaGiam,
-                totalPrice: dataSanPham.GiaGiam * numProduct
+                price: dataSanPham.DiscountPrice,
+                totalPrice: dataSanPham.DiscountPrice * numProduct
             }
             const res = await addProductToCart({data: data});
             if(res.status === 200){
@@ -130,13 +130,13 @@ function ProductDetail({ navigation, route }) {
         }else{
             const data = [{
                 productId: id,
-                name: dataSanPham.TenSP,
-                image: dataSanPham.HinhAnhSP,
+                name: dataSanPham.ProductName,
+                image: dataSanPham.ProductImages,
                 quantity: numProduct,
                 size: chooseSize,
                 color: chooseColor,
-                price: dataSanPham.GiaGiam,
-                totalPrice: dataSanPham.GiaGiam * numProduct
+                price: dataSanPham.DiscountPrice,
+                totalPrice: dataSanPham.DiscountPrice * numProduct
             }]
             setProduct(data);
             navigation.navigate('Checkout');
@@ -219,7 +219,7 @@ function ProductDetail({ navigation, route }) {
                     loop
                     autoplay
                 >
-                    {dataSanPham.HinhAnhSP.map((image, index) => (
+                    {dataSanPham.ProductImages.map((image, index) => (
 
                         <View style={{
                             flexDirection: 'row',
@@ -254,7 +254,7 @@ function ProductDetail({ navigation, route }) {
                             color: CUSTOM_COLOR.FlushOrange,
                             fontFamily: FONT_FAMILY.Semibold,
                             fontSize: 25,
-                        }}>{dataSanPham.GiaGiam}</Text>
+                        }}>{dataSanPham.DiscountPrice}</Text>
                 </View>
 
                 <Text
@@ -290,7 +290,7 @@ function ProductDetail({ navigation, route }) {
                         marginLeft: 40,
                         marginRight: 40,
 
-                    }}>{dataSanPham.TenSP}</Text>
+                    }}>{dataSanPham.ProductName}</Text>
             </View>
 
             <View style={{
@@ -678,9 +678,9 @@ function ProductDetail({ navigation, route }) {
                     onPress={() => navigation.navigate('ProductDetail', { id: item._id })}>
                     <ProductView
                       quantity={item.SoLuongDaBan}
-                      source={item.HinhAnhSP[0]}
-                      title={item.TenSP}
-                      price={item.GiaGiam}
+                      source={item.ProductImages[0]}
+                      title={item.ProductName}
+                      price={item.DiscountPrice}
                     />
                   </TouchableOpacity>
                 )}

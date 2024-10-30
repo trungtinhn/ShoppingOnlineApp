@@ -17,31 +17,31 @@ import PromotionCard from '../../components/Admin/PromotionCard';
 import { getAllPromotions } from '../../api/PromotionApi';
 const sampleDataPromotion = [
   {
-    NgayBatDau: new Date('2023-01-01T00:00:00Z'),
-    NgayKetThuc: new Date('2023-01-31T23:59:59Z'),
-    HinhAnhKM: 'https://example.com/image1.jpg',
-    TenKM: 'New Year Sale',
-    TiLe: 0.2,
+    StartDate: new Date('2023-01-01T00:00:00Z'),
+    EndDate: new Date('2023-01-31T23:59:59Z'),
+    PromotionImage: 'https://example.com/image1.jpg',
+    PromotionName: 'New Year Sale',
+    Rate: 0.2,
     DonToiThieu: 100,
-    Loai: 'Discount',
+    Type: 'Discount',
   },
   {
-    NgayBatDau: new Date('2023-02-01T00:00:00Z'),
-    NgayKetThuc: new Date('2023-02-14T23:59:59Z'),
-    HinhAnhKM: 'https://example.com/image2.jpg',
-    TenKM: 'Valentine Special',
-    TiLe: 0.3,
+    StartDate: new Date('2023-02-01T00:00:00Z'),
+    EndDate: new Date('2023-02-14T23:59:59Z'),
+    PromotionImage: 'https://example.com/image2.jpg',
+    PromotionName: 'Valentine Special',
+    Rate: 0.3,
     DonToiThieu: 50,
-    Loai: 'Discount',
+    Type: 'Discount',
   },
   {
-    NgayBatDau: new Date('2023-03-01T00:00:00Z'),
-    NgayKetThuc: new Date('2023-03-31T23:59:59Z'),
-    HinhAnhKM: 'https://example.com/image3.jpg',
-    TenKM: 'Spring Sale',
-    TiLe: 0.15,
+    StartDate: new Date('2023-03-01T00:00:00Z'),
+    EndDate: new Date('2023-03-31T23:59:59Z'),
+    PromotionImage: 'https://example.com/image3.jpg',
+    PromotionName: 'Spring Sale',
+    Rate: 0.15,
     DonToiThieu: 75,
-    Loai: 'Discount',
+    Type: 'Discount',
   },
 ];
 
@@ -111,14 +111,14 @@ function Promotion({navigation}){
             data={dataPromotion}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => {
-              const timestampBD = item.NgayBatDau;
+              const timestampBD = item.StartDate;
               const dateBD = dayjs(timestampBD);
 
               const dayBD = dateBD.date();
               const monthBD = dateBD.month() + 1;
               const yearBD = dateBD.year();
 
-              const timestampKT = item.NgayKetThuc;
+              const timestampKT = item.EndDate;
               const dateKT = dayjs(timestampKT);
 
               const dayKT = dateKT.date();
@@ -128,13 +128,13 @@ function Promotion({navigation}){
               console.log(item);
               return (
                 <PromotionCard
-                  source={item.HinhAnhKM}
-                  name={item.TenKM}
-                  discount={item.TiLe * 100}
+                  source={item.PromotionImage}
+                  name={item.PromotionName}
+                  discount={item.Rate * 100}
                   minimum={item.DonToiThieu}
                   start={`${dayBD}/${monthBD}/${yearBD}`}
                   end={`${dayKT}/${monthKT}/${yearKT}`}
-                  type={item.Loai}
+                  type={item.Type}
                   onPress={() => navigation.navigate('EditPromotion', { item })}
                 />
               );

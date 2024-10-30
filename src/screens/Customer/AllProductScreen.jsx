@@ -46,23 +46,23 @@ function AllProductScreen({ navigation, route }) {
     // Filter items based on search term
     if (searchTerm) {
       filteredData = items.filter((product) =>
-        product.TenSP.toLowerCase().includes(searchTerm.toLowerCase())
+        product.ProductName.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     // Sort items based on sort type
     switch (sortType) {
       case 'a-z':
-        filteredData.sort((a, b) => a.TenSP.localeCompare(b.TenSP));
+        filteredData.sort((a, b) => a.ProductName.localeCompare(b.ProductName));
         break;
       case 'z-a':
-        filteredData.sort((a, b) => b.TenSP.localeCompare(a.TenSP));
+        filteredData.sort((a, b) => b.ProductName.localeCompare(a.ProductName));
         break;
       case 'high-to-low':
-        filteredData.sort((a, b) => a.GiaGiam - b.GiaGiam);
+        filteredData.sort((a, b) => a.DiscountPrice - b.DiscountPrice);
         break;
       case 'low-to-high':
-        filteredData.sort((a, b) => b.GiaGiam - a.GiaGiam);
+        filteredData.sort((a, b) => b.DiscountPrice - a.DiscountPrice);
         break;
       default:
         break;
@@ -138,8 +138,8 @@ function AllProductScreen({ navigation, route }) {
                   <ProductView
                     quantity={item.SoLuongDaBan}
                     source={item.HinhAnhSP[0]}
-                    title={item.TenSP}
-                    price={item.GiaGiam}
+                    title={item.ProductName}
+                    price={item.DiscountPrice}
                   />
                 </TouchableOpacity>
               );

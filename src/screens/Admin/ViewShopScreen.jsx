@@ -51,7 +51,7 @@ export default function ViewShopScreen({ navigation }) {
       return;
     }
     const filteredProducts = productList.filter(product =>
-      product.TenSP.toLowerCase().includes(query.toLowerCase())
+      product.ProductName.toLowerCase().includes(query.toLowerCase())
     );
     setSearchResults(filteredProducts);
   };
@@ -90,10 +90,10 @@ export default function ViewShopScreen({ navigation }) {
                 onPress={() => {
                   navigation.navigate('ViewShopProduct', { item });
                 }}
-                source={item.HinhAnhSP[0]}
-                title={item.TenSP}
-                price={item.GiaGoc}
-                quantity={item.SoLuongDaBan}
+                source={item.ProductImages[0]}
+                title={item.ProductName}
+                price={item.OriginalPrice}
+                quantity={item.SoldQuantity}
               />
             )}
           />
@@ -168,9 +168,9 @@ export default function ViewShopScreen({ navigation }) {
             renderItem={({ item }) => (
               <ProductView
                 onPress={() => navigation.navigate('ViewShop2', { item })}
-                source={item.HinhAnhSP[0]}
-                title={item.TenSP}
-                price={item.GiaGoc}
+                source={item.ProductImages[0]}
+                title={item.ProductName}
+                price={item.OriginalPrice}
               />
             )}
           />

@@ -1,53 +1,57 @@
 const mongoose = require('mongoose');
 
 const promotionSchema = new mongoose.Schema({
-    ChiTietKM: {
+    PromotionDetails: {
         type: String,
         required: true
     },
-    TiLe:{
+    Rate:{
         type: Number,
         default: 0,
     },
-    DonToiThieu: {
+    MinimumOrder: {
         type: Number,
         required: false
     },
-    HinhAnhKM: {
+    PromotionImage: {
         type: String,
         required: false
     },
-    SoLuotConLai:{
+    Quantity:{
         type: Number,
         default: 0,
     },
-    SoLuotSuDung: {
+    UsageLimit: {
         type: Number,
         required: false,
     },
-    SoLuong: {
+    RemainingUses: {
         type: Number,
         required: false,
     },
     AnhNenKhuyenMai: {
         type: String,
-        required: true
+        required: fales,
     },
-    Loai: {
+    Type: {
         type: String,
         required: true
     },
-    NgayBatDau: {
+    StartDate: {
         type: Date,
         required: true
     },
-    NgayKetThuc: {
+    EndDate: {
         type: Date,
         required: true
     },
-    TenKM: {
+    PromotionName: {
         type: String,
         required: false
+    },
+    StoreID: {
+        type: String,
+        default: "none"
     },
 }, { timestamps: true });
 
