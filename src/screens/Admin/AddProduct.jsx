@@ -106,20 +106,19 @@ export default function AddProduct({navigation}) {
     });
     const imageUri = await UploadFile();
     const productData = {
-      GiaGoc: Number(price),
-      GiaGiam: Number(price),
-      HinhAnhSP: imageUri,
-      MaDM: categorize,
-      MauSac: colorList,
+      OriginalPrice: Number(price),
+      DiscountPrice: Number(price),
+      ProductImages: imageUri,
+      CategoryId: categorize,
+      Colors: colorList,
       Size: sizeList,
       Type: types,
-      SoLuongSP: Number(amount),
-      TenSP: name,
-      MoTaSP: description,
-      TrangThai: 'available',
+      StockQuantity: Number(amount),
+      ProductName: name,
+      ProductDescription: description,
+      Status: 'available',
       Trending: false,
       Onsale: false,
-      TiLeKM: 0,
     };
     const res = await addProduct({data: productData}).then(handleUpdateProductCategoryAmount());
     

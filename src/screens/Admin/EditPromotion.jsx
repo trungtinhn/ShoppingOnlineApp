@@ -121,17 +121,17 @@ function EditPromotion({navigation, route}) {
     if (KiemTraNhapLieu()) {
       const imageUri = await UploadFile();
       const newPromotion = {
-        ChiTietKM: description,
-        DonToiThieu: minimumOrder,
-        HinhAnhKM: imageUri,
-        Loai: typeOfPromotion,
-        NgayBatDau: startDate,
-        NgayKetThuc: endDate,
+        PromotionDetails: description,
+        MinimumOrder: minimumOrder,
+        PromotionImage: imageUri,
+        Type: typeOfPromotion,
+        StartDate: startDate,
+        EndDate: endDate,
         TenKM: name,
-        HinhAnhKhuyenMai: imageUri,
-        TiLe: discount / 100,
-        Soluotdung: 1,
-        SoLuong: 1,
+        //HinhAnhKhuyenMai: imageUri,
+        Rate: discount / 100,
+        UsageLimit: 1,
+        RemainingUses: 1,
       };
       const res = await updatePromotion({id: item._id, data: newPromotion});
       if (res === 200) {
@@ -203,27 +203,27 @@ function EditPromotion({navigation, route}) {
     // Lấy dữ liệu từ route và thiết lập giá trị ban đầu
     if (item) {
       setName(item.TenKM);
-      setDescription(item.ChiTietKM);
-      if (item.Loai === 'GiamGia') {
-        setValue(item.Loai);
-        setTpyeOfPromotion(item.Loai);
-        setDiscount((item.TiLe * 100).toString());
+      setDescription(item.PromotionDetails);
+      if (item.Type === 'GiamGia') {
+        setValue(item.Type);
+        setTpyeOfPromotion(item.Type);
+        setDiscount((item.Rate * 100).toString());
       } else {
-        setValue(item.Loai);
-        setTpyeOfPromotion(item.Loai);
+        setValue(item.Type);
+        setTpyeOfPromotion(item.Type);
       }
-      setMinimumOrder(item.DonToiThieu.toString());
+      setMinimumOrder(item.MinimumOrder.toString());
       setImage(item.HinhAnhKhuyenMai);
       setLengthName(item.TenKM.length);
-      setLengthDescription(item.ChiTietKM.length);
+      setLengthDescription(item.PromotionDetails.length);
 
       // Chuyển đổi thời gian bắt đầu và kết thúc thành đối tượng Date
-      setStartDate(new Date(item.NgayBatDau));
-      setEndDate(new Date(item.NgayKetThuc));
+      setStartDate(new Date(item.StartDate));
+      setEndDate(new Date(item.EndDate));
 
       // Thiết lập giá trị chuỗi để hiển thị trong Text component
-      setStartDateValuse(dayjs(item.NgayBatDau).format('DD/MM/YYYY'));
-      setEndDateValues(dayjs(item.NgayKetThuc).format('DD/MM/YYYY'));
+      setStartDateValuse(dayjs(item.StartDate).format('DD/MM/YYYY'));
+      setEndDateValues(dayjs(item.EndDate).format('DD/MM/YYYY'));
     }
   }, [item]);
 

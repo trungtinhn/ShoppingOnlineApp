@@ -78,7 +78,7 @@ export default function EditProduct({navigation, route}) {
   };
 
   const getDataColor = async () => {
-    const colors = item.MauSac;
+    const colors = item.Colors;
     setColorList(colors);
   };
 
@@ -99,20 +99,19 @@ export default function EditProduct({navigation, route}) {
       });
     });
     const productData = {
-      GiaGoc: Number(price),
-      GiaGiam: Number(price),
-      HinhAnhSP: image,
-      MaDM: categorize,
-      MauSac: colorList,
+      OriginalPrice: Number(price),
+      DiscountPrice: Number(price),
+      ProductImages: image,
+      CategoryId: categorize,
+      Colors: colorList,
       Size: sizeList,
       Type: types,
-      SoLuongSP: Number(amount),
-      TenSP: name,
-      MoTaSP: description,
-      TrangThai: item.TrangThai,
+      StockQuantity: Number(amount),
+      ProductName: name,
+      ProductDescription: description,
+      Status: item.Status,
       Trending: false,
       Onsale: false,
-      TiLeKM: 0,
     };
     const res = await updateProduct({productId: item._id, data: productData});
     if (res.status === 200) {
@@ -149,17 +148,17 @@ export default function EditProduct({navigation, route}) {
   };
 
   useEffect(() => {
-    setImage(item.HinhAnhSP);
-    setName(item.TenSP);
-    setDescription(item.MoTaSP);
-    setPrice(item.GiaGoc);
-    setAmount(item.SoLuongSP);
-    setValue(item.MaDM);
+    setImage(item.ProductImages);
+    setName(item.ProductName);
+    setDescription(item.ProductDescription);
+    setPrice(item.OriginalPrice);
+    setAmount(item.StockQuantity);
+    setValue(item.CategoryId);
     getDataColor();
     getDataSize();
     getDataCategories();
-    setLengthName(item.TenSP.length);
-    setLengthDescription(item.MoTaSP.length);
+    setLengthName(item.ProductName.length);
+    setLengthDescription(item.ProductDescription.length);
   }, []);
 
   return (

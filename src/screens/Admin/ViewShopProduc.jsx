@@ -8,7 +8,7 @@ import StarRating from '../../components/Admin/StarRating';
 import SwiperFlatList from "react-native-swiper-flatlist";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 function ViewShopProduct({ navigation, route }) {
-    const item = {"GiaSP": 139000, 
+    const item = {"OriginalPrice": 139000, 
     "HinhAnhSP": ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9z5m7BtaVEQCqDkL5UI2QrBqr1EiCI6-YXA&usqp=CAU", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9z5m7BtaVEQCqDkL5UI2QrBqr1EiCI6-YXA&usqp=CAU"], "MaDM": "lV95kTTz3PIxItriF4rU", "MaSP": "NtRoJWsfk1tH7niUcYu9",
      "MauSac": [{"MaMS": "J9e6EkiNPM6zJmDc2DV8", "MaMau": "#D73C2D", "TenMau": "Đỏ", "checked": true, "key": "J9e6EkiNPM6zJmDc2DV8"}, {"MaMS": "KeDTyP7uAAfU04hzqruV", "MaMau": "#EC65CF", "TenMau": "Hồng", "checked": true, "key": "KeDTyP7uAAfU04hzqruV"}, {"MaMS": "k8SlzWonYLXHBriMadH5", "MaMau": "#2D38D7", "TenMau": "Xanh", "checked": true, "key": "k8SlzWonYLXHBriMadH5"}], "MoTaSP": "Váy nữ cực đẹp mùa hè", 
      "Size": [{"checked": true, "id": "sizeS", "title": "S"}, {"checked": true, "id": "sizeM", "title": "M"}, {"checked": true, "id": "sizeL", "title": "L"}, {"checked": false, "id": "sizeXL", "title": "XL"}, {"checked": false, "id": "sizeXXL", "title": "XXL"}, {"checked": false, "id": "sizeXXXL", "title": "XXXL"}], "SoLuongDaBan": 0, "SoLuongSP": 40, "SoLuotXem": 0, "SoLuotYeuThich": 0, "TenSP": "Váy nữ", "TrangThai": "Inventory",
@@ -164,7 +164,7 @@ function ViewShopProduct({ navigation, route }) {
                         color: CUSTOM_COLOR.Orange,
                         fontWeight: 'bold'
                     }}
-                >{item.GiaSP}</Text>
+                >{item.OriginalPrice}</Text>
             </View>
             <View style={{
                 flexDirection: 'row',

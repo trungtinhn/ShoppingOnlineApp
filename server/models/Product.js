@@ -29,23 +29,23 @@ const TypeSchema = new mongoose.Schema({
 });
 
 const ProductSchema = new mongoose.Schema({
-    GiaGoc: {
+    OriginalPrice: {
         type: Number,
         required: true
     },
-    GiaGiam:{
+    DiscountPrice:{
         type: Number,
         default: 0
     },
-    HinhAnhSP: {
+    ProductImages: {
         type: [String], // Array of strings for image URLs or paths
         required: true
     },
-    MaDM: {
+    CategoryId: {
         type: String,
         required: true
     },
-    MauSac: {
+    Colors: {
         type: [ColorSchema],
         required: true
     },
@@ -57,7 +57,7 @@ const ProductSchema = new mongoose.Schema({
         type: [TypeSchema],
         required: true
     },
-    SoLuotDanhGia: {
+    ReviewCount: {
         type: Number,
         default: 0
     },
@@ -65,27 +65,27 @@ const ProductSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    SoLuongDaBan: {
+    SoldQuantity: {
         type: Number,
         default: 0
     },
-    SoLuongSP: {
+    StockQuantity: {
         type: Number,
         required: true
     },
-    SoLuotXem: {
+    ViewCount: {
         type: Number,
         default: 0
     },
-    SoLuotYeuThich: {
+    WishlistCount: {
         type: Number,
         default: 0
     },
-    TenSP: {
+    ProductName: {
         type: String,
         required: true
     },
-    TrangThai: {
+    Status: {
         type: String,
         enum: ['available', 'outofstock', 'onwait'],
         required: true
@@ -98,14 +98,18 @@ const ProductSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
-    TiLeKM: {
+    DiscountRate: {
         type: Number,
         default: 0
     },
-    MoTaSP: {
+    ProductDescription: {
         type: String,
         default: "Không có mô tả cho sản phẩm này",
         required: true
+    },
+    StoreID: {
+        type: String,
+        default: "none",
     }
 }, { timestamps: true });
 

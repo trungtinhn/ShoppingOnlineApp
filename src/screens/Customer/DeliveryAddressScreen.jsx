@@ -8,9 +8,9 @@ import {firebase} from '../../../firebase/firebase'
 import { addAddress } from "../../api/AddressApi";
 function DeliveryAddressScreen({ navigation}) {
 
-    const [diaChi, setDiaChi] = useState('')
-    const [phuongXa, setPhuongXa] = useState('')
-    const [quanHuyen, setQuanHuyen] = useState('')
+    const [diaChi, setAddress] = useState('')
+    const [phuongXa, setWard] = useState('')
+    const [quanHuyen, setDistrict] = useState('')
     const [tinhTP, setTinhTP] = useState('')
     const [numberPhone, setNumberPhone] = useState('')
     const [name, setName] = useState('')
@@ -21,13 +21,13 @@ function DeliveryAddressScreen({ navigation}) {
             return Alert.alert('Error', 'Please input all information') 
         }
         const data = {
-            DiaChi: diaChi,
-            PhuongXa: phuongXa,
-            QuanHuyen: quanHuyen,
-            TinhThanhPho: tinhTP,
-            SDT: numberPhone,
-            TenNguoiMua: name,
-            MaND: firebase.auth().currentUser.uid
+            Address: diaChi,
+            Ward: phuongXa,
+            District: quanHuyen,
+            City: tinhTP,
+            PhoneNumber: numberPhone,
+            BuyerName: name,
+            UserID: firebase.auth().currentUser.uid
         }
         const res = await addAddress({data: data})
         if(res.status === 200){
@@ -76,14 +76,14 @@ function DeliveryAddressScreen({ navigation}) {
                     title='Address'
                     width='85%'
                     placeholder='Input your address'
-                    onChangeText={(text) => setDiaChi(text)}
+                    onChangeText={(text) => setAddress(text)}
                 />
 
                 <InputData
                     title='Ward'
                     width='85%'
                     placeholder='Linh Trung'
-                    onChangeText={(text) => setPhuongXa(text)}
+                    onChangeText={(text) => setWard(text)}
                 />
             </View>
 
@@ -98,7 +98,7 @@ function DeliveryAddressScreen({ navigation}) {
                     title='District'
                     width='40%'
                     placeholder='Binh Thanh'
-                    onChangeText={(text) => setQuanHuyen(text)}
+                    onChangeText={(text) => setDistrict(text)}
                 />
                 <InputData
                     title='City'

@@ -125,17 +125,16 @@ function AddPromotion({navigation}) {
     }
     const imageUri = await UploadFile();
     const newPromotion = {
-      ChiTietKM: description,
-      DonToiThieu: minimumOrder,
-      HinhAnhKM: imageUri,
-      Loai: typeOfPromotion,
-      NgayBatDau: startDate,
-      NgayKetThuc: endDate,
-      TenKM: name,
-      AnhNenKhuyenMai: imageUri,
-      TiLe: discount/100,
-      SoluotSuDung: 1,
-      SoLuong: 1,
+      PromotionDetails: description,
+      MinimumOrder: minimumOrder,
+      PromotionImage: imageUri,
+      Type: typeOfPromotion,
+      StartDate: startDate,
+      EndDate: endDate,
+      PromotionName: name,
+      Rate: discount/100,
+      UsageLimit: 1,
+      RemainingUses: 1,
     }
     const res = await addPromotion({data: newPromotion});
     if(res.status === 200){

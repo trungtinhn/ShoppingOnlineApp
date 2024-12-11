@@ -104,13 +104,13 @@ function DeliveryScreen({ navigation }) {
                 {dataDelivery ? dataDelivery.map((item, index) => {
                     return (
                         <Delivery
-                            name={item.TenNguoiMua}
-                            phoneNumber={item.SDT}
-                            ward={item.PhuongXa}
-                            district={item.QuanHuyen}
-                            city={item.TinhThanhPho}
+                            name={item.BuyerName}
+                            phoneNumber={item.PhoneNumber}
+                            ward={item.Ward}
+                            district={item.District}
+                            city={item.City}
                             key={index}
-                            address={item.DiaChi}
+                            address={item.Address}
                             checkSelect={item.checkSelect}
                             onPressChoose={() => updateCheck(item)}
                             show={true}

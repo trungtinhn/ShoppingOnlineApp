@@ -1,28 +1,32 @@
 const mongoose = require('mongoose');
 
 const reviewSchema = new mongoose.Schema({
-    AnhDG: {
+    ReviewImages: {
         type: [String],
     },
-    MaND: {
+    UserID: {
         type: String,
         required: true
     },
-    MaSP: {
+    ProductID: {
         type: String,
         required: true
     },
-    NDDG: {
+    ReviewContent: {
         type: String,
         required: true
     },
-    NgayDG: {
+    ReviewDate: {
         type: Date,
         required: true
     },
     Rating: {
         type: Number,
         required: true
+    },
+    StoreID: {
+        type: String,
+        default: "none",
     }
 }, { timestamps: true });
 

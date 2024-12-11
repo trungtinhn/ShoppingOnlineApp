@@ -134,13 +134,13 @@ export default function MyProduct({navigation}) {
             renderItem={({item}) => {
               return (
                 <MyProductOne
-                  source={item.HinhAnhSP[0]}
-                  title={item.TenSP}
-                  price={item.GiaSP}
-                  soluongtonkho={item.SoLuongSP}
-                  soluonglove={item.SoLuotYeuThich}
-                  soluongview={item.SoLuotXem}
-                  soluongban={item.SoLuongDaBan}
+                  source={item.ProductImages[0]}
+                  title={item.ProductName}
+                  price={item.OriginalPrice}
+                  soluongtonkho={item.StockQuantity}
+                  soluonglove={item.WishlistCount}
+                  soluongview={item.ViewCount}
+                  soluongban={item.SoldQuantity}
                   edit={() => navigation.navigate('EditProduct', {item})}
                   hide={() => HideSanPham(item)}
                   AddAmount={() => navigation.navigate('ImportProduct', {item})}
@@ -256,13 +256,13 @@ export default function MyProduct({navigation}) {
             renderItem={({item}) => {
               return (
                 <MyProductOne
-                  source={item.HinhAnhSP[0]}
-                  title={item.TenSP}
-                  price={item.GiaSP}
-                  soluongtonkho={item.SoLuongSP}
-                  soluonglove={item.SoLuotYeuThich}
-                  soluongview={item.SoLuotXem}
-                  soluongban={item.SoLuongDaBan}
+                  source={item.ProductImages[0]}
+                  title={item.ProductName}
+                  price={item.OriginalPrice}
+                  soluongtonkho={item.StockQuantity}
+                  soluonglove={item.WishlistCount}
+                  soluongview={item.ViewCount}
+                  soluongban={item.StockQuantity}
                   edit={() => navigation.navigate('EditProduct')}
                 />
               );
@@ -376,13 +376,13 @@ export default function MyProduct({navigation}) {
             renderItem={({item}) => {
               return (
                 <MyProductOne
-                  source={item.HinhAnhSP[0]}
-                  title={item.TenSP}
-                  price={item.GiaSP}
-                  soluongtonkho={item.SoLuongSP}
-                  soluonglove={item.SoLuotYeuThich}
-                  soluongview={item.SoLuotXem}
-                  soluongban={item.SoLuongDaBan}
+                  source={item.ProductImages[0]}
+                  title={item.ProductName}
+                  price={item.OriginalPrice}
+                  soluongtonkho={item.StockQuantity}
+                  soluonglove={item.WishlistCount}
+                  soluongview={item.ViewCount}
+                  soluongban={item.StockQuantity}
                   type="Hidden"
                   show={() => ShowSanPham(item)}
                 />

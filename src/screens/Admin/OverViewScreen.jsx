@@ -151,9 +151,9 @@ export default function OverViewScreen({navigation}) {
               </TouchableOpacity>
             </View>
             <View style={styles.listOderConatiner}>
-              <ViewNowStatus number={1} status={"Confirm"} />
+              <ViewNowStatus number={4} status={"Confirm"} />
               <ViewNowStatus number={1} status={"On wait"} />
-              <ViewNowStatus number={1} status={"Delivering"} />
+              <ViewNowStatus number={3} status={"Delivering"} />
               <ViewNowStatus number={1} status={"Delivered"} />
             </View>
           </View>

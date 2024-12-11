@@ -104,8 +104,8 @@ function PromotionScreen({ navigation}) {
 
             <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={getDataKhuyenMai} />}>
                 {dataKhuyenMai.map((item, index) => {
-                    const startDate = new Date(item.NgayBatDau);
-                    const endDate = new Date(item.NgayKetThuc);
+                    const startDate = new Date(item.StartDate);
+                    const endDate = new Date(item.EndDate);
                     const dayBD = startDate.getDate();
                     const monthBD = startDate.getMonth() + 1;
                     const yearBD = startDate.getFullYear();
@@ -114,10 +114,10 @@ function PromotionScreen({ navigation}) {
                     const yearKT = endDate.getFullYear();
                         return (
                             <Promotion
-                                source={item.HinhAnhKM}
+                                source={item.PromotionImage}
                                 key={index}
-                                title={item.TenKM}
-                                minimum={item.DonToiThieu}
+                                title={item.PromotionName}
+                                minimum={item.MinimumOrder}
                                 expiry={`${dayBD}.${monthBD}.${yearBD} - ${dayKT}.${monthKT}.${yearKT}`}
                                 onPress={() => updateCheck(item)}
                                 checkSelect={item.checkSelect}
