@@ -12,8 +12,10 @@ const userController = {
     getUserTypeByMaND :async (req, res) => {
         try {
           const { MaND } = req.params;
+          console.log(MaND);
           const user = await User.findOne({ MaND });
           if (user) {
+
             return res.status(200).json(user);
           } else {
             return res.status(404).json({ message: 'User not found' });

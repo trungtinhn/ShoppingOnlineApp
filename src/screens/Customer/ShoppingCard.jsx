@@ -1,16 +1,12 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
-import { View, Text, StyleSheet,FlatList, TouchableOpacity, Image, ScrollView, RefreshControl, Alert, Switch } from "react-native";
+import { View, Text, StyleSheet,TouchableOpacity, ScrollView, RefreshControl, Alert } from "react-native";
 import ProductCheckOut from "../../components/Customer/ProductCheckout";
-import { IC_Back } from "../../../assets/Customer/icons";
-import { PR_1, PR_2, PR_3, PR_4, PR_5 } from "../../../assets/Customer/images";
 import CUSTOM_COLOR from "../../constants/color";
-import Button from '../../components/Admin/Button'
 import CustomButton from "../../components/Login_SignUp/CustomButton";
 import { BackIcon } from "../../../assets/Customer/svgs";
 import { getCartByUser, removeProductFromCart, updateProductInCart } from "../../api/CartApi";
 import {firebase} from "../../../firebase/firebase"
 import LoadingScreen from "../LoadingScreen";
-import { id } from "date-fns/locale";
 import CheckBox from "@react-native-community/checkbox";
 import { OrderContext } from "../../context/OrderContext";
 import FONT_FAMILY from "../../constants/font";
@@ -189,7 +185,7 @@ const ShoppingCard = ({navigation}) => {
                     onPress={() => {
                         navigation.goBack();
                     }}>
-                    <BackIcon></BackIcon>
+                    <BackIcon/>
                 </TouchableOpacity>
 
                 <Text style={{
