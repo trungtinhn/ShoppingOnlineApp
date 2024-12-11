@@ -76,9 +76,7 @@ const knnRecommend = {
             distance: minDistance,
           };
         });
-
         distances.sort((a, b) => a.distance - b.distance);
-
         const recommendedProducts = distances.slice(0, k).map(d => d.product);
 
         return res.status(200).json(recommendedProducts);

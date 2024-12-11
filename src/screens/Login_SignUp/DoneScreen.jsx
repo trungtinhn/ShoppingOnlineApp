@@ -8,10 +8,6 @@ import CUSTOM_COLOR from '../../constants/color'
 export default function DoneScreen({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
-      {/* <ImageBackground
-        source={IMG_Rectangle182}
-        resizeMode="cover"
-        style={styles.container}> */}
         <View style={styles.containerCenter}>
           <Image
             source={IMG_mditickcircle}
@@ -40,7 +36,6 @@ export default function DoneScreen({navigation}) {
             />
           </View>
         </View>
-      {/* </ImageBackground> */}
     </SafeAreaView>
   )
 }

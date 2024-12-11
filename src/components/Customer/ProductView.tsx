@@ -14,7 +14,6 @@ const ProductView = (props: any) => {
                height: 165,
                borderTopLeftRadius: 20,
                borderTopRightRadius: 20,
-
             }} />
          <View style={{ padding: 10 }}>
             <Text numberOfLines={1} ellipsizeMode="tail" style={{
@@ -26,8 +25,6 @@ const ProductView = (props: any) => {
                <Text style={{
                   fontSize: 16,
                   marginTop: -5,
-                  
-                  //fontFamily: FONT_FAMILY.Bold,
                   color: CUSTOM_COLOR.FlushOrange,
                }}>đ{props.price}</Text>
                <Text style={{fontSize: 10}}>Đã bán {formatSoldQuantity(props.quantity)}</Text>
@@ -41,7 +38,7 @@ const styles = StyleSheet.create({
    container: {
       width: 182,
       height: 230,
-      marginHorizontal: 15,
+      marginHorizontal: 5,
       borderWidth: 1,
       borderRadius: 20,
       borderColor: CUSTOM_COLOR.LightGray,

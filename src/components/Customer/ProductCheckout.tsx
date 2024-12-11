@@ -81,18 +81,12 @@ const ProductCheckOut = (props: any) => {
                         >
                             <Text style={styles.content}>+</Text>
                         </TouchableOpacity>
-
-
                     </View> :
                     <View>
                         <Text style={{
                             fontStyle: 'italic'
                         }}>Amount: {props.number}</Text>
                     </View>}
-
-
-
-
             </View>
 
             {props.check ?

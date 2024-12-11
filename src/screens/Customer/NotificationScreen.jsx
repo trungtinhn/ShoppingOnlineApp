@@ -73,13 +73,10 @@ function NotificationScreen({ navigation }) {
             style={{
               width: 50,
               height: 50,
-              //backgroundColor: CUSTOM_COLOR.Mercury,/
               borderWidth: 1,
               borderColor: CUSTOM_COLOR.Mercury,
               alignItems: 'center',
               justifyContent: 'center',
-              // marginVertical: 10,
-              // padding: 8,
               borderRadius: 10,
             }}
             onPress={() => {
@@ -92,7 +89,6 @@ function NotificationScreen({ navigation }) {
                 containerStyle={{ position: 'absolute', top: -5, right: -5 }}
               />
             ) : null}
-
             <MessengerLogo color={CUSTOM_COLOR.Black} />
           </TouchableOpacity>
 
@@ -106,8 +102,6 @@ function NotificationScreen({ navigation }) {
               borderColor: CUSTOM_COLOR.Mercury,
               alignItems: 'center',
               justifyContent: 'center',
-              // marginVertical: 10,
-              // padding: 8,
               borderRadius: 10,
             }}
             onPress={() => {
@@ -142,7 +136,6 @@ function NotificationScreen({ navigation }) {
           const day = time.getDate();
           const month = time.getMonth() + 1; // Month starts from 0
           const year = time.getFullYear();
-
 
           return (
             <TouchableOpacity>

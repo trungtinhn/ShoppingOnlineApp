@@ -222,6 +222,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 55,
     marginTop: 10,
+    marginBottom: 10,
   },
   button: {
     width: '200%',

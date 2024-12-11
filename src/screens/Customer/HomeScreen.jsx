@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback } from 'react';
 import dayjs from 'dayjs';
 import {
   FlatList,
-  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,14 +13,11 @@ import { Badge } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import Categories from '../../components/Customer/Categories';
 import ProductView from '../../components/Customer/ProductView';
-import SearchInput from '../../components/Customer/SearchInput';
 import PromotionCard from '../../components/Customer/PromotionCard'
 import CUSTOM_COLOR from '../../constants/color';
-import { PR_1, PR_2, PR_3, PR_4, PR_5 } from '../../../assets/Customer/images';
 import MessengerLogo from '../../../assets/Admin/svgs/Messenger.svg'
 import ShoppingCartLogo from '../../../assets/Customer/svgs/shopping-cart.svg'
 import LogoApp from '../../../assets/Customer/svgs/Logo.svg'
-import { Slider } from 'react-native-elements';
 import FONT_FAMILY from '../../constants/font';
 import { getCategory } from '../../api/CategoryApi';
 import { getProductOnsale, getProductTrending } from '../../api/ProductApi';
@@ -170,8 +166,6 @@ function HomeScreen({navigation}) {
           <View style={{marginLeft: "5%"}}></View>
         </View>
       </View>
-
-
         <ScrollView
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -186,21 +180,17 @@ function HomeScreen({navigation}) {
                 loop
                 style={{
                   flexDirection: 'row',
-
                   height: '90%',
                 }}>
                 {dataPromotion
                   ? dataPromotion.map((promotion, index) => {
                     const timestampBD = promotion.NgayBatDau;
                     const dateBD = dayjs(timestampBD);
-
                     const dayBD = dateBD.date();
                     const monthBD = dateBD.month();
                     const yearBD = dateBD.year();
-
                     const timestampKT = promotion.NgayKetThuc
                     const dateKT = dayjs(timestampKT);
-
                     const dayKT = dateKT.date();
                     const monthKT = dateKT.month();
                     const yearKT = dateKT.year();
@@ -242,7 +232,6 @@ function HomeScreen({navigation}) {
                 renderItem={({ item }) => (
                   <TouchableOpacity
                     style={{
-                      marginHorizontal: -10,
                     }}
                     onPress={() => {
                       const id = item._id;
@@ -263,7 +252,6 @@ function HomeScreen({navigation}) {
                 <Text style={styles.text}>Explore now</Text>
               </TouchableOpacity>
             </View>
-
             {danhmuc
               ? danhmuc.map(item => (
                 <TouchableOpacity
