@@ -4,7 +4,6 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   FlatList,
   Modal,
   Alert,
@@ -14,15 +13,8 @@ import {StyleSheet} from 'react-native';
 import CUSTOM_COLOR from '../../constants/color';
 import StarRating from '../../components/Customer/StartRating';
 import {
-  IC_Back,
-  IC_Cancle,
   IC_Down,
-  IC_Heart,
-  IC_Heart_Red,
-  IC_ShoppingCart,
-  IC_User,
 } from '../../../assets/Customer/icons';
-import ColorPicker from '../../components/Customer/ColorPicker';
 import {Badge} from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import ProductView from '../../components/Customer/ProductView';
@@ -40,7 +32,6 @@ import Button from '../../components/Customer/Button';
 import {firebase} from '../../../firebase/firebase';
 import {addProductToCart} from '../../api/CartApi';
 import {OrderContext} from '../../context/OrderContext';
-import {get} from 'mongoose';
 import {addLike, checkLike, deleteLike} from '../../api/LikeApi';
 import {knnRecommendSell} from '../../api/KnnApi';
 
@@ -69,37 +60,6 @@ function ProductDetail({navigation, route}) {
       console.log(res);
       setLove(false);
     }
-    const setDataGioHang = async () => {
-        if(chooseColor === '' || chooseSize === ''){
-            Alert.alert("Thông báo",'Vui lòng chọn màu sắc và kích cỡ');
-        }else{
-            setLoadingCart(true);
-            const data = {
-                userId: firebase.auth().currentUser.uid,
-                productId: id,
-                name: dataSanPham.ProductName,
-                image: dataSanPham.ProductImages,
-                quantity: numProduct,
-                size: chooseSize,
-                color: chooseColor,
-                price: dataSanPham.DiscountPrice,
-                totalPrice: dataSanPham.DiscountPrice * numProduct
-            }
-            const res = await addProductToCart({data: data});
-            if(res.status === 200){
-                setLoadingCart(false);
-                Alert.alert('Thông báo','Sản phẩm đã thêm vào giỏ hàng');
-                resetType();
-                setNumCart(numCart + 1);
-            }else{
-                console.log(res);
-            }
-        }
-    };
-
-    const resetType = () => {
-        setChooseColor('');
-        setChooseSize('');
   };
   const setDataLove = async () => {
     if (love) {
@@ -126,39 +86,6 @@ function ProductDetail({navigation, route}) {
     } else {
       console.log(res);
     }
-    const setBuyNow = () => {
-        if(chooseColor === '' || chooseSize === ''){
-            Alert.alert("Thông báo",'Vui lòng chọn màu sắc và kích cỡ');
-        }else{
-            const data = [{
-                productId: id,
-                name: dataSanPham.ProductName,
-                image: dataSanPham.ProductImages,
-                quantity: numProduct,
-                size: chooseSize,
-                color: chooseColor,
-                price: dataSanPham.DiscountPrice,
-                totalPrice: dataSanPham.DiscountPrice * numProduct
-            }]
-            setProduct(data);
-            navigation.navigate('Checkout');
-        }
-    };
-    const onRefresh = useCallback(() => {
-        setRefreshing(true);
-        Promise.all([getDataById(id), getDataLove(), getDataRecommend()])
-          .then(() => setRefreshing(false))
-          .catch(() => setRefreshing(false));
-    }, []);
-
-    useEffect(() => {
-        getDataById(id);
-    }, []);
-
-    if(isLoading){
-        return (
-            <LoadingScreen/>
-        )
   };
 
   const setDataGioHang = async () => {
@@ -245,87 +172,6 @@ function ProductDetail({navigation, route}) {
     return <LoadingScreen />;
   } else {
     return (
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }} 
-        refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        >
-        <View style={{
-            ...styles.container,
-        }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-
-                <View style={{ flexDirection: "row", alignItems: 'center', }}>
-                    <TouchableOpacity 
-                        style={{padding: 12}}
-                        onPress={() => {
-                            navigation.goBack();
-                        }}>
-                        <BackIcon fill={CUSTOM_COLOR.FlushOrange}></BackIcon>
-                    </TouchableOpacity>
-
-                    <Text style={{ height: 40, padding: 7, fontSize: 20, color: CUSTOM_COLOR.Black, fontFamily: FONT_FAMILY.Bold, fontWeight: 'bold',  }}>Product</Text>
-                </View>
-
-                <View style={{ flexDirection: "row", alignItems: 'center', marginRight: 10 }} >
-                    <TouchableOpacity onPress={() => {
-                        setDataLove();
-                    }}
-                    >
-                        {love ? (<HeartFillIcon fill={CUSTOM_COLOR.FlushOrange}
-                        />) :
-                            <HeartIcon/>
-                        }
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={{
-                            width: 45,
-                            height: 45,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderRadius: 10,
-                        }}
-                        onPress={() => {
-                            navigation.navigate('ShoppingCard', { item: dataSanPham });
-                        }}>
-                        {numCart != 0 ? (
-                            <Badge
-                                value={numCart}
-                                status="error"
-                                containerStyle={{ position: 'absolute', top: -5, right: -5 }}
-                            />
-                        ) : null}
-                        <ShoppingCartIcon />
-                    </TouchableOpacity>
-                </View>
-            </View>
-            <View style={{ width: '100%', height: 350, alignItems: 'center', justifyContent: 'center', marginTop: 10 }}>
-                <Swiper
-                    loop
-                    autoplay
-                >
-                    {dataSanPham.ProductImages.map((image, index) => (
-
-                        <View style={{
-                            flexDirection: 'row',
-                            justifyContent: 'center'
-                        }}
-                            key={index}
-                        >
-                            <Image
-                                source={{ uri: image }}
-                                style={{
-                                    width: 300,
-                                    height: 300, borderRadius: 20
-                                }}
-                            />
-
-                        </View>
-                    ))}
-
-                </Swiper>
-
-            </View>
       <View style={{flex: 1, backgroundColor: CUSTOM_COLOR.White}}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -397,17 +243,6 @@ function ProductDetail({navigation, route}) {
             style={{
               ...styles.container,
             }}>
-                <View style={{ flexDirection: 'row'}}>
-                    <Text style={{ color: CUSTOM_COLOR.FlushOrange,  marginLeft: 40, fontFamily: FONT_FAMILY.CeraPro, fontSize: 20 }}>đ</Text>
-                    <Text
-                        style={{
-                            color: CUSTOM_COLOR.FlushOrange,
-                            fontFamily: FONT_FAMILY.Semibold,
-                            fontSize: 25,
-                        }}>{dataSanPham.DiscountPrice}</Text>
-                </View>
-
-                <Text
             <View
               style={{
                 width: '100%',
@@ -487,34 +322,6 @@ function ProductDetail({navigation, route}) {
                   }}>
                   <Text
                     style={{
-                        margin: 5,
-                        color: CUSTOM_COLOR.Black,
-                        fontFamily: FONT_FAMILY.Semibold,
-                        
-                        fontSize: 20,
-                        marginLeft: 40,
-                        marginRight: 40,
-
-                    }}>{dataSanPham.ProductName}</Text>
-            </View>
-
-            <View style={{
-                flexDirection: 'row',
-                marginVertical: 20,
-                marginHorizontal: 40,
-                alignItems: 'center'
-            }}>
-                <Text style={{ marginRight: 10, fontFamily: FONT_FAMILY.SemiBoldItalic, fontSize: 15, color: CUSTOM_COLOR.FlushOrange }}>{dataSanPham.Rating}</Text>
-                <StarRating
-                    maxStars={5}
-                    rating={dataSanPham.Rating}
-                />
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('Review', { dataSanPham: dataSanPham })}
-                >
-                    <Text style={{
-                        marginHorizontal: 40,
-                        fontStyle: 'italic'
                       color: CUSTOM_COLOR.Red,
                       fontWeight: 'bold',
                       margin: 4,
@@ -951,9 +758,9 @@ function ProductDetail({navigation, route}) {
                     }>
                     <ProductView
                       quantity={item.SoLuongDaBan}
-                      source={item.ProductImages[0]}
-                      title={item.ProductName}
-                      price={item.DiscountPrice}
+                      source={item.HinhAnhSP[0]}
+                      title={item.TenSP}
+                      price={item.GiaGiam}
                     />
                   </TouchableOpacity>
                 )}

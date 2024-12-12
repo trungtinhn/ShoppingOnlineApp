@@ -1,57 +1,66 @@
 const mongoose = require('mongoose');
 
 const promotionSchema = new mongoose.Schema({
-    PromotionDetails: {
+    promotionName: {
         type: String,
-        required: true
+        required: true, // Tên khuyến mãi cần thiết
+        trim: true, // Loại bỏ khoảng trắng đầu và cuối
     },
-    Rate:{
-        type: Number,
-        default: 0,
-    },
-    MinimumOrder: {
-        type: Number,
-        required: false
-    },
-    PromotionImage: {
+    promotionDetails: {
         type: String,
-        required: false
+        required: true, // Thông tin chi tiết cần thiết
+        trim: true,
     },
-    Quantity:{
+    rate: {
         type: Number,
-        default: 0,
+        default: 0, // Giá trị mặc định
+        min: 0, // Tối thiểu là 0
+        max: 100, // Tối đa là 100 nếu là phần trăm giảm giá
     },
-    UsageLimit: {
+    minimumOrder: {
         type: Number,
-        required: false,
+        default: 0, // Đơn hàng tối thiểu mặc định là 0 nếu không yêu cầu
+        min: 0,
     },
-    RemainingUses: {
-        type: Number,
-        required: false,
-    },
-    AnhNenKhuyenMai: {
+    promotionImage: {
         type: String,
-        required: fales,
+        default: null, // Giá trị mặc định nếu không có hình ảnh
     },
-    Type: {
+    quantity: {
+        type: Number,
+        default: 0, // Số lượng mặc định là 0
+        min: 0,
+    },
+    usageLimit: {
+        type: Number,
+        default: null, // Giá trị mặc định nếu không giới hạn
+        min: 0,
+    },
+    remainingUses: {
+        type: Number,
+        default: null, // Giá trị mặc định nếu không theo dõi số lượt còn lại
+        min: 0,
+    },
+    backgroundImage: {
         type: String,
-        required: true
+        default: null, // Đổi tên trường và tránh lỗi cú pháp `fales`
     },
-    StartDate: {
+    type: {
+        type: String,
+        required: true,
+    },
+    startDate: {
         type: Date,
-        required: true
+        required: true, // Ngày bắt đầu là bắt buộc
     },
-    EndDate: {
+    endDate: {
         type: Date,
-        required: true
+        required: true, // Ngày kết thúc là bắt buộc
     },
-    PromotionName: {
-        type: String,
-        required: false
-    },
-    StoreID: {
-        type: String,
-        default: "none"
+    storeId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Store', // Tham chiếu đến bảng Store
+        default: null,
     },
 }, { timestamps: true });
 

@@ -12,7 +12,7 @@ const LikeSchema = new mongoose.Schema({
   }]
 });
 
-// Tạo model từ schema
+
 
 const Like = mongoose.model('Like', LikeSchema);
 

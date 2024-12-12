@@ -8,4 +8,5 @@ router.post('/addLike', verifyToken, likeController.addLike);
 router.put('/checkLike', verifyToken, likeController.checkLike);
 router.delete('/deleteLike', verifyToken, likeController.deleteLike);
 router.get('/getLikeByUser/MaND=:MaND', verifyToken, likeController.getLikeByUser);
+
 module.exports = router
