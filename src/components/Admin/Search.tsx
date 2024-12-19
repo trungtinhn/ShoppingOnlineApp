@@ -36,7 +36,6 @@ const Search: React.FC<SearchInputProps> = ({onSearch}) => {
             resizeMode="center"
           />
           <View style={{width: 5, height: '100%'}}/>
-          {/* <Text style={styles.buttonText}>Tìm kiếm</Text> */}
         </TouchableOpacity>
       </View>
     </View>
@@ -45,11 +44,10 @@ const Search: React.FC<SearchInputProps> = ({onSearch}) => {
 
 const styles = StyleSheet.create({
   container: {
-    // marginBottom: 10,
-    width: '100%',
+    width: '80%',
     height: '100%',
     justifyContent: 'center',
-    borderColor: CUSTOM_COLOR.Black,
+    borderColor: CUSTOM_COLOR.Gray,
     borderWidth: 1,
     borderRadius: 25,
     backgroundColor: CUSTOM_COLOR.White,

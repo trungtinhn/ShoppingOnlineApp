@@ -12,6 +12,7 @@ import { OrderContext } from "../../context/OrderContext";
 import { collection, orderBy, query, where, onSnapshot } from "firebase/firestore";
 import LoadingComponent from "../../components/LoadingComponent";
 import { Firestore, firebase } from "../../../firebase/firebase";
+import PromoionItem from "../../components/Customer/PromoionItem";
 
 function NotificationScreen({ navigation }) {
   const [chatUser, setChatUser] = useState();
@@ -55,7 +56,6 @@ function NotificationScreen({ navigation }) {
   return (
     <View style={{
       flex: 1,
-      backgroundColor: CUSTOM_COLOR.White
     }}>
       <View
         style={{
@@ -63,7 +63,8 @@ function NotificationScreen({ navigation }) {
           height: 70,
           alignItems: 'center',
           flexDirection: 'row',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          backgroundColor: CUSTOM_COLOR.White
         }}>
         <View style={{marginLeft: "5%"}}>
           <LogoApp width={130} height={50}></LogoApp>
@@ -127,6 +128,13 @@ function NotificationScreen({ navigation }) {
         <LoadingComponent />
       </View>
       :
+      <>
+      <View style={{ width: '100%', padding: 15, backgroundColor: CUSTOM_COLOR.White }}>
+        <PromoionItem/>
+      </View>
+
+      <Text style={{ fontSize: 18, fontWeight: 'bold', padding: 10 }}>Cập nhật đơn hàng</Text>
+
       <FlatList
         data={notificationPromotion}
         renderItem={({ item }) => {
@@ -145,11 +153,12 @@ function NotificationScreen({ navigation }) {
                 content={item.description}
                 time={`${day}-${month}-${year} ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`}
               />
-
             </TouchableOpacity>
           )
         }}
       />
+
+      </>
     }
 
 
