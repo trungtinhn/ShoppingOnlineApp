@@ -63,7 +63,7 @@ function ChangeProfile({ navigation }) {
   const fetchUserData = async () => {
     try {
       const user = firebase.auth().currentUser;
-      const res = await getUserType({ MaND: user.uid });
+      const res = await getUserType({ userId: user.uid });
       const birthDay = new Date(res.data.NgaySinh);
       const formattedDate = `${birthDay.getDate()}/${birthDay.getMonth() + 1}/${birthDay.getFullYear()}`;
       setUserData(res.data);
@@ -143,11 +143,11 @@ function ChangeProfile({ navigation }) {
         "GioiTinh": gender,
         "Avatar": uploadedImageUrl,
         "LoaiND": userData.LoaiND,
-        "MaND": userData.MaND,
+        "userId": userData.userId,
         "Email": userData.Email,
       };
       console.log(updatedData)
-      const res = await updateUser({MaND: userData.MaND, data: updatedData}); // Assuming updateUserProfile updates the user's profile in your backend
+      const res = await updateUser({userId: userData.userId, data: updatedData}); // Assuming updateUserProfile updates the user's profile in your backend
       if(res.status === 200){
         Alert.alert('Notification', 'Change Profile Sucess!', [
           {text: 'OK', onPress: () => navigation.goBack(), style: 'cancel'},

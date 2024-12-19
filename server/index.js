@@ -22,6 +22,7 @@ const paymentRoutes = require("./routes/routePayment");
 const permissionRoutes = require("./routes/routePermission");
 const knnRoutes = require('./routes/routeKnn');
 const messageRoutes = require('./routes/routeMessage');
+const globalCategoryRoutes = require("./routes/routeGlobalCategory");
 dotenv.config()
 mongoose.connect(process.env.MONGODB_URL.replace("<password>", process.env.MONGODB_PASSWORD)).then(() => {
     console.log("Database connected");
@@ -51,6 +52,7 @@ app.use('/api/payment', paymentRoutes);
 app.use('/api/permissions', permissionRoutes);
 app.use('/api/knn', knnRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/globalCategory', globalCategoryRoutes);
 
 socketSetup(server);
 server.listen(8000, () => {

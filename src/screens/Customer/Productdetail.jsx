@@ -52,7 +52,7 @@ function ProductDetail({navigation, route}) {
   const {product, setProduct} = useContext(OrderContext);
   const [itemsRecommend, setItemsRecommend] = useState([]);
   const getDataLove = async () => {
-    const res = await checkLike({data: {MaND: userId, _id: id}});
+    const res = await checkLike({data: {userId: userId, _id: id}});
     if (res.status === 200) {
       const data = res.data.isFavorited;
       setLove(data);
@@ -63,14 +63,14 @@ function ProductDetail({navigation, route}) {
   };
   const setDataLove = async () => {
     if (love) {
-      const res = await deleteLike({data: {MaND: userId, _id: id}});
+      const res = await deleteLike({data: {userId: userId, _id: id}});
       if (res.status === 200) {
         setLove(false);
       } else {
         console.log(res);
       }
     } else {
-      const res = await addLike({data: {MaND: userId, _id: id}});
+      const res = await addLike({data: {userId: userId, _id: id}});
       if (res.status === 200) {
         setLove(true);
       } else {

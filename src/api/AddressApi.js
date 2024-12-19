@@ -118,10 +118,10 @@ const getAddressById = async ({ addressId }) => {
   }
 };
 
-const getAddressByMaND = async ({ MaND }) => {
+const getAddressByuserId = async ({ userId }) => {
   try {
     const idToken = await getIdToken();
-    const url = `/addresses/getAddressByMaND/MaND=${MaND}`;
+    const url = `/addresses/getAddressByuserId/userId=${userId}`;
     const config = {
       method: "GET",
       headers: {
@@ -141,4 +141,4 @@ const getAddressByMaND = async ({ MaND }) => {
   }
 };
 
-export { addAddress, updateAddress, deleteAddress, getAllAddresses, getAddressById, getAddressByMaND };
+export { addAddress, updateAddress, deleteAddress, getAllAddresses, getAddressById, getAddressByuserId };

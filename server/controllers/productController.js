@@ -77,15 +77,67 @@ const productController = {
         }
     },
 
-    getProductByStatus: async (req, res) => {
+    getProductsByStatus: async (req, res) => {
         try {
-            const products = await Product.find({ status: req.params.status });
+            const { status } = req.query; // Lấy trạng thái từ query parameter
+            if (!status) {
+                return res.status(400).json({ message: 'Status is required!' });
+            }
+    
+            const validStatuses = ['available', 'onwait', 'outofstock'];
+            if (!validStatuses.includes(status)) {
+                return res.status(400).json({ message: 'Invalid status value!' });
+            }
+    
+            const products = await Product.find({ status });
+            if (!products || products.length === 0) {
+                return res.status(404).json({ message: `No products found with status: ${status}` });
+            }
+    
             res.status(200).json(products);
         } catch (error) {
-            res.status(500).json({ message: 'Failed to get products by status!', error });
+            res.status(500).json({ message: 'Failed to get products!', error });
         }
     },
 
+    getProductsByStoreId: async (req, res) => {
+        try {
+            const { storeId } = req.params; // Lấy storeId từ params
+            if (!storeId) {
+                return res.status(400).json({ message: 'Store ID is required!' });
+            }
+    
+            const products = await Product.find({ storeId });
+            if (!products || products.length === 0) {
+                return res.status(404).json({ message: `No products found for store ID: ${storeId}` });
+            }
+    
+            res.status(200).json(products);
+        } catch (error) {
+            res.status(500).json({ message: 'Failed to get products by store ID!', error });
+        }
+    },
+
+    getProductsByStatusAndStoreId: async (req, res) => {
+        try {
+            const { storeId, status } = req.body; // Lấy storeId và status từ body
+            if (!storeId || !status) {
+                return res.status(400).json({ message: 'Store ID and status are required!' });
+            }
+    
+            const products = await Product.find({ storeId, status });
+            if (!products || products.length === 0) {
+                return res.status(404).json({ message: `No products found with status: ${status} for store ID: ${storeId}` });
+            }
+    
+            res.status(200).json(products);
+        } catch (error) {
+            res.status(500).json({ message: 'Failed to get products by status and store ID!', error });
+        }
+    },
+    
+    
+    
     setProductStatus: async (req, res) => {
         try {
             const updatedProduct = await Product.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true });

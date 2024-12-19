@@ -77,7 +77,7 @@ function ManageUser({navigation}){
   }
 const getUserData = async () => {
   const user = firebase.auth().currentUser;
-  const res =  await getUserType({MaND: user.uid});
+  const res =  await getUserType({userId: user.uid});
   console.log(res.data)
   setUserData(res.data);
 };

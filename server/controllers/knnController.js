@@ -8,7 +8,7 @@ const knnRecommend = {
         try {
             const { userId } = req.params; // Sửa lỗi cú pháp
             console.log(userId);
-            const userLikes = await Like.findOne({ MaND: userId }).populate('danhSachSanPham');
+            const userLikes = await Like.findOne({ userId: userId }).populate('danhSachSanPham');
             console.log(userLikes);
         
             if (!userLikes || !userLikes.danhSachSanPham.length) {

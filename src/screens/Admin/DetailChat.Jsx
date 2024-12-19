@@ -78,7 +78,7 @@ function DetailChatScreen({ navigation, route }) {
   useEffect(() => {
     const fetchUserData = async () => {
       const user = firebase.auth().currentUser;
-      const res = await getUserType({ MaND: user.uid });
+      const res = await getUserType({ userId: user.uid });
       setUserInfo(res.data);
       setupSocketListeners(res.data, item);
     };

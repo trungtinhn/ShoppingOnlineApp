@@ -172,7 +172,7 @@ const orderController = {
             const orders = await Order.find({ status: req.params.status }).lean();
 
             const ordersWithUserDetails = await Promise.all(orders.map(async (order) => {
-                const user = await User.findOne({ MaND: order.userId });
+                const user = await User.findOne({ userId: order.userId });
                 if (user) {
                     order.TenND = user.TenND;
                     order.Avatar = user.Avatar;

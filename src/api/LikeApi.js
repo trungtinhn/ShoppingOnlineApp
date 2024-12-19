@@ -47,10 +47,10 @@ const deleteLike = async ({data}) => {
     }
 }
 
-const getLikeByUser = async (MaND) => {
+const getLikeByUser = async (userId) => {
     try {
       const idToken = await getIdToken();
-      const url = `/like/getLikeByUser/MaND=${MaND}`;
+      const url = `/like/getLikeByUser/userId=${userId}`;
       const config = {
         method: "GET",
         headers: {
