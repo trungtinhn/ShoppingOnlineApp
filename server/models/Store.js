@@ -37,8 +37,8 @@ const storeSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['active', 'inactive', 'suspended'], // Các trạng thái hợp lệ
-        default: 'active',
+        enum: ['active', 'pending', 'suspended'], // Các trạng thái hợp lệ
+        default: 'pending',
     },
     ownerId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -55,6 +55,12 @@ const storeSchema = new mongoose.Schema({
         type: Number,
         default: 0,
         min: 0,
+    },
+    latidude: {
+        type: Number,
+    },
+    longitude: {
+        type: Number,
     },
 }, { timestamps: true }); // Tự động thêm createdAt và updatedAt
 

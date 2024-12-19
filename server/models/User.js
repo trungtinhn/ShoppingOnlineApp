@@ -10,11 +10,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         unique: true,
         required: true,
-        match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // Xác thực định dạng email
+        match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     },
     phone: {
         type: String,
-        match: /^[0-9]{10,15}$/, // Định dạng số điện thoại (10-15 chữ số)
+        match: /^[0-9]{10,15}$/,
         default: null,
     },
     dateOfBirth: {
@@ -42,6 +42,10 @@ const UserSchema = new mongoose.Schema({
     gender: {
         type: String,
         default: '',
+    },
+    shopId: {
+        type: String,
+        default: null,
     },
 }, { timestamps: true });
 

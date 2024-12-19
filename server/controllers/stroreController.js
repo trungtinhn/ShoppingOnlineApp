@@ -1,28 +1,34 @@
-const Strore = require('../models/Store');
+const Store = require('../models/Store');
 
-const stroreController = {
+const storeController = {
     addStore: async (req, res) => {
         try {
-            const { StoreID, StoreName, StoreAddress, StorePhoneNumber, StoreEmail, StoreDescription, StoreImage } = req.body;
-            const newStore = new Strore({
-                StoreID,
-                StoreName,
-                StoreAddress,
-                StorePhoneNumber,
-                StoreEmail,
-                StoreDescription,
-                StoreImage
+            const { storeId, name, address, phoneNumber, email, description, image, status, ownerId, latitude, longitude } = req.body;
+
+            const newStore = new Store({
+                storeId,
+                name,
+                address,
+                phoneNumber,
+                email,
+                description,
+                image,
+                status,
+                ownerId,
+                latitude,
+                longitude
             });
+
             await newStore.save();
-            res.status(201).json({ message: 'Store created successfully' });
+            res.status(201).json({ message: 'Store created successfully', store: newStore });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
     },
 
-    getAllStores: async (req, res) => { 
+    getAllStores: async (req, res) => {
         try {
-            const stores = await Strore.find();
+            const stores = await Store.find();
             res.status(200).json(stores);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -31,7 +37,7 @@ const stroreController = {
 
     getStoreById: async (req, res) => {
         try {
-            const store = await Strore.findById(req.params.id);
+            const store = await Store.findById(req.params.id);
             if (!store) {
                 return res.status(404).json({ error: 'Store not found' });
             }
@@ -43,11 +49,11 @@ const stroreController = {
 
     updateStore: async (req, res) => {
         try {
-            const updatedStore = await Strore.findByIdAndUpdate(req.params.id, req.body, { new: true });
+            const updatedStore = await Store.findByIdAndUpdate(req.params.id, req.body, { new: true });
             if (!updatedStore) {
                 return res.status(404).json({ error: 'Store not found' });
             }
-            res.status(200).json(updatedStore);
+            res.status(200).json({ message: 'Store updated successfully', store: updatedStore });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -55,7 +61,7 @@ const stroreController = {
 
     deleteStore: async (req, res) => {
         try {
-            const deletedStore = await Strore.findByIdAndDelete(req.params.id);
+            const deletedStore = await Store.findByIdAndDelete(req.params.id);
             if (!deletedStore) {
                 return res.status(404).json({ error: 'Store not found' });
             }
@@ -64,7 +70,6 @@ const stroreController = {
             res.status(500).json({ error: error.message });
         }
     }
+};
 
-}
-
-module.exports = stroreController
+module.exports = storeController;

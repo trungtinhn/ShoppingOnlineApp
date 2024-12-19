@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 
 // Định nghĩa schema cho model YeuThich
 const LikeSchema = new mongoose.Schema({
-  UserID: {
+  userID: {
     type: String,
     required: true
   },
-  ProductList: [{
+  productList: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Product' // Tham chiếu tới model SanPham
   }]

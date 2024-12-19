@@ -6,17 +6,14 @@ const Product = require('../models/Product'); // Adjust the path as needed
 const Cart = require('../models/Cart'); // Adjust the path as needed
 const Promotion = require('../models/Promotion');
 const User = require('../models/User');
+const Store = require('../models/Store');
 const orderController = {
     createOrder : async (req, res) => {
         const session = await mongoose.startSession();
         session.startTransaction();
 
         try {
-            const { userId, products, promotionId } = req.body;
-
-            console.log(userId);
-            console.log(products);
-            console.log(promotionId);
+            const { userId, storeId , products, promotionId } = req.body;
             
             // Tạo đơn hàng mới
             const newOrder = new Order(req.body);
@@ -44,7 +41,7 @@ const orderController = {
             if (promotionId) {
                 await Promotion.updateOne(
                     { _id: promotionId },
-                    { $inc: { SoLuotSuDung: 1, SoLuotConLai: -1 } },
+                    { $inc: { usageLimit: 1, remainingUses: -1 } },
                     { session }
                 );
             }
@@ -91,21 +88,43 @@ const orderController = {
         try {
             const orders = await Order.find({ userId: req.params.userId, status: req.params.status }).lean();
 
-            const ordersWithUserDetails = await Promise.all(orders.map(async (order) => {
-                const user = await User.findOne({ MaND: order.userId });
-                if (user) {
-                    order.TenND = user.TenND;
-                    order.Avatar = user.Avatar;
+            const ordersWithShopDetails = await Promise.all(orders.map(async (order) => {
+                const store = await Store.findById(order.storeId);
+                if (store) {
+                    order.name = store.name;
+                    order.avatar = store.avatar;
                 } else {
                     // Handle case where user is not found
-                    order.TenND = 'Unknown';
-                    order.Avatar = ''; // Provide a default image if necessary
+                    order.name = 'Unknown';
+                    order.avatar = ''; // Provide a default image if necessary
                 }
                 return order;
             }));
 
 
-            res.json(ordersWithUserDetails);
+            res.json(ordersWithShopDetails);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    },
+    getOrderByStoreIdAndStatus: async (req, res) => {
+        try {
+            const orders = await Order.find({ storeId: req.params.storeId, status: req.params.status }).lean();
+            const ordersWithShopDetails = await Promise.all(orders.map(async (order) => {
+                const store = await Store.findById(order.storeId);
+                if (store) {
+                    order.name = store.name;
+                    order.avatar = store.avatar;
+                } else {
+                    // Handle case where user is not found
+                    order.name = 'Unknown';
+                    order.avatar = ''; // Provide a default image if necessary
+                }
+                return order;
+            }));
+
+
+            res.json(ordersWithShopDetails);
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
