@@ -6,6 +6,11 @@ const ProductSchema = new mongoose.Schema({
         ref: 'Product',
         required: true
     },
+    storeId: { // Thêm storeId tại đây
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Store',
+        required: true
+    },
     name: {
         type: String,
         required: true
@@ -27,9 +32,9 @@ const ProductSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    price: {
+    priceAtPurchase: {
         type: Number,
-        required: true
+        required: true,
     },
     totalPrice: {
         type: Number,

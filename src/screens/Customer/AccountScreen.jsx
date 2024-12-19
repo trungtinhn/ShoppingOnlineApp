@@ -24,7 +24,7 @@ function AccountScreen() {
     const [userData, setUserData] = useState(null);
 
     const getUserData = async () => {
-        const res = await getUserType({ MaND: firebase.auth().currentUser.uid });
+        const res = await getUserType({ userId: firebase.auth().currentUser.uid });
         if (res.status === 200) {
             setUserData(res.data);
             setIsLoading(true);

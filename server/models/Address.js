@@ -1,31 +1,31 @@
 const mongoose = require('mongoose');
 
 const addressSchema = new mongoose.Schema({
-    Address: {
+    address: {
         type: String,
         required: true
     },
-    UserID: {
+    userID: {
         type: String,
         required: true
     },
-    Ward: {
+    ward: {
         type: String,
         required: true
     },
-    District: {
+    district: {
         type: String,
         required: true
     },
-    PhoneNumber: {
+    phoneNumber: {
         type: String,
         required: true
     },
-    BuyerName: {
+    buyerName: {
         type: String,
         required: true
     },
-    City: {
+    city: {
         type: String,
         required: true
     }

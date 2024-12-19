@@ -18,7 +18,7 @@ function App() {
 
   const getPropertyValue = async uid => {
     try {
-      const res = await getUserType({MaND: uid});
+      const res = await getUserType({userId: uid});
       console.log(uid);
 
       if(res.status == 200){

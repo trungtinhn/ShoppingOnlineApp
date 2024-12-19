@@ -5,7 +5,7 @@ import { IC_Add } from "../../../assets/Customer/icons";
 import Delivery from "../../components/Customer/Delivery";
 import { BackIcon } from "../../../assets/Customer/svgs";
 import { OrderContext } from "../../context/OrderContext";
-import { getAddressByMaND } from "../../api/AddressApi";
+import { getAddressByuserId } from "../../api/AddressApi";
 import {firebase} from "../../../firebase/firebase"
 import LoadingScreen from "../LoadingScreen";
 function DeliveryScreen({ navigation }) {
@@ -14,7 +14,7 @@ function DeliveryScreen({ navigation }) {
     const [dataDelivery, setDataDelivery] = useState([])
 
     const getDataDelivery = async() => {
-        const res = await getAddressByMaND({MaND: firebase.auth().currentUser.uid})
+        const res = await getAddressByuserId({userId: firebase.auth().currentUser.uid})
         if(res.status === 200){
             const data = res.data.map((delivery) => {
                 return { ...delivery, checkSelect: false }

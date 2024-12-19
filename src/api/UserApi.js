@@ -20,10 +20,10 @@ const registerUser = async({data}) => {
         }
       }
 }
-const getUserType = async({MaND}) => {
+const getUserType = async({userId}) => {
     try{
         const idToken = await getIdToken();
-        const url = `/user/MaND=${MaND}`;
+        const url = `/user/userId=${userId}`;
         const config = {
           method: "GET",
           headers: {
@@ -41,10 +41,10 @@ const getUserType = async({MaND}) => {
         }
       }
 }
-const updateUser = async({MaND, data}) => {
+const updateUser = async({userId, data}) => {
   try {
       const idToken = await getIdToken();
-      const url = `/user/MaND=${MaND}`;
+      const url = `/user/userId=${userId}`;
       const config = {
           method: "PUT",
           headers: {
@@ -64,10 +64,10 @@ const updateUser = async({MaND, data}) => {
   }
 };
 
-const deleteUser = async({MaND}) => {
+const deleteUser = async({userId}) => {
   try {
       const idToken = await getIdToken();
-      const url = `/user/MaND=${MaND}`;
+      const url = `/user/userId=${userId}`;
       const config = {
           method: "DELETE",
           headers: {
@@ -85,10 +85,10 @@ const deleteUser = async({MaND}) => {
       }
   }
 };
-const getCurrentUserData = async({MaND}) => {
+const getCurrentUserData = async({userId}) => {
   try{
     const idToken = await getIdToken();
-    const url = `/user/getUser/MaND=${MaND}`;
+    const url = `/user/getUser/userId=${userId}`;
     const config = {
         method: "GET",
         headers: {

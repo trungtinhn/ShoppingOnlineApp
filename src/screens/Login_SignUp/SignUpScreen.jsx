@@ -62,7 +62,7 @@ export default function SignUpScreen({navigation}) {
             Email: email,
             Phone: phoneNumber,
             NgaySinh: birth,
-            MaND: user.uid,
+            userId: user.uid,
             LoaiND: userType,
             Avatar: avatarDefault,
             DiaChi: '',

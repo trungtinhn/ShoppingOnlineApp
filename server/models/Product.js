@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const natural = require('natural');
 const TfIdf = natural.TfIdf;
 const tfidf = new TfIdf();
+
+// Schema cho Color
 const ColorSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -13,6 +15,7 @@ const ColorSchema = new mongoose.Schema({
     }
 });
 
+// Schema cho Type (biến thể sản phẩm)
 const TypeSchema = new mongoose.Schema({
     size: {
         type: String,
@@ -24,104 +27,126 @@ const TypeSchema = new mongoose.Schema({
     },
     quantity: {
         type: Number,
-        required: true
+        required: true,
+        min: 0
     }
 });
 
+// Schema chính cho Product
 const ProductSchema = new mongoose.Schema({
-    OriginalPrice: {
-        type: Number,
-        required: true
-    },
-    DiscountPrice:{
-        type: Number,
-        default: 0
-    },
-    ProductImages: {
-        type: [String], // Array of strings for image URLs or paths
-        required: true
-    },
-    CategoryId: {
+    productName: { // Đặt tên field chuẩn và camelCase
         type: String,
+        required: true,
+        trim: true
+    },
+    originalPrice: {
+        type: Number,
+        required: true,
+        min: 0
+    },
+    discountPrice: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+    discountRate: {
+        type: Number,
+        default: 0,
+        min: 0,
+        max: 100
+    },
+    productImages: {
+        type: [String], // URL hoặc đường dẫn ảnh
         required: true
     },
-    Colors: {
-        type: [ColorSchema],
+    categoryId: {
+        type: mongoose.Schema.Types.ObjectId, // ID danh mục tham chiếu
+        ref: 'Category',
         required: true
     },
-    Size: {
-        type: [String],
+    globalCategoryId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'GlobalCategory',
         required: true
     },
-    Type: {
-        type: [TypeSchema],
+    colors: {
+        type: [ColorSchema], // Danh sách màu sắc
         required: true
     },
-    ReviewCount: {
-        type: Number,
-        default: 0
-    },
-    Rating: {
-        type: Number,
-        default: 0
-    },
-    SoldQuantity: {
-        type: Number,
-        default: 0
-    },
-    StockQuantity: {
-        type: Number,
+    sizes: {
+        type: [String], // Danh sách các size (M, L, XL,...)
         required: true
     },
-    ViewCount: {
-        type: Number,
-        default: 0
+    types: {
+        type: [TypeSchema], // Biến thể (size + color + quantity)
+        required: true
     },
-    WishlistCount: {
+    reviewCount: {
         type: Number,
-        default: 0
+        default: 0,
+        min: 0
     },
-    ProductName: {
+    rating: {
+        type: Number,
+        default: 0,
+        min: 0,
+        max: 5
+    },
+    soldQuantity: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+    stockQuantity: {
+        type: Number,
+        required: true,
+        min: 0
+    },
+    viewCount: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+    wishlistCount: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+    status: {
         type: String,
-        required: true
+        enum: ['available', 'outofstock', 'onwait'], // Trạng thái sản phẩm
+        required: true,
+        default: 'available'
     },
-    Status: {
-        type: String,
-        enum: ['available', 'outofstock', 'onwait'],
-        required: true
-    },
-    Trending: {
+    trending: {
         type: Boolean,
         default: false
     },
-    Onsale: {
+    onsale: {
         type: Boolean,
         default: true
     },
-    DiscountRate: {
-        type: Number,
-        default: 0
-    },
-    ProductDescription: {
+    productDescription: {
         type: String,
         default: "Không có mô tả cho sản phẩm này",
-        required: true
+        trim: true
     },
-    StoreID: {
-        type: String,
-        default: "none",
+    storeId: { // Tham chiếu đến cửa hàng
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Store',
+        required: true
     }
 }, { timestamps: true });
 
 // Tạo các đặc trưng từ giá gốc, giá giảm và tên sản phẩm
 ProductSchema.virtual('features').get(function() {
-    const priceFeature = this.GiaGoc;
-    const discountPriceFeature = this.GiaGiam;
+    const priceFeature = this.originalPrice;
+    const discountPriceFeature = this.discountPrice;
     
     // Tạo mảng các giá trị TF-IDF
     const tfidfValues = [];
-    tfidf.addDocument(this.TenSP);
-    tfidf.tfidfs(this.TenSP, function(i, measure) {
+    tfidf.addDocument(this.productName);
+    tfidf.tfidfs(this.productName, function(i, measure) {
         tfidfValues.push(measure);
     });
 

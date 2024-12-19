@@ -250,7 +250,7 @@ export default function DeTailDelivery({ navigation, route }) {
               }}
             />
             <View>
-              <PerSon avartar={item.Avatar} name={item.TenND} id={item.MaND} />
+              <PerSon avartar={item.Avatar} name={item.TenND} id={item.userId} />
 
               <View>
                 {item.DatHang.map((order, index) => {

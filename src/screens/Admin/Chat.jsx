@@ -21,7 +21,7 @@ function Chat({navigation}) {
 
       const [allUsersRes, userTypeRes] = await Promise.all([
         getAllUsers(),
-        getUserType({MaND: user.uid}),
+        getUserType({userId: user.uid}),
       ]);
 
       if (allUsersRes.status === 200) {

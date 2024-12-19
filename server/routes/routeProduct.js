@@ -9,11 +9,14 @@ router.delete('/deleteProducts/id=:id', verifyToken ,productController.deletePro
 router.get('/getProducts', verifyToken ,productController.getAllProducts);
 router.get('/getProduct/id=:id', verifyToken ,productController.getProductById);
 router.get('/getProductTrending', verifyToken ,productController.getProductTrending);
-router.get('/getProductOnsale', verifyToken ,productController.getProductOnsale);
-router.get('/getProductByCategory/MaDM=:MaDM', verifyToken ,productController.getProductByCategory);
-router.get('/getProductAvailable', verifyToken ,productController.getProductAvailable);
-router.get('/getProductOnwait', verifyToken ,productController.getProductOnwait);
-router.get('/getProductOutofstock', verifyToken ,productController.getProductOutofstock);
+router.get('/getProductOnsale', verifyToken ,productController.getProductOnSale);
+router.get('/getProductByCategory/categoryId=:categoryId', verifyToken ,productController.getProductByCategory);
+router.get('/getProducts/status/:status', verifyToken, productController.getProductsByStatus);
 router.put('/setProductStatus/status/:id',verifyToken, productController.setProductStatus);
-router.put('/checkAvailable', verifyToken ,productController.checkAvailable);
+router.put('/checkAvailable', verifyToken ,productController.checkAvailability);
+
+router.get('/products/store/:storeId', verifyToken, productController.getProductsByStoreId);
+
+router.get('/products/store/:storeId/status/:status', verifyToken, productController.getProductsByStatusAndStoreId);
+
 module.exports = router;

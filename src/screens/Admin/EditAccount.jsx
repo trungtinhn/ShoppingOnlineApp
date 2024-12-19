@@ -77,7 +77,7 @@ function EditAccount ({navigation, route}) {
           <TextInputCard
             title="User ID*"
             txtInput="Nguyen Van A"
-            value={user.MaND}
+            value={user.userId}
             onChangeText={fullName => setFullName(fullName)}
           />
         </View>
@@ -136,7 +136,7 @@ function EditAccount ({navigation, route}) {
             type="primary"
             text="Delete account"
             onPress={() => {
-              handleDeleteUser(user.MaND);
+              handleDeleteUser(user.userId);
               navigation.goBack();
             }}
           />

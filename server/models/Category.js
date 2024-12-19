@@ -6,7 +6,7 @@ const categorySchema = new mongoose.Schema({
         required: true
     },
     name: {
-        type: String,
+        type: String,  
         required: true
     },
     image: {
@@ -16,7 +16,16 @@ const categorySchema = new mongoose.Schema({
     numProduct: {
         type: Number,
         default: 0,
-    }
+    },
+    storeId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Store',
+        required: true
+    },
+    globalCategoryId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'GlobalCategory' // Liên kết với danh mục toàn cục
+    },
 }, {timestamps: true})
 
 module.exports = mongoose.model("Category", categorySchema)

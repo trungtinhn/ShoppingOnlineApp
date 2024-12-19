@@ -59,7 +59,7 @@ function ReviewScreen({navigation, route}) {
         }
     }
     const getUser = async () =>{
-        const res = await getUserType({MaND: userId});
+        const res = await getUserType({userId: userId});
         if(res.status === 200){
             setdataUser(res.data)
         }else{
@@ -120,7 +120,7 @@ function ReviewScreen({navigation, route}) {
         // Upload tất cả hình ảnh và lấy danh sách URL
         const imageUrls = await Promise.all(imageRe.map(image => UploadFile(image)));
         const data = {
-            MaND: userId,
+            userId: userId,
             MaSP: dataSanPham._id,
             NDDG: ndDG,
             NgayDG: new Date(),

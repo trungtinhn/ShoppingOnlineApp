@@ -18,7 +18,7 @@ export default function OverViewScreen({navigation}) {
   
   const handleGetCurrentUser = async () => {
     const user = firebase.auth().currentUser;
-    const res =  await getUserType({MaND: user.uid});
+    const res =  await getUserType({userId: user.uid});
     if(res.status === 200){
       setUserData(res.data);
       setImageUrl(res.data.Avatar);
