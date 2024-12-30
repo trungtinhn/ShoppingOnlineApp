@@ -17,6 +17,11 @@ const promotionSchema = new mongoose.Schema({
         min: 0, // Tối thiểu là 0
         max: 100, // Tối đa là 100 nếu là phần trăm giảm giá
     },
+    maxDiscount: { // Thêm trường giảm tối đa
+        type: Number,
+        default: null,
+        min: 0,
+    },
     minimumOrder: {
         type: Number,
         default: 0, // Đơn hàng tối thiểu mặc định là 0 nếu không yêu cầu
@@ -56,11 +61,6 @@ const promotionSchema = new mongoose.Schema({
     endDate: {
         type: Date,
         required: true, // Ngày kết thúc là bắt buộc
-    },
-    storeId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Store', // Tham chiếu đến bảng Store
-        default: null,
     },
 }, { timestamps: true });
 

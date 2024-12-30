@@ -22,7 +22,12 @@ const paymentRoutes = require("./routes/routePayment");
 const permissionRoutes = require("./routes/routePermission");
 const knnRoutes = require('./routes/routeKnn');
 const messageRoutes = require('./routes/routeMessage');
+const storeRoutes = require("./routes/routeStore");
 const globalCategoryRoutes = require("./routes/routeGlobalCategory");
+const storePromotionRoutes = require("./routes/routesStorePromotion");
+const rankRoutes = require("./routes/routeRank");
+const rankRuleRoutes = require("./routes/routeRankRule");
+const { api } = require("../src/api/AppApi");
 dotenv.config()
 mongoose.connect(process.env.MONGODB_URL.replace("<password>", process.env.MONGODB_PASSWORD)).then(() => {
     console.log("Database connected");
@@ -38,7 +43,7 @@ app.get("/", (req, res) =>
     res.status(200).json("Welcome server")
   );
 
-app.use("/api/category", categoryRoutes)
+app.use('/api/category', categoryRoutes)
 app.use('/api/products', productRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/promotion', promotionRoutes);
@@ -53,6 +58,10 @@ app.use('/api/permissions', permissionRoutes);
 app.use('/api/knn', knnRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/globalCategory', globalCategoryRoutes);
+app.use('/api/storePromotion', storePromotionRoutes);
+app.use('/api/rank', rankRoutes);
+app.use('/api/rankRule', rankRuleRoutes);
+app.use('/api/store', storeRoutes);
 
 socketSetup(server);
 server.listen(8000, () => {

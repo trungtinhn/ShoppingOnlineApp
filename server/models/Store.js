@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 
 const storeSchema = new mongoose.Schema({
-    storeId: {
-        type: String,
-        required: true,
-        unique: true, // Đảm bảo ID là duy nhất
-    },
     name: {
         type: String,
         required: true,
