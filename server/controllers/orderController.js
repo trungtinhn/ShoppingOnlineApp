@@ -7,13 +7,14 @@ const Cart = require('../models/Cart'); // Adjust the path as needed
 const Promotion = require('../models/Promotion');
 const User = require('../models/User');
 const Store = require('../models/Store');
+const StorePromotion = require('../models/StorePromotion');
 const orderController = {
     createOrder : async (req, res) => {
         const session = await mongoose.startSession();
         session.startTransaction();
 
         try {
-            const { userId, storeId , products, promotionId } = req.body;
+            const { userId, storeId , products, promotionId, storePromotionId } = req.body;
             
             // Tạo đơn hàng mới
             const newOrder = new Order(req.body);
@@ -41,6 +42,14 @@ const orderController = {
             if (promotionId) {
                 await Promotion.updateOne(
                     { _id: promotionId },
+                    { $inc: { usageLimit: 1, remainingUses: -1 } },
+                    { session }
+                );
+            }
+
+            if (storePromotionId) {
+                await StorePromotion.updateOne(
+                    { _id: storePromotionId },
                     { $inc: { usageLimit: 1, remainingUses: -1 } },
                     { session }
                 );

@@ -1,4 +1,5 @@
 const Promotion = require('../models/Promotion');
+const Rank = require('../models/Rank');
 
 const promotionController = {
     addPromotion: async (req, res) => {
@@ -66,24 +67,37 @@ const promotionController = {
         }
     },
 
-    getPromotionCurrent: async (req, res) => {
+    getAvailablePromotionsForUser: async (req, res) => {
         try {
-            const currentDate = new Date();
-            const promotions = await Promotion.find({
-                startDate: { $lte: currentDate },
-                endDate: { $gte: currentDate },
-                remainingUses: { $gt: 0 },
-            });
-
-            if (!promotions.length) {
-                return res.status(404).json({ message: 'No current promotions found!' });
-            }
-
-            res.status(200).json({ data: promotions });
+          const { userId } = req.params; // ID của người dùng
+    
+          // Lấy thông tin xếp hạng của người dùng
+          const rank = await Rank.findOne({ userId }).select('rank');
+          if (!rank) {
+            return res.status(404).json({ message: 'User rank not found!' });
+          }
+    
+          // Lấy tất cả khuyến mãi mà người dùng có thể sử dụng
+          const promotions = await Promotion.find({
+            // Khuyến mãi phải còn hiệu lực
+            startDate: { $lte: new Date() },
+            endDate: { $gte: new Date() },
+            // Nếu khuyến mãi có hạn chế bậc hạng, kiểm tra bậc hạng của người dùng
+            $or: [
+              { applicableRanks: { $in: [rank.rank] } },  // Khuyến mãi dành riêng cho bậc hạng
+              { applicableRanks: { $size: 0 } },  // Khuyến mãi không giới hạn bậc hạng
+            ],
+          });
+    
+          if (!promotions.length) {
+            return res.status(404).json({ message: 'No promotions available for this user.' });
+          }
+    
+          res.status(200).json({ data: promotions });
         } catch (error) {
-            res.status(500).json({ message: 'Failed to get current promotions!', error });
+          res.status(500).json({ message: 'Error fetching promotions', error: error.message });
         }
-    },
+      },
 
     checkPromotion: async (req, res) => {
         try {

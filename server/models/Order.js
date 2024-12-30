@@ -26,6 +26,10 @@ const OrderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Promotion',
     },
+    storePromotionId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'StorePromotion',
+    },
     products: [{
         productId: {
             type: mongoose.Schema.Types.ObjectId,
