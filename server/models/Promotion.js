@@ -31,7 +31,7 @@ const promotionSchema = new mongoose.Schema({
     },
     AnhNenKhuyenMai: {
         type: String,
-        required: fales,
+        required: false,
     },
     Type: {
         type: String,

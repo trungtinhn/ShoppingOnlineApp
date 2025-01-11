@@ -13,7 +13,7 @@ const userController = {
         try {
           const { MaND } = req.params;
           console.log(MaND);
-          const user = await User.findOne({ MaND });
+          const user = await User.findOne({ userId: MaND });
           if (user) {
 
             return res.status(200).json(user);
