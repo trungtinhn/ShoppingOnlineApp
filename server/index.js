@@ -27,7 +27,6 @@ const globalCategoryRoutes = require("./routes/routeGlobalCategory");
 const storePromotionRoutes = require("./routes/routesStorePromotion");
 const rankRoutes = require("./routes/routeRank");
 const rankRuleRoutes = require("./routes/routeRankRule");
-const { api } = require("../src/api/AppApi");
 dotenv.config()
 mongoose.connect(process.env.MONGODB_URL.replace("<password>", process.env.MONGODB_PASSWORD)).then(() => {
     console.log("Database connected");

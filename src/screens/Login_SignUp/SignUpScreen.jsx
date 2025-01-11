@@ -25,7 +25,8 @@ export default function SignUpScreen({navigation}) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [userType, setuserType] = useState('customer');
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [isStoreAccount, setIsStoreAccount] = useState(false);
+  // const [errorMessage, setErrorMessage] = useState('');
 
   const isValidForm = (fullName, email, password, confirmPassword, toggleCheckBox) => {
     if (fullName === '' && email === '' && password === '' && confirmPassword === '') {
@@ -58,18 +59,20 @@ export default function SignUpScreen({navigation}) {
           // ...
         try{
           const data = {
-            TenND: fullName,
-            Email: email,
-            Phone: phoneNumber,
-            NgaySinh: birth,
+            fullName: fullName,
+            email: email,
+            phone: phoneNumber,
+            dateOfBirth: birth,
             userId: user.uid,
-            LoaiND: userType,
-            Avatar: avatarDefault,
-            DiaChi: '',
+            userType: isStoreAccount ? 'storeOwner' : 'customer',
+            avatar: avatarDefault,
+            storeId: '',
+            address: '',
+            gender: '',
           }
           console.log(data);
           const res = await registerUser({data: data});
-          if (res.status === 200) {
+          if (res.status === 201) {
             Alert.alert('Success', 'Account created successfully');
             navigation.navigate('Congratulation');
           } else {
@@ -109,7 +112,6 @@ export default function SignUpScreen({navigation}) {
             <TextInputCard
               title="Full name*"
               txtInput="Nguyen Van A"
-              // value={fullName}
               onChangeText={fullName => setFullName(fullName)}
             />
           </View>
@@ -119,53 +121,53 @@ export default function SignUpScreen({navigation}) {
               txtInput="abc@gmail.com"
               onChangeText={email => setEmail(email)}
               keyboardType="email-address"
-              // value={email}
             />
           </View>
-
           <View style={{flex: 1}}>
             <TextInputCard
               title="Phone number"
               txtInput="03333333333"
-              // value={phoneNumber}
-              onChangeText={phoneNumber=> setPhoneNumber(phoneNumber)}
+              onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
             />
           </View>
-
           <View style={{flex: 1}}>
             <DateInputCard title="Select Date" onDateChange={handleDateChange} />
-          </View> 
-
+          </View>
           <View style={{flex: 1}}>
             <PasswordCard
               title="Password*"
               txtInput="********"
-              // value={password}
-              onChangeText={password=>setPassword(password)}
+              onChangeText={password => setPassword(password)}
             />
           </View>
-
           <View style={{flex: 1}}>
             <PasswordCard
               title="Confirm Password*"
               txtInput="********"
-              onChangeText={confirmPassword=>setConfirmPassword(confirmPassword)}
+              onChangeText={confirmPassword => setConfirmPassword(confirmPassword)}
             />
           </View>
 
           <View style={[styles.checkContainer, styles.unitContainer]}>
-              <CheckBox
-                disabled={false}
-                value={toggleCheckBox}
-                onValueChange={
-                  newValue => setToggleCheckBox(newValue)
-                }
-              />
-              <HeaderContent content="I agree with this " />
-              <TouchableOpacity onPress={() => navigation.navigate('Policy')}>
-                <Text style={styles.policyStyles}>Privary Policies</Text>
-              </TouchableOpacity>
-            </View>
+            <CheckBox
+              disabled={false}
+              value={isStoreAccount}
+              onValueChange={newValue => setIsStoreAccount(newValue)}
+            />
+            <HeaderContent content="I want to create a store account" />
+          </View>
+
+          <View style={[styles.checkContainer, styles.unitContainer]}>
+            <CheckBox
+              disabled={false}
+              value={toggleCheckBox}
+              onValueChange={newValue => setToggleCheckBox(newValue)}
+            />
+            <HeaderContent content="I agree with this " />
+            <TouchableOpacity onPress={() => navigation.navigate('Policy')}>
+              <Text style={styles.policyStyles}>Privacy Policies</Text>
+            </TouchableOpacity>
+          </View>
 
           <View style={styles.containerBot}>
             <View style={styles.button}>

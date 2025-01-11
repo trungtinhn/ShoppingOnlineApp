@@ -31,6 +31,7 @@ import DetailChatScreen from '../../screens/Admin/DetailChat';
 import DeliveryScreen from '../../screens/Customer/DeliveryScreen';
 import DeTailDelivery from '../../screens/Customer/DetailDelivery';
 import FunctionPermisson from '../../screens/Admin/FunctionPermission';
+import AdminManagement from '../../screens/Admin/AdminManagement';
 const Stack = createNativeStackNavigator();
 
 const AdminNavigation = () => {
@@ -39,7 +40,7 @@ const AdminNavigation = () => {
         <Stack.Navigator 
           screenOptions={{headerShown: false}}
           initialRouteName='OverView'>
-            <Stack.Screen name='OverView' component={OverViewScreen}/>
+            <Stack.Screen name='OverView' component={AdminManagement}/>
             <Stack.Screen name='ViewShopScreen' component={ViewShopScreen}/>
             <Stack.Screen name='ViewShopProduct' component={ViewShopProduct}/>
             <Stack.Screen name='ViewDetailsinList' component={ViewDetailsinList}/>

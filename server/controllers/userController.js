@@ -4,7 +4,7 @@ const userController = {
     // Đăng ký người dùng qua Email/Password
     registerEmailPassword: async (req, res) => {
         try {
-            const { fullName, email, phone, dateOfBirth, userId, userType, avatar, address, gender, shopId } = req.body;
+            const { fullName, email, phone, dateOfBirth, userId, userType, avatar, address, gender, storeId } = req.body;
 
             // Tạo người dùng mới
             const newUser = new User({
@@ -17,7 +17,7 @@ const userController = {
                 avatar,
                 address,
                 gender,
-                shopId,
+                storeId,
             });
 
             await newUser.save();
