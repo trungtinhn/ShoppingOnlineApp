@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
+  ActivityIndicator,
   Alert,
   FlatList,
   Image,
@@ -10,13 +11,13 @@ import {
   View,
 } from 'react-native';
 import AccountCard from '../../components/Admin/AccountCard';
-import { IC_User } from '../../../assets/Admin/icons';
+import {IC_User} from '../../../assets/Admin/icons';
 import LoadingComponent from '../../components/LoadingComponent';
 import CUSTOM_COLOR from '../../constants/color';
 import FONT_FAMILY from '../../constants/font';
 import Search from '../../components/Admin/Search';
-import { getAllUsers, getCurrentUserData, getUserType } from '../../api/UserApi';
-import { firebase } from '../../../firebase/firebase';
+import {getAllUsers, getCurrentUserData, getUserType} from '../../api/UserApi';
+import {firebase} from '../../../firebase/firebase';
 
 export const Acount = {
   name: 'Nguyen Trung Tinh',
@@ -31,7 +32,7 @@ export const Acount = {
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9z5m7BtaVEQCqDkL5UI2QrBqr1EiCI6-YXA&usqp=CAU',
 };
 
-function ManageUser({navigation}){
+function ManageUser({navigation}) {
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState({});
   const [imageUrl, setImageUrl] = useState(null);
@@ -39,73 +40,98 @@ function ManageUser({navigation}){
   const [userAvata, setUserAvata] = useState([]);
   const [searchTerm, setSearchTerm] = useState();
   const [filteredItems, setFilteredItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activatedUsers, setActivatedUsers] = useState([]);
+  const [unactivatedUsers, setUnactivatedUsers] = useState([]);
 
   const handleSearch = searchTerm => {
     setSearchTerm(searchTerm);
-    // const filteredItems = users.filter(item =>
-    //   item.TenND.toLowerCase().includes(searchTerm.toLowerCase()),
-    // );
+    const filteredItems = users.filter(item =>
+      item.fullName.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
     setFilteredItems(filteredItems);
   };
 
+  // useEffect(() => {
+  //   getUserData();
+  //   handleGetAllUser();
+  //   setIsLoading(false);
+  // }, []);
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      // const response = await axios.get('https://your-api-url.com/api/users');
+      const response = await getAllUsers();
+      const users = response.data;
+
+      const activated = users.filter(user => user.storeID);
+      const unactivated = users.filter(user => !user.storeID);
+
+      setActivatedUsers(activated);
+      setUnactivatedUsers(unactivated);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      Alert.alert('Error', 'Failed to fetch user data. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const activateUser = async (userId) => {
+    try {
+      // await axios.put(`https://your-api-url.com/api/users/${userId}/activate`);
+      Alert.alert('Success', 'User activated successfully.');
+      fetchUsers();
+    } catch (error) {
+      console.error('Error activating user:', error);
+      Alert.alert('Error', 'Failed to activate user. Please try again.');
+    }
+  };
+
   useEffect(() => {
-    setTimeout(() => {
-      // Assume data is fetched here
-      // const fetchedData = 'Sample Data';
-      // setData(fetchedData);
-      getUserData();
-      handleGetAllUser();
-      setIsLoading(false);
-    }, 2000);
-    // fetchUserData(firebase.auth().currentUser.uid);
-    // fetchImageUrl(firebase.auth().currentUser.uid, 'Avatar').then(url =>
-    //   setImageUrl(url),
-    // );
-    
+    fetchUsers();
   }, []);
 
   const handleUserPress = user => {
-    // Navigate to the edit screen with the selected user data
-    navigation.navigate('EditAccount', { user });
+    navigation.navigate('EditAccount', {user});
   };
 
-
-  const handleFunctionPermisson = (item) => {};
+  const handleFunctionPermisson = item => {};
   const handleGetAllUser = async () => {
     const res = await getAllUsers();
     setUsers(res.data);
-  }
-const getUserData = async () => {
-  const user = firebase.auth().currentUser;
-  const res =  await getUserType({userId: user.uid});
-  console.log(res.data)
-  setUserData(res.data);
-};
-  const renderUser = ({ item }) => (
-    
-   (userData._id === item._id)?(<></>) : (<TouchableOpacity onPress={() => handleUserPress(item)}>
-      <View style={{}}>
-        <AccountCard
-          source={{ uri: item.Avatar }}
-          name={item.TenND}
-          userType={item.LoaiND}
-          onPress={() => handleFunctionPermisson(item)}
-        />
-      </View>
-    </TouchableOpacity>)
-  );
+  };
+  const getUserData = async () => {
+    const user = firebase.auth().currentUser;
+    const res = await getCurrentUserData({userId: user.uid});
+    setUserData(res.data);
+  };
+  const renderUser = ({item}) =>
+    userData._id === item._id ? (
+      <></>
+    ) : (
+      <TouchableOpacity onPress={() => handleUserPress(item)}>
+        <View style={{}}>
+          <AccountCard
+            source={{uri: item.avatar}}
+            name={item.fullName}
+            userType={item.userType}
+            onPress={() => handleFunctionPermisson(item)}
+          />
+        </View>
+      </TouchableOpacity>
+    );
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ width: '100%', height: 15 }} />
-
-      {userData ? (
+      <View style={{width: '100%', height: 15}} />
+      {users ? (
         <>
           <View style={styles.accountContainer}>
             <View style={styles.avataContainer}>
-              {userData.Avatar ? (
+              {userData.avatar ? (
                 <Image
-                  source={{ uri: userData.Avatar }}
+                  source={{uri: userData.avatar}}
                   style={{
                     width: '80%',
                     height: '80%',
@@ -131,14 +157,14 @@ const getUserData = async () => {
                 />
               )}
             </View>
-            <View style={{ width: 15, height: '100%' }} />
-            <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
-              <Text style={[styles.textViewStyles, { fontSize: 20 }]}>
-                {userData.TenND}
+            <View style={{width: 15, height: '100%'}} />
+            <View style={{flexDirection: 'column', justifyContent: 'center'}}>
+              <Text style={[styles.textViewStyles, {fontSize: 20}]}>
+                {userData.fullName}
               </Text>
-              <View style={{ width: '100%', height: 5 }} />
-              <Text style={[styles.textViewStyles, { fontSize: 15 }]}>
-                {userData.LoaiND}
+              <View style={{width: '100%', height: 5}} />
+              <Text style={[styles.textViewStyles, {fontSize: 15}]}>
+                {userData.userType}
               </Text>
             </View>
           </View>
@@ -153,7 +179,7 @@ const getUserData = async () => {
 
           <>
             <View style={styles.searchContainer}>
-              <View style={{ width: '5%', height: '100%' }} />
+              <View style={{width: '5%', height: '100%'}} />
 
               <View style={styles.searchViewContainer}>
                 <Search
@@ -166,10 +192,10 @@ const getUserData = async () => {
                   onSearch={handleSearch}
                 />
               </View>
-              <View style={{ width: '5%', height: '100%' }} />
+              <View style={{width: '5%', height: '100%'}} />
               <TouchableOpacity style={styles.butAddContainer}>
                 <Text
-                  style={{ color: CUSTOM_COLOR.White }}
+                  style={{color: CUSTOM_COLOR.White}}
                   onPress={() => navigation.navigate('AddAccount')}>
                   Add Account
                 </Text>
@@ -179,23 +205,50 @@ const getUserData = async () => {
 
           <>
             <View style={styles.listViewContainer}>
-              {/* Lay list nguoi dung ve hien thi */}
-              {/* <AccountCard onPress={() => navigation.navigate('EditAccount')} /> */}
-              <FlatList
+              {/* <FlatList
                 data={searchTerm ? filteredItems : users}
                 renderItem={renderUser}
                 keyExtractor={(item, index) => index}
-              />
+              /> */}
+              {loading ? (
+                <ActivityIndicator
+                  size="large"
+                  color={CUSTOM_COLOR.FlushOrange}
+                  style={styles.loading}
+                />
+              ) : (
+                <>
+                  <Text style={styles.sectionTitle}>Activated Users</Text>
+                  <FlatList
+                    data={activatedUsers}
+                    keyExtractor={item => item.id}
+                    renderItem={item =>
+                      renderUserItem({...item, isActivated: true})
+                    }
+                    style={styles.list}
+                  />
+
+                  <Text style={styles.sectionTitle}>Unactivated Users</Text>
+                  <FlatList
+                    data={unactivatedUsers}
+                    keyExtractor={item => item.id}
+                    renderItem={item =>
+                      renderUserItem({...item, isActivated: false})
+                    }
+                    style={styles.list}
+                  />
+                </>
+              )}
             </View>
           </>
-          <View style={{ width: '100%', height: 20 }} />
+          <View style={{width: '100%', height: 20}} />
         </>
       ) : (
         <LoadingComponent text="Loading data..." />
       )}
     </SafeAreaView>
   );
-};
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,

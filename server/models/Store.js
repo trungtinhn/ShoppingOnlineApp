@@ -9,11 +9,13 @@ const storeSchema = new mongoose.Schema({
     address: {
         type: String,
         required: true,
+        default: '', // Mặc định là chuỗi rỗng nếu không có địa chỉ cụ thể
     },
     phoneNumber: {
         type: String,
         required: true,
         match: /^[0-9]{10,15}$/, // Định dạng số điện thoại hợp lệ
+        default: '', // Mặc định là chuỗi rỗng nếu không có số điện thoại
     },
     email: {
         type: String,

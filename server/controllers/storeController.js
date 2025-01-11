@@ -1,12 +1,10 @@
 const Store = require('../models/Store');
-
+const User = require('../models/User');
 const storeController = {
     addStore: async (req, res) => {
         try {
-            const { storeId, name, address, phoneNumber, email, description, image, status, ownerId, latitude, longitude } = req.body;
-
+            const { name, address, phoneNumber, email, description, image, status, ownerId, latitude, longitude } = req.body;
             const newStore = new Store({
-                storeId,
                 name,
                 address,
                 phoneNumber,
@@ -20,6 +18,7 @@ const storeController = {
             });
 
             await newStore.save();
+            await User.findByIdAndUpdate(ownerId, { storeId: newStore._id });
             res.status(201).json({ message: 'Store created successfully', store: newStore });
         } catch (error) {
             res.status(500).json({ error: error.message });

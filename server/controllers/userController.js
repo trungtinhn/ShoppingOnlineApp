@@ -1,5 +1,5 @@
 const User = require('../models/User');
-
+const Store = require('../models/Store');
 const userController = {
     // Đăng ký người dùng qua Email/Password
     registerEmailPassword: async (req, res) => {
@@ -105,6 +105,23 @@ const userController = {
             return res.status(500).json({ message: error.message });
         }
     },
+    // activateUser: async (req, res) => {
+    //     try {
+    //         const { userId } = req.params;
+    //         const newStore = new Store({
+    //             storeName: 'New Store',
+    //             storeOwner: userId,
+    //         });
+    //         const activatedUser = await User.findOneAndUpdate( { userId }, { storeId: newStore._id }, { new: true, runValidators: true });
+    //         if (activatedUser) {
+    //             return res.status(200).json({ message: 'User activated successfully' });
+    //         } else {
+    //             return res.status(404).json({ message: 'User not found' });
+    //         }
+    //     } catch (error) {
+    //         return res.status(500).json({ message: error.message });
+    //     }
+    // }
 };
 
 module.exports = userController;

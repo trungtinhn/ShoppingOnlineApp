@@ -14,7 +14,7 @@ const toolsData = [
     title: 'Basic Function',
     items: [
       {name: 'ChatWithStore', icon: IC_Chat, screen: 'Chat'},
-      {name: 'AdminManament', icon: IC_Catgory, screen: ''},
+      {name: 'AdminManament', icon: IC_Catgory, screen: 'ManageUser'},
     ],
   }
 ];

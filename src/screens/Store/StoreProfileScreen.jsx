@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   View,
   Text,
@@ -6,7 +6,8 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-} from "react-native";
+} from 'react-native';
+import { firebase } from '../../../firebase/firebase';
 
 const StoreProfileScreen = () => {
   return (
@@ -14,7 +15,7 @@ const StoreProfileScreen = () => {
       {/* Header */}
       <View style={styles.header}>
         <Image
-          source={{ uri: "https://via.placeholder.com/80" }}
+          source={{uri: 'https://via.placeholder.com/80'}}
           style={styles.avatar}
         />
         <View style={styles.headerText}>
@@ -65,7 +66,11 @@ const StoreProfileScreen = () => {
       <TouchableOpacity style={styles.footerButton}>
         <Text style={styles.footerText}>Other Account</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.footerButton}>
+      <TouchableOpacity
+        style={styles.footerButton}
+        onPress={() => {
+          firebase.auth().signOut();
+        }}>
         <Text style={styles.footerText}>Log out</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -73,7 +78,7 @@ const StoreProfileScreen = () => {
 };
 
 // Component for Menu Item
-const MenuItem = ({ title, help }) => (
+const MenuItem = ({title, help}) => (
   <TouchableOpacity style={styles.menuItem}>
     <Text style={styles.menuText}>{title}</Text>
     {help && <Text style={styles.helpText}>Get Help</Text>}
@@ -83,12 +88,12 @@ const MenuItem = ({ title, help }) => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f7f7f7",
+    backgroundColor: '#f7f7f7',
     paddingHorizontal: 16,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: 20,
   },
   avatar: {
@@ -98,76 +103,76 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   headerText: {
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   username: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   sellerID: {
     fontSize: 12,
-    color: "gray",
+    color: 'gray',
   },
   banner: {
-    backgroundColor: "#007BFF",
+    backgroundColor: '#007BFF',
     padding: 12,
     borderRadius: 8,
     marginBottom: 16,
-    alignItems: "center",
+    alignItems: 'center',
   },
   bannerText: {
-    color: "white",
+    color: 'white',
     fontSize: 14,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   shopSection: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 20,
   },
   shopButton: {
     flex: 1,
     paddingVertical: 12,
     marginHorizontal: 8,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 8,
-    alignItems: "center",
+    alignItems: 'center',
     elevation: 2,
   },
   menuSection: {
     marginVertical: 8,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 8,
     padding: 8,
     elevation: 1,
   },
   menuItem: {
     paddingVertical: 12,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     borderBottomWidth: 0.5,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
   },
   menuText: {
     fontSize: 14,
-    color: "#333",
+    color: '#333',
   },
   helpText: {
     fontSize: 12,
-    color: "#007BFF",
+    color: '#007BFF',
   },
   footerButton: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     padding: 12,
     borderRadius: 8,
     marginBottom: 10,
-    alignItems: "center",
+    alignItems: 'center',
     elevation: 1,
   },
   footerText: {
     fontSize: 14,
-    fontWeight: "bold",
-    color: "#333",
+    fontWeight: 'bold',
+    color: '#333',
   },
 });
 

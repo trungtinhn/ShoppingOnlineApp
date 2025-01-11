@@ -36,7 +36,6 @@ function EditAccount ({navigation, route}) {
   const updateFullname = async (documentId, newData) => {
     try {
 
-
       console.log('Profile updated successfully!');
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -86,7 +85,7 @@ function EditAccount ({navigation, route}) {
           <TextInputCard
             title="Full name*"
             txtInput="Nguyen Van A"
-            value={user.TenND}
+            value={user.fullName}
             onChangeText={fullName => setFullName(fullName)}
           />
         </View>
@@ -97,7 +96,7 @@ function EditAccount ({navigation, route}) {
             txtInput="abc@gmail.com"
             onChangeText={email => setEmail(email)}
             keyboardType="email-address"
-            value={user.Email}
+            value={user.email}
           />
         </View>
 
@@ -105,7 +104,7 @@ function EditAccount ({navigation, route}) {
           <TextInputCard
             title="Phone number"
             txtInput="03333333333"
-            value={user.Phone}
+            value={user.phone}
             onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
           />
         </View>
@@ -114,7 +113,7 @@ function EditAccount ({navigation, route}) {
           <TextInputCard
             title="Day of birth"
             txtInput="dd/mm/yy"
-            value={user.NgaySinh}
+            value={user.dateOfBirth}
             onChangeText={birth => setBirth(birth)}
           />
         </View>
@@ -122,7 +121,7 @@ function EditAccount ({navigation, route}) {
         <View style={{flex: 1}}>
           <TextInputCard
             title="User Type"
-            value={user.LoaiND}
+            value={user.userType}
             onChangeText={birth => setBirth(birth)}
           />
         </View>

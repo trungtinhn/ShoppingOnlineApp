@@ -70,7 +70,6 @@ export default function SignUpScreen({navigation}) {
             address: '',
             gender: '',
           }
-          console.log(data);
           const res = await registerUser({data: data});
           if (res.status === 201) {
             Alert.alert('Success', 'Account created successfully');

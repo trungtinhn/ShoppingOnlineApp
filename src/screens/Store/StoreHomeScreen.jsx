@@ -1,7 +1,26 @@
-import React from "react";
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from "react-native";
-
-const StoreHomeScreen = () => {
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import {getCurrentUserData} from '../../api/UserApi';
+import {firebase} from '../../../firebase/firebase';
+const StoreHomeScreen = ({navigation}) => {
+  const [userData, setUserData] = useState({});
+  const handleGetCurrentUser = async () => {
+    const user = firebase.auth().currentUser;
+    const res = await getCurrentUserData({userId: user.uid});
+    if (res.status === 200) {
+      setUserData(res.data);
+    }
+  };
+  useEffect(() => {
+    handleGetCurrentUser();
+  }, []);
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
@@ -9,10 +28,10 @@ const StoreHomeScreen = () => {
         <Text style={styles.headerTitle}>Seller Center</Text>
         <View style={styles.userInfo}>
           <Image
-            source={{ uri: "https://via.placeholder.com/40" }}
+            source={{uri: userData.avatar}}
             style={styles.userIcon}
           />
-          <Text style={styles.userName}>qdSBH6t2</Text>
+          <Text style={styles.userName}>{userData.fullName}</Text>
         </View>
       </View>
 
@@ -20,7 +39,7 @@ const StoreHomeScreen = () => {
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>Order</Text>
         <View style={styles.orderStats}>
-          {["To Process", "Shipping", "Return", "Review"].map((item, index) => (
+          {['To Process', 'Shipping', 'Return', 'Review'].map((item, index) => (
             <View key={index} style={styles.statItem}>
               <Text style={styles.statValue}>0</Text>
               <Text style={styles.statLabel}>{item}</Text>
@@ -29,16 +48,15 @@ const StoreHomeScreen = () => {
         </View>
       </View>
 
-      {/* Business Setup */}
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>Start your business right now!</Text>
-        {["Add Email", "Add Warehouse Address", "Add ID & Bank documents", "Upload Products"].map(
-          (item, index) => (
-            <TouchableOpacity key={index} style={styles.button}>
-              <Text style={styles.buttonText}>{item}</Text>
-            </TouchableOpacity>
-          )
-        )}
+        {[
+          'Add Store Information',
+        ].map((item, index) => (
+          <TouchableOpacity key={index} style={styles.button} onPress={() => navigation.navigate('InfoStore')}>
+            <Text style={styles.buttonText}>{item}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
 
       {/* Growth Center */}
@@ -65,7 +83,9 @@ const StoreHomeScreen = () => {
 
       {/* Product Upload */}
       <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Add 3 Products to get traffic bonus</Text>
+        <Text style={styles.sectionTitle}>
+          Add 3 Products to get traffic bonus
+        </Text>
         <View style={styles.row}>
           {Array(3)
             .fill(0)
@@ -81,10 +101,10 @@ const StoreHomeScreen = () => {
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>Lazada University</Text>
         {[
-          "Cách tham gia Chương trình khuyến mãi",
-          "Đầu tư và thu nhiều lợi nhuận",
-          "Am hiểu chỉ số kinh doanh",
-          "Khuyến mãi lớn, truy cập khung giờ vàng",
+          'Cách tham gia Chương trình khuyến mãi',
+          'Đầu tư và thu nhiều lợi nhuận',
+          'Am hiểu chỉ số kinh doanh',
+          'Khuyến mãi lớn, truy cập khung giờ vàng',
         ].map((item, index) => (
           <Text key={index} style={styles.listItem}>
             • {item}
@@ -98,25 +118,25 @@ const StoreHomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: '#f5f5f5',
     padding: 10,
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 10,
-    backgroundColor: "#007bff",
+    backgroundColor: '#007bff',
     borderRadius: 5,
   },
   headerTitle: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   userInfo: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   userIcon: {
     width: 40,
@@ -125,90 +145,90 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   userName: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 16,
   },
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 5,
     padding: 15,
     marginBottom: 10,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 2,
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 10,
   },
   orderStats: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   statItem: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   statValue: {
     fontSize: 20,
-    fontWeight: "bold",
-    color: "#007bff",
+    fontWeight: 'bold',
+    color: '#007bff',
   },
   statLabel: {
     fontSize: 12,
-    color: "#666",
+    color: '#666',
   },
   button: {
-    backgroundColor: "#007bff",
+    backgroundColor: '#007bff',
     padding: 10,
     borderRadius: 5,
     marginTop: 10,
   },
   buttonText: {
-    color: "#fff",
-    textAlign: "center",
+    color: '#fff',
+    textAlign: 'center',
     fontSize: 14,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   subtitle: {
     fontSize: 14,
-    color: "#666",
+    color: '#666',
     marginBottom: 10,
   },
   row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: 10,
   },
   smallButton: {
     flex: 1,
     marginHorizontal: 5,
-    backgroundColor: "#e0e0e0",
+    backgroundColor: '#e0e0e0',
     padding: 10,
     borderRadius: 5,
   },
   smallButtonText: {
-    textAlign: "center",
-    color: "#333",
+    textAlign: 'center',
+    color: '#333',
   },
   addButton: {
     width: 50,
     height: 50,
-    backgroundColor: "#007bff",
+    backgroundColor: '#007bff',
     borderRadius: 25,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   addButtonText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   listItem: {
     fontSize: 14,
     marginBottom: 5,
-    color: "#333",
+    color: '#333',
   },
 });
 
