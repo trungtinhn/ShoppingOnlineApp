@@ -28,13 +28,12 @@ const StoreHomeScreen = ({navigation}) => {
         <Text style={styles.headerTitle}>Seller Center</Text>
         <View style={styles.userInfo}>
           <Image
-            source={{uri: userData.avatar}}
+            source={{uri: userData.avatar ?? 'https://via.placeholder.com/50'}}
             style={styles.userIcon}
           />
           <Text style={styles.userName}>{userData.fullName}</Text>
         </View>
       </View>
-
       {/* Order Summary */}
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>Order</Text>
@@ -47,18 +46,18 @@ const StoreHomeScreen = ({navigation}) => {
           ))}
         </View>
       </View>
-
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Start your business right now!</Text>
-        {[
-          'Add Store Information',
-        ].map((item, index) => (
-          <TouchableOpacity key={index} style={styles.button} onPress={() => navigation.navigate('InfoStore')}>
-            <Text style={styles.buttonText}>{item}</Text>
+      {!userData.storeId ?? (
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>
+            Start your business right now!
+          </Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('InfoStore')}>
+            <Text style={styles.buttonText}>{'Add Store Information'}</Text>
           </TouchableOpacity>
-        ))}
-      </View>
-
+        </View>
+      )}
       {/* Growth Center */}
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>Growth Center</Text>
@@ -79,37 +78,6 @@ const StoreHomeScreen = ({navigation}) => {
             <Text style={styles.smallButtonText}>Traffic Source Ranking</Text>
           </TouchableOpacity>
         </View>
-      </View>
-
-      {/* Product Upload */}
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>
-          Add 3 Products to get traffic bonus
-        </Text>
-        <View style={styles.row}>
-          {Array(3)
-            .fill(0)
-            .map((_, index) => (
-              <TouchableOpacity key={index} style={styles.addButton}>
-                <Text style={styles.addButtonText}>+</Text>
-              </TouchableOpacity>
-            ))}
-        </View>
-      </View>
-
-      {/* Lazada University */}
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Lazada University</Text>
-        {[
-          'Cách tham gia Chương trình khuyến mãi',
-          'Đầu tư và thu nhiều lợi nhuận',
-          'Am hiểu chỉ số kinh doanh',
-          'Khuyến mãi lớn, truy cập khung giờ vàng',
-        ].map((item, index) => (
-          <Text key={index} style={styles.listItem}>
-            • {item}
-          </Text>
-        ))}
       </View>
     </ScrollView>
   );

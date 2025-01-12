@@ -7,39 +7,48 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import { IC_Catgory, IC_Chat } from '../../../assets/Admin/icons';
+import { IC_AccountManagement, IC_ChatWithStore, IC_logout } from '../../../assets/Admin/icons';
+import CUSTOM_COLOR from '../../constants/color';
 
 const toolsData = [
   {
     title: 'Basic Function',
     items: [
-      {name: 'ChatWithStore', icon: IC_Chat, screen: 'Chat'},
-      {name: 'AdminManament', icon: IC_Catgory, screen: 'ManageUser'},
+      {name: 'ChatWithStore', icon: IC_ChatWithStore, screen: 'Chat'},
+      {name: 'AdminManament', icon: IC_AccountManagement, screen: 'ManageUser'},
     ],
-  }
+  },
 ];
 
 const AdminManagement = ({navigation}) => {
   return (
-    <ScrollView style={styles.container}>
-      {toolsData.map((section, index) => (
-        <View key={index} style={styles.section}>
-          <Text style={styles.sectionTitle}>{section.title}</Text>
-          <View style={styles.itemsContainer}>
-            {section.items.map((item, idx) => (
-              <TouchableOpacity
-                key={idx}
-                style={styles.item}
-                onPress={() => navigation.navigate(item.screen)} // Điều hướng
-              >
-                <Image source={item.icon} style={styles.icon} />
-                <Text style={styles.itemText}>{item.name}</Text>
-              </TouchableOpacity>
-            ))}
+  <View style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Admin Management</Text>
+      </View>
+
+      {/* Main Content */}
+      <ScrollView contentContainerStyle={styles.content}>
+        {toolsData.map((section, index) => (
+          <View key={index} style={styles.section}>
+            <Text style={styles.sectionTitle}>{section.title}</Text>
+            <View style={styles.itemsContainer}>
+              {section.items.map((item, idx) => (
+                <TouchableOpacity
+                  key={idx}
+                  style={styles.item}
+                  onPress={() => navigation.navigate(item.screen)} // Điều hướng
+                >
+                  <Image source={item.icon} style={styles.icon} />
+                  <Text style={styles.itemText}>{item.name}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
-        </View>
-      ))}
-    </ScrollView>
+        ))}
+      </ScrollView>
+    </View>
   );
 };
 
@@ -47,7 +56,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f7f7f7',
+  },
+  header: {
+    backgroundColor: CUSTOM_COLOR.FlushOrange,
+    paddingVertical: 16,
     paddingHorizontal: 16,
+    alignItems: 'center',
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#ffffff',
+  },
+  content: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
   },
   section: {
     marginBottom: 24,
@@ -60,7 +83,6 @@ const styles = StyleSheet.create({
   itemsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: '',
   },
   item: {
     width: '33%',

@@ -9,5 +9,6 @@ router.put('/userId=:userId', verifyToken, userController.updateUser);
 router.delete('/userId=:userId', verifyToken, userController.deleteUser);
 router.get('/getUser/userId=:userId', verifyToken, userController.getCurrentUserData);
 router.get('/users', verifyToken, userController.getAllUsers);
+router.get('/storeOwners', verifyToken, userController.getAllStoreOwners);
 
 module.exports = router;

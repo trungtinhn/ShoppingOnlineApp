@@ -47,3 +47,5 @@ export { default as IC_Search } from '../icons/Search.png';
 export { default as IC_Chat } from '../icons/chat.png'
 export { default as IC_ShoppingCart } from '../icons/shoppingcarticon.png'
 export { default as IC_FunctionPermission } from '../icons/OverView/function.png';
+export { default as IC_AccountManagement } from '../icons/accounts_management.png';
+export {default as IC_ChatWithStore} from '../icons/chatwithstore.png'

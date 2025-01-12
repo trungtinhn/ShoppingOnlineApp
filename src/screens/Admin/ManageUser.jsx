@@ -16,21 +16,15 @@ import LoadingComponent from '../../components/LoadingComponent';
 import CUSTOM_COLOR from '../../constants/color';
 import FONT_FAMILY from '../../constants/font';
 import Search from '../../components/Admin/Search';
-import {getAllUsers, getCurrentUserData, getUserType} from '../../api/UserApi';
+import {
+  getAllStoreOwners,
+  getAllUsers,
+  getCurrentUserData,
+  getUserType,
+} from '../../api/UserApi';
 import {firebase} from '../../../firebase/firebase';
-
-export const Acount = {
-  name: 'Nguyen Trung Tinh',
-  avartar:
-    'https://icdn.dantri.com.vn/thumb_w/660/2021/09/24/lucasweibo-1632498824939.jpeg',
-  id: '21520115',
-  address: 'Binh Tan, Ho Chi Minh',
-  phone: '0704408389',
-  sex: 'male',
-  day: '16/12/2003',
-  background:
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9z5m7BtaVEQCqDkL5UI2QrBqr1EiCI6-YXA&usqp=CAU',
-};
+import {getStoreById, updateStore} from '../../api/StroreApi';
+import { act } from 'react-test-renderer';
 
 function ManageUser({navigation}) {
   const [isLoading, setIsLoading] = useState(true);
@@ -40,9 +34,64 @@ function ManageUser({navigation}) {
   const [userAvata, setUserAvata] = useState([]);
   const [searchTerm, setSearchTerm] = useState();
   const [filteredItems, setFilteredItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [activatedUsers, setActivatedUsers] = useState([]);
-  const [unactivatedUsers, setUnactivatedUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [activeTab, setActiveTab] = useState('pending');
+
+  const filterUsers = async () => {
+    try {
+      // Create new array for filtered results
+      const filtered = [];
+
+      // Process each user
+      for (const user of users) {
+        // Skip users without storeId
+        if (!user.storeId) continue;
+
+        // Fetch store data
+        const res = await getStoreById({storeId: user.storeId});
+        if (!res || !res.data) continue;
+
+        const store = res.data;
+
+        // Filter based on store status
+        switch (activeTab) {
+          case 'pending':
+            if (store.status === 'pending') filtered.push(user);
+            break;
+          case 'active':
+            if (store.status === 'active') filtered.push(user);
+            break;
+          case 'stop':
+            if (store.status === 'stop') filtered.push(user);
+            break;
+        }
+      }
+      setFilteredUsers(filtered);
+    } catch (error) {
+      console.error('Error filtering users:', error);
+    }
+  };
+  useEffect(() => {
+    filterUsers();
+  }, [activeTab, users]);
+
+  const TabBar = () => (
+    <View style={styles.tabContainer}>
+      {['pending', 'active', 'stop'].map(tab => (
+        <TouchableOpacity
+          key={tab}
+          style={[styles.tab, activeTab === tab && styles.activeTab]}
+          onPress={() => {
+            setActiveTab(tab);
+          }}>
+          <Text
+            style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
+            {tab.charAt(0).toUpperCase() + tab.slice(1)}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
 
   const handleSearch = searchTerm => {
     setSearchTerm(searchTerm);
@@ -52,53 +101,76 @@ function ManageUser({navigation}) {
     setFilteredItems(filteredItems);
   };
 
-  // useEffect(() => {
-  //   getUserData();
-  //   handleGetAllUser();
-  //   setIsLoading(false);
-  // }, []);
-  const fetchUsers = async () => {
-    setLoading(true);
-    try {
-      // const response = await axios.get('https://your-api-url.com/api/users');
-      const response = await getAllUsers();
-      const users = response.data;
-
-      const activated = users.filter(user => user.storeID);
-      const unactivated = users.filter(user => !user.storeID);
-
-      setActivatedUsers(activated);
-      setUnactivatedUsers(unactivated);
-    } catch (error) {
-      console.error('Error fetching users:', error);
-      Alert.alert('Error', 'Failed to fetch user data. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const activateUser = async (userId) => {
-    try {
-      // await axios.put(`https://your-api-url.com/api/users/${userId}/activate`);
-      Alert.alert('Success', 'User activated successfully.');
-      fetchUsers();
-    } catch (error) {
-      console.error('Error activating user:', error);
-      Alert.alert('Error', 'Failed to activate user. Please try again.');
-    }
-  };
-
   useEffect(() => {
-    fetchUsers();
+    getUserData();
+    handleGetAllUser();
+    setIsLoading(false);
   }, []);
 
   const handleUserPress = user => {
     navigation.navigate('EditAccount', {user});
   };
 
-  const handleFunctionPermisson = item => {};
+  const handleActiveAccount = async item => {
+    const res = await getStoreById({storeId: item.storeId});
+    const store = res.data;
+    if (store.status === 'pending') {
+      Alert.alert(
+        'Active Account',
+        'Are you sure to active this account?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: async () => {
+              const res = await getCurrentUserData({userId: item.userId});
+              if (res.data.userType === 'storeOwner') {
+                const res = await getStoreById({storeId: item.storeId});
+                const store = res.data;
+                store.status = 'active';
+                await updateStore({storeId: item.storeId, data: store});
+              }
+              handleGetAllUser();
+            },
+          },
+        ],
+        {cancelable: false},
+      );
+    } else {
+      Alert.alert(
+        'Stop Account',
+        'Are you sure to stop this account?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: async () => {
+              const res = await getUserType({userId: item.userId});
+              if (res.data.userType === 'storeOwner') {
+                const res = await getStoreById({storeId: item.storeId});
+                const store = res.data;
+                store.status = 'stop';
+                await updateStore({storeId: item.storeId, data: store});
+              }
+              handleGetAllUser();
+            },
+          },
+        ],
+        {cancelable: false},
+      );
+    }
+  };
+
   const handleGetAllUser = async () => {
-    const res = await getAllUsers();
+    const res = await getAllStoreOwners();
     setUsers(res.data);
   };
   const getUserData = async () => {
@@ -106,6 +178,7 @@ function ManageUser({navigation}) {
     const res = await getCurrentUserData({userId: user.uid});
     setUserData(res.data);
   };
+
   const renderUser = ({item}) =>
     userData._id === item._id ? (
       <></>
@@ -116,7 +189,8 @@ function ManageUser({navigation}) {
             source={{uri: item.avatar}}
             name={item.fullName}
             userType={item.userType}
-            onPress={() => handleFunctionPermisson(item)}
+            isActived={activeTab === 'pending'}
+            onPress={() => handleActiveAccount(item)}
           />
         </View>
       </TouchableOpacity>
@@ -176,11 +250,8 @@ function ManageUser({navigation}) {
               backgroundColor: CUSTOM_COLOR.SlateGray,
             }}
           />
-
           <>
             <View style={styles.searchContainer}>
-              <View style={{width: '5%', height: '100%'}} />
-
               <View style={styles.searchViewContainer}>
                 <Search
                   placeholder="Search"
@@ -192,53 +263,16 @@ function ManageUser({navigation}) {
                   onSearch={handleSearch}
                 />
               </View>
-              <View style={{width: '5%', height: '100%'}} />
-              <TouchableOpacity style={styles.butAddContainer}>
-                <Text
-                  style={{color: CUSTOM_COLOR.White}}
-                  onPress={() => navigation.navigate('AddAccount')}>
-                  Add Account
-                </Text>
-              </TouchableOpacity>
             </View>
           </>
-
           <>
-            <View style={styles.listViewContainer}>
-              {/* <FlatList
-                data={searchTerm ? filteredItems : users}
+            <TabBar />
+           <View style={styles.listViewContainer}>
+              <FlatList
+                data={searchTerm ? filteredItems : filteredUsers}
                 renderItem={renderUser}
-                keyExtractor={(item, index) => index}
-              /> */}
-              {loading ? (
-                <ActivityIndicator
-                  size="large"
-                  color={CUSTOM_COLOR.FlushOrange}
-                  style={styles.loading}
-                />
-              ) : (
-                <>
-                  <Text style={styles.sectionTitle}>Activated Users</Text>
-                  <FlatList
-                    data={activatedUsers}
-                    keyExtractor={item => item.id}
-                    renderItem={item =>
-                      renderUserItem({...item, isActivated: true})
-                    }
-                    style={styles.list}
-                  />
-
-                  <Text style={styles.sectionTitle}>Unactivated Users</Text>
-                  <FlatList
-                    data={unactivatedUsers}
-                    keyExtractor={item => item.id}
-                    renderItem={item =>
-                      renderUserItem({...item, isActivated: false})
-                    }
-                    style={styles.list}
-                  />
-                </>
-              )}
+                keyExtractor={item => item._id}
+              />
             </View>
           </>
           <View style={{width: '100%', height: 20}} />
@@ -281,10 +315,11 @@ const styles = StyleSheet.create({
   },
 
   searchViewContainer: {
-    width: '60%',
+    width: '100',
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 20,
   },
   butAddContainer: {
     width: '25%',
@@ -300,6 +335,30 @@ const styles = StyleSheet.create({
     flex: 10,
     // justifyContent: 'center',
     alignItems: 'center',
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 10,
+    backgroundColor: '#f5f5f5',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  tab: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+  },
+  activeTab: {
+    backgroundColor: CUSTOM_COLOR.FlushOrange,
+  },
+  tabText: {
+    color: '#666',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  activeTabText: {
+    color: '#fff',
   },
 });
 export default ManageUser;

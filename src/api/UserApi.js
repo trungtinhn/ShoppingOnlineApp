@@ -1,5 +1,6 @@
 import { getIdToken } from "../middleware/getToken";
 import { api } from "./AppApi";
+
 const registerUser = async({data}) => {
     try {
         const url = "/user/register";
@@ -127,6 +128,27 @@ const getAllUsers = async() => {
       }
   }
 };
+const getAllStoreOwners = async() => {
+  try {
+      const idToken = await getIdToken();
+      const url = `/user/storeOwners`;
+      const config = {
+          method: "GET",
+          headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${idToken}`
+          },
+      };
+      const res = await api(url, config);
+      return res;
+  } catch (error) {
+      if (error.response) {
+          return error.response;
+      } else {
+          throw error;
+      }
+  }
+};
 
 
-export {registerUser, getUserType, updateUser, deleteUser, getAllUsers, getCurrentUserData}
+export {registerUser, getUserType, updateUser, deleteUser, getAllUsers, getCurrentUserData, getAllStoreOwners}
