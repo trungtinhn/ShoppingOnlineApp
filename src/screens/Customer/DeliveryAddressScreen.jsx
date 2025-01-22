@@ -21,13 +21,13 @@ function DeliveryAddressScreen({ navigation}) {
             return Alert.alert('Error', 'Please input all information') 
         }
         const data = {
-            Address: diaChi,
-            Ward: phuongXa,
-            District: quanHuyen,
-            City: tinhTP,
-            PhoneNumber: numberPhone,
-            BuyerName: name,
-            UserID: firebase.auth().currentUser.uid
+            address: diaChi,
+            ward: phuongXa,
+            district: quanHuyen,
+            city: tinhTP,
+            phoneNumber: numberPhone,
+            buyerName: name,
+            userID: firebase.auth().currentUser.uid
         }
         const res = await addAddress({data: data})
         if(res.status === 200){

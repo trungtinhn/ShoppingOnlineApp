@@ -94,9 +94,9 @@ function CheckoutScreen({ navigation }) {
   const AddOrderInServer = async () => {
     const orderData = {
       userId: firebase.auth().currentUser.uid,
-      name: address.TenNguoiMua,
-      phone: address.SDT, // Số điện thoại của người đặt hàng
-      address: address.DiaChi + " " + address.PhuongXa + " " + address.QuanHuyen + " " + address.TinhThanhPho, // Địa chỉ giao hàng
+      name: address.buyerName,
+      phone: address.phoneNumber, // Số điện thoại của người đặt hàng
+      address: address.address + " " + address.ward + " " + address.district + " " + address.city, // Địa chỉ giao hàng
       promotionId: promoCode == null ? null : promoCode._id, // ID của khuyến mãi được áp dụng (nếu có)
       products: product, // Danh sách sản phẩm đơn hàng
       discount: discount, // Giảm giá được áp dụng (nếu có)
@@ -158,7 +158,7 @@ function CheckoutScreen({ navigation }) {
           const data = res.data;
           data.map((item) => {
             if(!item.available){
-              Alert.alert('Notification', 'Sản phẩm ' + item.productId.TenSP + ' đã hết hàng. Vui lòng chọn sản phẩm khác!');
+              Alert.alert('Notification', 'Sản phẩm ' + item.productId.productName + ' đã hết hàng. Vui lòng chọn sản phẩm khác!');
               hasUnavailableProduct = true;
             }
           })
@@ -279,10 +279,10 @@ function CheckoutScreen({ navigation }) {
           }}>
           {promoCode != null && promotion ? (
             <Promotion
-              source={promoCode.HinhAnhKM}
-              title={promoCode.TenKM}
-              minimum={promoCode.DonToiThieu}
-              expiry={formatDate(promoCode.NgayBatDau) + ' - ' + formatDate(promoCode.NgayKetThuc)}
+              source={promoCode.backgroundImage}
+              title={promoCode.promotionName}
+              minimum={promoCode.minimumOrder}
+              expiry={formatDate(promoCode.startDate) + ' - ' + formatDate(promoCode.endDate)}
             />
           ) : (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -339,12 +339,12 @@ function CheckoutScreen({ navigation }) {
           }}>
           {address != null ? (
             <Delivery
-              name={address.TenNguoiMua}
-              phoneNumber={address.SDT}
-              ward={address.PhuongXa}
-              district={address.QuanHuyen}
-              city={address.TinhThanhPho}
-              address={address.DiaChi}
+              name={address.buyerName}
+              phoneNumber={address.phoneNumber}
+              ward={address.ward}
+              district={address.district}
+              city={address.city}
+              address={address.address}
               show={false}
               style={{
                 width: '90%',

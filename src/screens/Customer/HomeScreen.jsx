@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import dayjs from 'dayjs';
 import {
   FlatList,
@@ -7,26 +7,28 @@ import {
   Text,
   TouchableOpacity,
   View,
-  RefreshControl
+  RefreshControl,
 } from 'react-native';
-import { Badge } from 'react-native-elements';
+import {Badge} from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import Categories from '../../components/Customer/Categories';
 import ProductView from '../../components/Customer/ProductView';
-import PromotionCard from '../../components/Customer/PromotionCard'
+import PromotionCard from '../../components/Customer/PromotionCard';
 import CUSTOM_COLOR from '../../constants/color';
-import MessengerLogo from '../../../assets/Admin/svgs/Messenger.svg'
-import ShoppingCartLogo from '../../../assets/Customer/svgs/shopping-cart.svg'
-import LogoApp from '../../../assets/Customer/svgs/Logo.svg'
+import MessengerLogo from '../../../assets/Admin/svgs/Messenger.svg';
+import ShoppingCartLogo from '../../../assets/Customer/svgs/shopping-cart.svg';
+import LogoApp from '../../../assets/Customer/svgs/Logo.svg';
 import FONT_FAMILY from '../../constants/font';
-import { getCategory } from '../../api/CategoryApi';
-import { getProductOnsale, getProductTrending } from '../../api/ProductApi';
-import { getPromotionCurrent } from '../../api/PromotionApi';
-import { OrderContext } from '../../context/OrderContext';
-import { getCartByUser } from '../../api/CartApi';
+import {getCategory} from '../../api/CategoryApi';
+import {getProductOnsale, getProductTrending} from '../../api/ProductApi';
+import {getPromotionCurrent} from '../../api/PromotionApi';
+import {OrderContext} from '../../context/OrderContext';
+import {getCartByUser} from '../../api/CartApi';
 import {firebase} from '../../../firebase/firebase';
+import {getAllGlobalCategory} from '../../api/GlobalCategory';
+import CustomIcon from '../../components/Customer/CustomIcon';
 function HomeScreen({navigation}) {
-  const uidUser = firebase.auth().currentUser.uid
+  const uidUser = firebase.auth().currentUser.uid;
   const {numCart, setNumCart} = React.useContext(OrderContext);
   const [trending, setTrending] = useState([]);
   const [danhmuc, setDanhMuc] = useState([]);
@@ -37,48 +39,49 @@ function HomeScreen({navigation}) {
   const [sanpham, setSanPham] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const getDanhMuc = async () => {
-    const res = await getCategory();
-    if(res.status === 200){
+    const res = await getAllGlobalCategory();
+    if (res.status === 200) {
       setDanhMuc(res.data);
     }
-  }
+  };
   const getDataCart = async () => {
     const res = await getCartByUser(uidUser);
-    if(res.status === 200){
-      if(res.data.products.length > 0){
+    if (res.status === 200) {
+      if (res.data.products.length > 0) {
         setNumCart(res.data.products.length);
-      }else{
+      } else {
         setNumCart(0);
       }
     }
-  }
-    
+  };
+
   const getTrending = async () => {
-    try{
+    try {
       const res = await getProductTrending();
-      if(res.status === 200){
+      if (res.status === 200) {
         setTrending(res.data);
       }
-    }catch (error){
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
   const getSanPhamOnsale = async () => {
-    try{
+    try {
       const res = await getProductOnsale();
-      if(res.status === 200){
+      if (res.status === 200) {
         setSanPham(res.data);
       }
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
   };
   const getDataPromotion = async () => {
-    const res = await getPromotionCurrent();
-    if(res.status === 200){
+    const res = await getPromotionCurrent(uidUser);
+    if (res.status === 200) {
+      console.log(res.data);
       setDataPromotion(res.data);
     }
-  }
+  };
   useEffect(() => {
     getTrending();
     getSanPhamOnsale();
@@ -87,19 +90,23 @@ function HomeScreen({navigation}) {
     getDataCart();
   }, []);
 
-
-  const setSoLuongChuaDocCuaCustomer = async () => {}
+  const setSoLuongChuaDocCuaCustomer = async () => {};
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    Promise.all([getTrending(), getSanPhamOnsale(), getDataPromotion(), getDanhMuc()])
+    Promise.all([
+      getTrending(),
+      getSanPhamOnsale(),
+      getDataPromotion(),
+      getDanhMuc(),
+    ])
       .then(() => setRefreshing(false))
       .catch(() => setRefreshing(false));
   }, []);
 
   return (
     <View
-      style={{ backgroundColor: CUSTOM_COLOR.White, flex: 1 }}
+      style={{backgroundColor: CUSTOM_COLOR.White, flex: 1}}
       nestedScrollEnabled={true}>
       <View
         style={{
@@ -107,12 +114,12 @@ function HomeScreen({navigation}) {
           height: 70,
           alignItems: 'center',
           flexDirection: 'row',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
         }}>
-        <View style={{marginLeft: "5%"}}>
+        <View style={{marginLeft: '5%'}}>
           <LogoApp width={130} height={50}></LogoApp>
         </View>
-        <View style= {{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             style={{
               width: 50,
@@ -125,20 +132,20 @@ function HomeScreen({navigation}) {
             }}
             onPress={() => {
               setSoLuongChuaDocCuaCustomer();
-              navigation.navigate('ChatScreen', { chatUser });
+              navigation.navigate('ChatScreen', {chatUser});
             }}>
             {chatUser && chatUser.SoLuongChuaDocCuaCustomer != 0 ? (
               <Badge
                 value={chatUser.SoLuongChuaDocCuaCustomer}
                 status="error"
-                containerStyle={{ position: 'absolute', top: -5, right: -5 }}
+                containerStyle={{position: 'absolute', top: -5, right: -5}}
               />
             ) : null}
 
             <MessengerLogo color={CUSTOM_COLOR.Black} />
           </TouchableOpacity>
 
-          <View style={{ width: 10, height: '100%' }} />
+          <View style={{width: 10, height: '100%'}} />
 
           <TouchableOpacity
             style={{
@@ -153,142 +160,148 @@ function HomeScreen({navigation}) {
             onPress={() => {
               navigation.navigate('ShoppingCard');
             }}>
-                {numCart != 0 ? (
-                <Badge
-                  value={numCart}
-                  status="error"
-                  containerStyle={{ position: 'absolute', top: -5, right: -5 }}
-                />
-              ) : null}
-            <ShoppingCartLogo>
-            </ShoppingCartLogo>
+            {numCart != 0 ? (
+              <Badge
+                value={numCart}
+                status="error"
+                containerStyle={{position: 'absolute', top: -5, right: -5}}
+              />
+            ) : null}
+            <ShoppingCartLogo></ShoppingCartLogo>
           </TouchableOpacity>
-          <View style={{marginLeft: "5%"}}></View>
+          <View style={{marginLeft: '5%'}}></View>
         </View>
       </View>
-        <ScrollView
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-          >
-            <Text style={styles.textView}>On sale</Text><View
-              style={{
-                height: 175,
-              }}>
-              <Swiper
-                autoplay
-                loop
-                style={{
-                  flexDirection: 'row',
-                  height: '90%',
-                }}>
-                {dataPromotion
-                  ? dataPromotion.map((promotion, index) => {
-                    const timestampBD = promotion.NgayBatDau;
-                    const dateBD = dayjs(timestampBD);
-                    const dayBD = dateBD.date();
-                    const monthBD = dateBD.month();
-                    const yearBD = dateBD.year();
-                    const timestampKT = promotion.NgayKetThuc
-                    const dateKT = dayjs(timestampKT);
-                    const dayKT = dateKT.date();
-                    const monthKT = dateKT.month();
-                    const yearKT = dateKT.year();
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+        <Text style={styles.textView}>On sale</Text>
+        <View
+          style={{
+            height: 175,
+          }}>
+          <Swiper
+            autoplay
+            loop
+            style={{
+              flexDirection: 'row',
+              height: '90%',
+            }}>
+            {dataPromotion
+              ? dataPromotion.map((promotion, index) => {
+                  const timestampBD = promotion.startDate;
+                  const dateBD = dayjs(timestampBD);
+                  const dayBD = dateBD.date();
+                  const monthBD = dateBD.month();
+                  const yearBD = dateBD.year();
+                  const timestampKT = promotion.endDate;
+                  const dateKT = dayjs(timestampKT);
+                  const dayKT = dateKT.date();
+                  const monthKT = dateKT.month();
+                  const yearKT = dateKT.year();
 
-                    return (
-                      <PromotionCard
-                        source={promotion.HinhAnhKM}
-                        name={promotion.TenKM}
-                        discount={promotion.TiLe * 100}
-                        minimum={promotion.DonToiThieu}
-                        start={`${dayBD}/${monthBD}/${yearBD}`}
-                        end={`${dayKT}/${monthKT}/${yearKT}`}
-                        type={promotion.Loai}
-                        key={index} />
-                    );
-                  })
-                  : null}
-              </Swiper>
-            </View><View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginTop: -40,
-              }}>
-              <Text style={styles.textView}>Trending now</Text>
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('AllProduct');
-                }}>
-                <Text style={styles.text}>See all</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={{marginLeft: "5%"}}>
-              <FlatList
-                horizontal={true}
-                data={trending}
-                showsHorizontalScrollIndicator={false}
-                key={item => item._id}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    style={{
-                    }}
-                    onPress={() => {
-                      const id = item._id;
-                      navigation.navigate('ProductDetail', { id });
-                    }}>
-                    <ProductView
-                      source={item.HinhAnhSP[0]}
-                      title={item.TenSP}
-                      quantity={item.SoLuongDaBan}
-                      price={item.GiaGiam} />
-                  </TouchableOpacity>
-                )}
-                />
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={styles.textView}>Orther categories</Text>
-              <TouchableOpacity>
-                <Text style={styles.text}>Explore now</Text>
-              </TouchableOpacity>
-            </View>
-            {danhmuc
-              ? danhmuc.map(item => (
-                <TouchableOpacity
-                  style={{
-                    width: '100%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                  onPress={() => {
-                    navigation.navigate('DetailCategory', { item });
-                  }}
-                  key={item._id}>
-                  <Categories source={item.image} title={item.name} />
-                </TouchableOpacity>
-              ))
+                  return (
+                    <PromotionCard
+                      source={promotion.backgroundImage}
+                      name={promotion.promotionName}
+                      discount={promotion.rate * 100}
+                      minimum={promotion.minimumOrder}
+                      start={`${dayBD}/${monthBD}/${yearBD}`}
+                      end={`${dayKT}/${monthKT}/${yearKT}`}
+                      type={promotion.type}
+                      key={index}
+                    />
+                  );
+                })
               : null}
-          </ScrollView>
-
+          </Swiper>
+        </View>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text style={styles.textView}>Orther categories</Text>
+          <TouchableOpacity>
+            <Text style={styles.text}>Explore now</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{marginBottom: 10}}>
+        <FlatList
+          data={danhmuc}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={item => item._id}
+          renderItem={({item}) => (
+            <TouchableOpacity
+                style={{
+                  marginHorizontal: 10,
+                }}
+                onPress={() => {
+                  navigation.navigate('DetailCategory', {item});
+                }}
+                key={item._id}>
+                <CustomIcon
+                  icon={item.image} // Đường dẫn icon
+                  backgroundColor="#F4F8FF"
+                  text={item.name}
+                  textColor="#1E293B"
+                />
+              </TouchableOpacity>
+          )}
+        />
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <Text style={styles.textView}>Trending now</Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('AllProduct');
+            }}>
+            <Text style={styles.text}>See all</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{}}>
+          <FlatList
+            data={trending}
+            scrollEnabled={false}
+            keyExtractor={item => item._id}
+            renderItem={({item}) => (
+              <TouchableOpacity
+                style={{}}
+                onPress={() => {
+                  const id = item._id;
+                  navigation.navigate('ProductDetail', {id});
+                }}>
+                <ProductView
+                  source={item.productImages[0]}
+                  title={item.productName}
+                  quantity={item.soldQuantity}
+                  price={item.discountPrice}
+                />
+              </TouchableOpacity>
+            )}
+            numColumns={2}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 }
 const styles = StyleSheet.create({
   textView: {
     marginHorizontal: 15,
-    marginVertical: 10,
     fontFamily: FONT_FAMILY.SemiBoldItalic,
     color: CUSTOM_COLOR.FlushOrange,
     fontSize: 20,
   },
-  text:{
+  text: {
     fontFamily: FONT_FAMILY.CeraPro,
     color: CUSTOM_COLOR.Black,
     fontStyle: 'italic',
     padding: 15,
-    textDecorationLine: 'underline'
-    
-  }
+    textDecorationLine: 'underline',
+  },
 });
 
 export default HomeScreen;

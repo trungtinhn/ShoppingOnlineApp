@@ -14,7 +14,7 @@ const ProductCheckOut = (props: any) => {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginHorizontal: 10,
+            marginHorizontal: 20,
             borderWidth: 1,
             borderColor: CUSTOM_COLOR.LightGray,
             backgroundColor: CUSTOM_COLOR.WhitePorcelain,
@@ -31,15 +31,15 @@ const ProductCheckOut = (props: any) => {
             <Image source={{uri:props.source}}
                 style={{
                     width: 100,
-                    height: 120,
+                    height: 100,
                     borderRadius: 20,
                     marginHorizontal: props.show ? 10 : 20
                 }}
             />
 
-            <View style={{ width: props.check ? '50%' : '65%' }}>
+            <View style={{ width: props.check ? '45%' : '60%' }}>
                 <Text numberOfLines={2} style={{
-                    fontSize: 17,
+                    fontSize: 13,
                     fontFamily: FONT_FAMILY.Semibold,
                     color: CUSTOM_COLOR.Black,
                     marginVertical: 2
@@ -98,7 +98,7 @@ const ProductCheckOut = (props: any) => {
                 alignItems: 'center',
                 marginRight: 10,
                 backgroundColor: props.show ? CUSTOM_COLOR.White : CUSTOM_COLOR.WhitePorcelain,
-                marginHorizontal: props.show ? 5 : 10,
+                marginHorizontal: props.show ? 0 : 5,
             }}
                 onPress={props.onPressDelete}
             >

@@ -4,8 +4,8 @@ const cartController = {
     // Thêm sản phẩm vào giỏ hàng
     addProductToCart: async (req, res) => {
         try {
-            const { userId, productId, storeId, name, image, quantity, size, color, priceAtPurchase } = req.body;
-            const totalPrice = priceAtPurchase * quantity;
+            const { userId, productId, storeId, name, image, quantity, size, color, price } = req.body;
+            const totalPrice = price * quantity;
 
             // Tìm giỏ hàng theo userId
             let cart = await Cart.findOne({ userId });
@@ -36,7 +36,7 @@ const cartController = {
                     quantity,
                     size,
                     color,
-                    priceAtPurchase,
+                    price,
                     totalPrice
                 });
             }
@@ -52,8 +52,8 @@ const cartController = {
     // Cập nhật thông tin sản phẩm trong giỏ hàng
     updateProductInCart: async (req, res) => {
         try {
-            const { userId, productId, size, color, quantity, priceAtPurchase } = req.body;
-            const totalPrice = priceAtPurchase * quantity;
+            const { userId, productId, size, color, quantity, price } = req.body;
+            const totalPrice = price * quantity;
 
             // Tìm giỏ hàng theo userId
             let cart = await Cart.findOne({ userId });
@@ -75,7 +75,7 @@ const cartController = {
 
             // Cập nhật thông tin sản phẩm
             cart.products[productIndex].quantity = quantity;
-            cart.products[productIndex].priceAtPurchase = priceAtPurchase;
+            cart.products[productIndex].price = price;
             cart.products[productIndex].totalPrice = totalPrice;
 
             // Lưu giỏ hàng đã cập nhật
@@ -143,22 +143,32 @@ const cartController = {
     },
 
     // Lấy thông tin giỏ hàng
-    getCart: async (req, res) => {
-        try {
-            const { userId } = req.params;
+    // Lấy thông tin giỏ hàng
+getCart: async (req, res) => {
+    try {
+        const { userId } = req.params;
 
-            // Tìm giỏ hàng theo userId và populate sản phẩm
-            const cart = await Cart.findOne({ userId }).populate('products.productId', 'name image price');
+        // Tìm giỏ hàng theo userId, populate sản phẩm và thông tin cửa hàng
+        const cart = await Cart.findOne({ userId })
+            .populate({
+                path: 'products.productId',
+                select: 'name image price size color quantity totalPrice', // Lấy thông tin sản phẩm và storeId
+                populate: {
+                    path: 'storeId',
+                    select: 'name image', // Lấy thông tin tên và avatar của cửa hàng
+                },
+            });
 
-            if (!cart) {
-                return res.status(404).json({ message: 'Cart not found' });
-            }
-
-            res.status(200).json(cart);
-        } catch (error) {
-            res.status(500).json({ message: 'Failed to get cart!', error });
+        if (!cart) {
+            return res.status(404).json({ message: 'Cart not found' });
         }
+
+        res.status(200).json(cart);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to get cart!', error });
     }
+},
+
 };
 
 module.exports = cartController;

@@ -1,9 +1,9 @@
-const storePromotion = require('../models/storePromotion');
+const StorePromotion = require('../models/storePromotion');
 
 const storePromotionController = {
   createstorePromotion: async (req, res) => {
     try {
-      const newPromotion = new storePromotion(req.body);
+      const newPromotion = new StorePromotion(req.body);
       const savedPromotion = await newPromotion.save();
       res.status(201).json({
         message: 'Promotion created successfully',
@@ -19,7 +19,7 @@ const storePromotionController = {
     const {storeId} = req.params;
 
     try {
-      const promotions = await storePromotion.find({storeId, isActive: true});
+      const promotions = await StorePromotion.find({storeId, isActive: true});
       res.status(200).json({success: true, promotions});
     } catch (error) {
       res
@@ -29,7 +29,7 @@ const storePromotionController = {
   },
   getAllPromotions: async (req, res) => {
     try {
-      const promotions = await storePromotion.find();
+      const promotions = await StorePromotion.find();
       res.status(200).json({data: promotions});
     } catch (error) {
       res.status(500).json({message: 'Failed to get promotions!', error});
@@ -38,7 +38,7 @@ const storePromotionController = {
   getPromotionCurrent: async (req, res) => {
     try {
       const currentDate = new Date();
-      const promotions = await storePromotion.find({
+      const promotions = await StorePromotion.find({
         startDate: {$lte: currentDate},
         endDate: {$gte: currentDate},
         remainingUses: {$gt: 0},
@@ -59,7 +59,7 @@ const storePromotionController = {
   checkPromotion: async (req, res) => {
     try {
       const {id} = req.params;
-      const promotion = await storePromotion.findOne({
+      const promotion = await StorePromotion.findOne({
         _id: id,
         startDate: {$lte: new Date()},
         endDate: {$gte: new Date()},

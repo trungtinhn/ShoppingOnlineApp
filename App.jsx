@@ -22,8 +22,8 @@ function App() {
       console.log(uid);
 
       if(res.status == 200){
-        setUserType(res.data.LoaiND)
-        console.log("Loai nguoi dung" + res.data)
+        setUserType(res.data.userType);
+        console.log("Loai nguoi dung" + res.data);
       }
       else
         console.log(res)

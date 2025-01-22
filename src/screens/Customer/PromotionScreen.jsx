@@ -114,10 +114,10 @@ function PromotionScreen({ navigation}) {
                     const yearKT = endDate.getFullYear();
                         return (
                             <Promotion
-                                source={item.PromotionImage}
+                                source={item.promotionImage}
                                 key={index}
-                                title={item.PromotionName}
-                                minimum={item.MinimumOrder}
+                                title={item.promotionName}
+                                minimum={item.minimumOrder}
                                 expiry={`${dayBD}.${monthBD}.${yearBD} - ${dayKT}.${monthKT}.${yearKT}`}
                                 onPress={() => updateCheck(item)}
                                 checkSelect={item.checkSelect}

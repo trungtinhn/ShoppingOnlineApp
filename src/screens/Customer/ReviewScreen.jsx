@@ -33,7 +33,7 @@ function ReviewScreen({navigation, route}) {
     const [imageRe, setImageRe] = useState([])
     const [dataUser, setdataUser] = useState([])
     const [ngayDG, setNgayDG] = useState('')
-    const [ndDG, setND] = useState('')
+    const [content, setND] = useState('')
     const [defaultRating, setDefaultRating] = useState(2);
     const [click, setClick] = useState(false);
     const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
@@ -121,11 +121,11 @@ function ReviewScreen({navigation, route}) {
         const imageUrls = await Promise.all(imageRe.map(image => UploadFile(image)));
         const data = {
             userId: userId,
-            MaSP: dataSanPham._id,
-            NDDG: ndDG,
-            NgayDG: new Date(),
-            Rating: defaultRating,
-            AnhDG: imageUrls,
+            productId: dataSanPham._id,
+            content: content,
+            reviewDate: new Date(),
+            rating: defaultRating,
+            images: imageUrls,
         };
         const res = await addReviewApi({data: data});
         if(res.status === 200){
@@ -197,7 +197,7 @@ function ReviewScreen({navigation, route}) {
                         }}>{dataSanPham.Rating}/5</Text>
                         <StarRating
                             maxStars = {5}
-                            rating={dataSanPham.Rating}
+                            rating={dataSanPham.rating}
                         />
                     </View>
                     </>
@@ -218,10 +218,10 @@ function ReviewScreen({navigation, route}) {
                                 fontSize: 17,
                                 color: CUSTOM_COLOR.Black,
                                 marginRight: '5%'
-                            }}>{dataSanPham.Rating}/5</Text>
+                            }}>{dataSanPham.rating}/5</Text>
                             <StarRating
                                 maxStars = {5}
-                                rating={dataSanPham.Rating}
+                                rating={dataSanPham.rating}
                             />
                         </View>
                     </View>
@@ -264,14 +264,14 @@ function ReviewScreen({navigation, route}) {
                     key={review._id}
                     >
                         <Review
-                            avatar = {review.Avatar}
-                            name = {review.TenND}
-                            time = {formatDate(review.NgayDG)}
-                            rating = {review.Rating}
-                            content = {review.NDDG}
-                            images = {review.AnhDG}
+                            avatar = {review.avatar}
+                            name = {review.userName}
+                            time = {formatDate(review.reviewDate)}
+                            rating = {review.rating}
+                            content = {review.content}
+                            images = {review.images}
                             onPress = {() => {
-                                setImages(review.AnhDG);
+                                setImages(review.images);
                                 setIsVisible(true);
                             }}
                         />
@@ -313,7 +313,7 @@ function ReviewScreen({navigation, route}) {
                     alignItems: 'center',
                     marginHorizontal: '5%'
                 }}> 
-                    <Image source={{uri: dataUser.Avatar}}
+                    <Image source={{uri: dataUser.avatar}}
                         style = {{
                             width: 45,
                             height: 45,
@@ -326,7 +326,7 @@ function ReviewScreen({navigation, route}) {
                         marginHorizontal: '3%',
                         fontFamily: FONT_FAMILY.CeraPro,
                         color: CUSTOM_COLOR.Black,
-                    }}>{dataUser.TenND}</Text>
+                    }}>{dataUser.userName}</Text>
                 </View>
 
                 <View style ={{
@@ -371,7 +371,7 @@ function ReviewScreen({navigation, route}) {
                             paddingHorizontal: 10
                         }}
                         onChangeText={setND}
-                        value={ndDG}
+                        value={content}
                     />
                 </View>
 

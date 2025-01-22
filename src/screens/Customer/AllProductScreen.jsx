@@ -136,10 +136,10 @@ function AllProductScreen({ navigation, route }) {
                     navigation.navigate('ProductDetail', { id: item._id });
                   }}>
                   <ProductView
-                    quantity={item.SoLuongDaBan}
-                    source={item.HinhAnhSP[0]}
-                    title={item.ProductName}
-                    price={item.DiscountPrice}
+                    quantity={item.soldQuantity}
+                    source={item.productImages[0]}
+                    title={item.productName}
+                    price={item.discountPrice}
                   />
                 </TouchableOpacity>
               );

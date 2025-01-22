@@ -28,7 +28,7 @@ function DetailCategoryScreen({ navigation, route }) {
   };
 
   const getDataCategory = async () => {
-    const res = await getProductByCategory({ MaDM: item._id });
+    const res = await getProductByCategory(item._id);
     if (res.status === 200) {
       setItems(res.data);
       setLoading(false);
@@ -47,23 +47,23 @@ function DetailCategoryScreen({ navigation, route }) {
     // Filter items based on search term
     if (searchTerm) {
       filteredData = items.filter((product) =>
-        product.TenSP.toLowerCase().includes(searchTerm.toLowerCase())
+        product.productName.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
     // Sort items based on sort type
     switch (sortType) {
       case 'a-z':
-        filteredData.sort((a, b) => a.TenSP.localeCompare(b.TenSP));
+        filteredData.sort((a, b) => a.productName.localeCompare(b.productName));
         break;
       case 'z-a':
-        filteredData.sort((a, b) => b.TenSP.localeCompare(a.TenSP));
+        filteredData.sort((a, b) => b.productName.localeCompare(a.productName));
         break;
       case 'high-to-low':
-        filteredData.sort((a, b) => a.GiaGiam - b.GiaGiam);
+        filteredData.sort((a, b) => a.discountPrice - b.discountPrice);
         break;
       case 'low-to-high':
-        filteredData.sort((a, b) => b.GiaGiam - a.GiaGiam);
+        filteredData.sort((a, b) => b.discountPrice - a.discountPrice);
         break;
       default:
         break;
@@ -163,10 +163,10 @@ function DetailCategoryScreen({ navigation, route }) {
                     navigation.navigate('ProductDetail', { id: item._id });
                   }}>
                   <ProductView
-                    quantity={item.SoLuongDaBan}
-                    source={item.HinhAnhSP[0]}
-                    title={item.TenSP}
-                    price={item.GiaGiam}
+                    quantity={item.soldQuantity}
+                    source={item.productImages[0]}
+                    title={item.productName}
+                    price={item.discountPrice}
                   />
                 </TouchableOpacity>
               );

@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 
 const rankSchema = new mongoose.Schema({
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Liên kết đến bảng User (khách hàng)
+        type: String,
         required: true, // Bắt buộc phải có ID của khách hàng
         unique: true, // Mỗi khách hàng chỉ có một bản ghi xếp hạng
     },

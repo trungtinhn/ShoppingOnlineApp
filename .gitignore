@@ -66,3 +66,5 @@ yarn-error.log
 /coverage
 
 server/.env
+server/serviceAccountKey.json
+server/vison-api.json

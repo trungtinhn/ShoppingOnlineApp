@@ -104,10 +104,6 @@ export default function SignInScreen({navigation}) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <ImageBackground
-        source={IMG_Rectangle182}
-        resizeMode="cover"
-        style={styles.container}> */}
         <View style={{width: '100%', height: 10}}/>
         <HeaderWithBack onPress={() => navigation.goBack()} />
         <View style={{width: '100%', height: Size.DeviceHeight*0.05}} />
