@@ -118,10 +118,10 @@ const deletePromotion = async ({ id }) => {
   }
 };
 
-const getPromotionCurrent = async () => {
+const getPromotionCurrent = async (userId) => {
   try {
     const idToken = await getIdToken();
-    const url = "/promotion/getPromotionCurrent";
+    const url = `/promotion/getAvailablePromotionsForUser/userId=${userId}`;
     const config = {
       method: "GET",
       headers: {

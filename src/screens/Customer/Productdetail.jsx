@@ -13,6 +13,7 @@ import {StyleSheet} from 'react-native';
 import CUSTOM_COLOR from '../../constants/color';
 import StarRating from '../../components/Customer/StartRating';
 import {
+  IC_Chat,
   IC_Down,
 } from '../../../assets/Customer/icons';
 import {Badge} from 'react-native-elements';
@@ -20,6 +21,7 @@ import Swiper from 'react-native-swiper';
 import ProductView from '../../components/Customer/ProductView';
 import {RefreshControl, ScrollView} from 'react-native-gesture-handler';
 import {
+  AddCart,
   BackIcon,
   HeartFillIcon,
   HeartIcon,
@@ -34,6 +36,8 @@ import {addProductToCart} from '../../api/CartApi';
 import {OrderContext} from '../../context/OrderContext';
 import {addLike, checkLike, deleteLike} from '../../api/LikeApi';
 import {knnRecommendSell} from '../../api/KnnApi';
+import { IC_messenger } from '../../../assets/Admin/icons';
+import { formatCurrency } from '../../utils/helpers';
 
 function ProductDetail({navigation, route}) {
   const {id} = route.params;
@@ -51,6 +55,7 @@ function ProductDetail({navigation, route}) {
   const [refreshing, setRefreshing] = useState(false);
   const {product, setProduct} = useContext(OrderContext);
   const [itemsRecommend, setItemsRecommend] = useState([]);
+  const [shopData, setShopData] = useState([]);
   const getDataLove = async () => {
     const res = await checkLike({data: {userId: userId, _id: id}});
     if (res.status === 200) {
@@ -95,15 +100,16 @@ function ProductDetail({navigation, route}) {
       setLoadingCart(true);
       const data = {
         userId: firebase.auth().currentUser.uid,
+        storeId: dataSanPham.storeId,
         productId: id,
-        name: dataSanPham.TenSP,
-        image: dataSanPham.HinhAnhSP,
+        name: dataSanPham.productName,
+        image: dataSanPham.productImages,
         quantity: numProduct,
         size: chooseSize,
         color: chooseColor,
-        price: dataSanPham.GiaGiam,
-        totalPrice: dataSanPham.GiaGiam * numProduct,
+        price: dataSanPham.discountPrice,
       };
+      console.log(data);
       const res = await addProductToCart({data: data});
       if (res.status === 200) {
         setLoadingCart(false);
@@ -112,6 +118,7 @@ function ProductDetail({navigation, route}) {
         setNumCart(numCart + 1);
       } else {
         console.log(res);
+        setLoadingCart(false);
       }
     }
   };
@@ -128,6 +135,8 @@ function ProductDetail({navigation, route}) {
       const res = await getProductById({productId: id});
       if (res.status === 200) {
         setDataSanPham(res.data);
+        const Store = res.data.storeId;
+        setShopData(Store);
         setLoading(false);
         resetType();
       } else {
@@ -144,13 +153,14 @@ function ProductDetail({navigation, route}) {
       const data = [
         {
           productId: id,
-          name: dataSanPham.TenSP,
-          image: dataSanPham.HinhAnhSP,
+          storeId: dataSanPham.storeId,
+          name: dataSanPham.productName,
+          image: dataSanPham.productImages,
           quantity: numProduct,
           size: chooseSize,
           color: chooseColor,
-          price: dataSanPham.GiaGiam,
-          totalPrice: dataSanPham.GiaGiam * numProduct,
+          price: dataSanPham.discountPrice,
+          totalPrice: dataSanPham.discountPrice * numProduct,
         },
       ];
       setProduct(data);
@@ -159,7 +169,7 @@ function ProductDetail({navigation, route}) {
   };
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    Promise.all([getDataById(id), getDataLove(), getDataRecommend()])
+    Promise.all([getDataById(id), getDataLove()])
       .then(() => setRefreshing(false))
       .catch(() => setRefreshing(false));
   }, []);
@@ -252,7 +262,7 @@ function ProductDetail({navigation, route}) {
                 marginTop: 10,
               }}>
               <Swiper loop autoplay>
-                {dataSanPham.HinhAnhSP.map((image, index) => (
+                {dataSanPham.productImages.map((image, index) => (
                   <View
                     style={{
                       flexDirection: 'row',
@@ -301,7 +311,7 @@ function ProductDetail({navigation, route}) {
                       fontFamily: FONT_FAMILY.Semibold,
                       fontSize: 25,
                     }}>
-                    {dataSanPham.GiaGiam}
+                    {dataSanPham.discountPrice}
                   </Text>
                 </View>
                 <Text
@@ -313,7 +323,7 @@ function ProductDetail({navigation, route}) {
                     textDecorationLine: 'line-through',
                     alignItems: 'flex-end',
                   }}>
-                  -đ{dataSanPham.GiaGoc}
+                  -đ{dataSanPham.originalPrice}
                 </Text>
                 <View
                   style={{
@@ -326,7 +336,7 @@ function ProductDetail({navigation, route}) {
                       fontWeight: 'bold',
                       margin: 4,
                     }}>
-                    -{dataSanPham.TiLeKM}%
+                    -{dataSanPham.discountPrice}%
                   </Text>
                 </View>
               </View>
@@ -336,7 +346,7 @@ function ProductDetail({navigation, route}) {
                   fontSize: 12,
                   color: CUSTOM_COLOR.Black,
                 }}>
-                Đã bán 2.6k
+                {dataSanPham.soldQuantity}
               </Text>
             </View>
             <View
@@ -357,7 +367,7 @@ function ProductDetail({navigation, route}) {
                   fontSize: 18,
                   marginHorizontal: 20,
                 }}>
-                {dataSanPham.TenSP}
+                {dataSanPham.productName}
               </Text>
             </View>
 
@@ -383,9 +393,9 @@ function ProductDetail({navigation, route}) {
                     fontSize: 15,
                     color: CUSTOM_COLOR.FlushOrange,
                   }}>
-                  {dataSanPham.Rating}
+                  {dataSanPham.rating}
                 </Text>
-                <StarRating maxStars={5} rating={dataSanPham.Rating} />
+                <StarRating maxStars={5} rating={dataSanPham.rating} />
               </View>
               <TouchableOpacity
                 onPress={() =>
@@ -426,7 +436,7 @@ function ProductDetail({navigation, route}) {
                     Color
                   </Text>
 
-                  {dataSanPham.MauSac.map(color => (
+                  {dataSanPham.colors.map(color => (
                     <View
                       style={{
                         ...styles.colorCicle,
@@ -509,7 +519,7 @@ function ProductDetail({navigation, route}) {
                   style={{
                     flexDirection: 'row',
                   }}>
-                  {dataSanPham.Size.map((size, index) => (
+                  {dataSanPham.sizes.map((size, index) => (
                     <View
                       style={{
                         ...styles.sizeCircle,
@@ -536,18 +546,19 @@ function ProductDetail({navigation, route}) {
               </TouchableOpacity>
             </View>
 
+
             <View style={{flex: 1, paddingHorizontal: 20}}>
               {/* Store Information */}
               <View style={styles.header}>
                 <Image
-                  source={{uri: 'https://example.com/store-logo.png'}}
+                  source={{uri: shopData.image}}
                   style={styles.logo}
                 />
                 <View style={styles.storeInfo}>
                   <Text style={styles.storeName}>
-                    Sói Store Bigsize 38-115kg
+                    {shopData.name}
                   </Text>
-                  <Text style={styles.storeDetails}>Online 15 phút trước</Text>
+                  {/* <Text style={styles.storeDetails}>Online 15 phút trước</Text> */}
                   <Text style={styles.location}>📍 TP. Hồ Chí Minh</Text>
                 </View>
                 <TouchableOpacity style={styles.visitShopButton}>
@@ -559,7 +570,7 @@ function ProductDetail({navigation, route}) {
               <View style={styles.statsContainer}>
                 <Text style={styles.statItem}>220 Sản phẩm</Text>
                 <Text style={styles.statItem}>4.9 Đánh giá</Text>
-                <Text style={styles.statItem}>99% Phản hồi Chat</Text>
+                <Text style={styles.statItem}>100% Phản hồi Chat</Text>
               </View>
 
               {/* Featured and Link Buttons */}
@@ -602,10 +613,16 @@ function ProductDetail({navigation, route}) {
                   style={{
                     marginHorizontal: 35,
                   }}>
-                  {dataSanPham.MoTaSP}
+                  {dataSanPham.productDescription}
                 </Text>
               </View>
             ) : null}
+
+            {isLoadingCart && (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#0000ff" />
+              </View>
+            )}
 
             <Modal
               animationType="slide"
@@ -647,7 +664,7 @@ function ProductDetail({navigation, route}) {
 
                     <View>
                       <FlatList
-                        data={dataSanPham.MauSac}
+                        data={dataSanPham.colors}
                         keyExtractor={(item, index) => index}
                         renderItem={({item}) => {
                           return (
@@ -705,7 +722,7 @@ function ProductDetail({navigation, route}) {
                     </Text>
 
                     <View style={{flexDirection: 'row'}}>
-                      {dataSanPham.Size.map((size, index) => (
+                      {dataSanPham.sizes.map((size, index) => (
                         <TouchableOpacity
                           style={{
                             ...styles.sizeCircle,
@@ -736,11 +753,6 @@ function ProductDetail({navigation, route}) {
                 </View>
               </View>
             </Modal>
-            {isLoadingCart && (
-              <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#0000ff" />
-              </View>
-            )}
             <View
               style={{
                 backgroundColor: CUSTOM_COLOR.WhitePorcelain,
@@ -757,10 +769,10 @@ function ProductDetail({navigation, route}) {
                       navigation.navigate('ProductDetail', {id: item._id})
                     }>
                     <ProductView
-                      quantity={item.SoLuongDaBan}
-                      source={item.HinhAnhSP[0]}
-                      title={item.TenSP}
-                      price={item.GiaGiam}
+                      quantity={item.soldQuantity}
+                      source={item.productImages[0]}
+                      title={item.productName}
+                      price={item.discountPrice}
                     />
                   </TouchableOpacity>
                 )}
@@ -772,15 +784,15 @@ function ProductDetail({navigation, route}) {
         </ScrollView>
         {/* Purchase Button */}
         <View style={styles.purchaseRow}>
-          <TouchableOpacity style={styles.chatButton}>
+          {/* <TouchableOpacity style={styles.chatButton}>
             
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cartButton}>
-            <ShoppingCartIcon />
+          </TouchableOpacity> */}
+          <TouchableOpacity style={styles.cartButton} onPress={setDataGioHang}>
+            <AddCart width={35} height={35} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.buyButton}>
             <Text style={styles.buyButtonText}>Mua với voucher</Text>
-            <Text style={styles.price}>đ78.200</Text>
+            <Text style={styles.price}>{formatCurrency(dataSanPham.discountPrice)}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -947,7 +959,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#E4F2EE',
-    paddingVertical: 8,
     borderRadius: 8,
   },
   chatButton: {
@@ -957,13 +968,11 @@ const styles = StyleSheet.create({
   },
   cartButton: {
     backgroundColor: '#24A99D',
-    padding: 8,
-    borderRadius: 4,
+    padding: 11,
   },
   buyButton: {
     backgroundColor: '#FF5E00',
     padding: 8,
-    borderRadius: 4,
     flex: 1,
     alignItems: 'center',
   },

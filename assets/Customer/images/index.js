@@ -10,3 +10,6 @@ export { default as IM_AnhGiay2 } from '../images/AnhGiay2.png';
 export { default as IM_AnhGiay3 } from '../images/AnhGiay3.png';
 export { default as IM_AnhGiay4 } from '../images/AnhGiay4.png';
 export { default as Default_Avatar } from '../images/avartar.png';
+export {default as IM_Love} from '../images/love.png';
+export {default as IM_Shirt} from '../images/shirt.png';
+export {default as IM_Washing_Machine} from '../images/washing-machine.png';

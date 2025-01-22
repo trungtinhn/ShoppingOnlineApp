@@ -160,10 +160,10 @@ const getProductOnsale = async () => {
   }
 };
 
-const getProductByCategory = async ({MaDM}) => {
+const getProductByCategory = async (categoryId) => {
   try {
     const idToken = await getIdToken();
-    const url = `/products/getProductByCategory/MaDM=${MaDM}`;
+    const url = `/products/getProductByCategory/categoryId=${categoryId}`;
     const config = {
       method: 'GET',
       headers: {

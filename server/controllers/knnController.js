@@ -8,15 +8,15 @@ const knnRecommend = {
         try {
             const { userId } = req.params; // Sửa lỗi cú pháp
             console.log(userId);
-            const userLikes = await Like.findOne({ userId: userId }).populate('danhSachSanPham');
+            const userLikes = await Like.findOne({ userId: userId }).populate('productList');
             console.log(userLikes);
         
-            if (!userLikes || !userLikes.danhSachSanPham.length) {
+            if (!userLikes || !userLikes.productList.length) {
               return res.status(404).json({ message: 'Không tìm thấy sản phẩm nào trong danh sách yêu thích của người dùng này' });
             }
         
             // Tập hợp tất cả các sản phẩm mà người dùng đã thích
-            const likedProducts = userLikes.danhSachSanPham;
+            const likedProducts = userLikes.productList;
         
             // Tìm tất cả các sản phẩm chưa thích
             const allProducts = await Product.find();

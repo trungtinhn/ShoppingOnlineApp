@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // Định nghĩa schema cho model YeuThich
 const LikeSchema = new mongoose.Schema({
-  userID: {
+  userId: {
     type: String,
     required: true
   },

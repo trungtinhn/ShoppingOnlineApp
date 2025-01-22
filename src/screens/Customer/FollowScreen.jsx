@@ -22,6 +22,7 @@ import { firebase } from '../../../firebase/firebase';
 import { knnRecommendLike } from '../../api/KnnApi';
 import LoadingComponent from '../../components/LoadingComponent';
 import { OrderContext } from '../../context/OrderContext';
+import { IM_Love } from '../../../assets/Customer/images';
 
 const styles = StyleSheet.create({
   container: {
@@ -166,27 +167,27 @@ function FollowScreen({ navigation }) {
 
       {data.length === 0 ? (
         <View style={styles.noDataContainer}>
-          <Image source={IC_Heart3X} style={{ width: 100, height: 100 }} />
+          <Image source={IM_Love} style={{ width: 200, height: 130 }} />
           <Text style={styles.noDataText}>Your Love is empty</Text>
           <Button color={CUSTOM_COLOR.FlushOrange} title="SHOP NOW" onPress={() => navigation.goBack()} />
         </View>
       ) : (
         <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
           <View>
-            <Text style={styles.productLikedText}>Product Liked</Text>
+            <Text style={styles.productLikedText}>Danh sách yêu thích của bạn</Text>
             <View style={styles.productListContainer}>
               <FlatList
-                data={data.danhSachSanPham}
+                data={data.productList}
                 scrollEnabled={false}
                 renderItem={({ item }) => (
                   <TouchableOpacity
                     style={styles.productItemContainer}
                     onPress={() => navigation.navigate('ProductDetail', { id: item._id })}>
                     <ProductView
-                      quantity={item.SoLuongDaBan}
-                      source={item.HinhAnhSP[0]}
-                      title={item.TenSP}
-                      price={item.GiaGiam}
+                      quantity={item.soldQuantity}
+                      source={item.productImages[0]}
+                      title={item.productName}
+                      price={item.discountPrice}
                     />
                   </TouchableOpacity>
                 )}
@@ -206,10 +207,10 @@ function FollowScreen({ navigation }) {
                     style={styles.productItemContainer}
                     onPress={() => navigation.navigate('ProductDetail', { id: item._id })}>
                     <ProductView
-                      quantity={item.SoLuongDaBan}
-                      source={item.HinhAnhSP[0]}
-                      title={item.TenSP}
-                      price={item.GiaGiam}
+                      quantity={item.soldQuantity}
+                      source={item.productImages[0]}
+                      title={item.productName}
+                      price={item.discountPrice}
                     />
                   </TouchableOpacity>
                 )}

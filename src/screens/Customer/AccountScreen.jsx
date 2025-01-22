@@ -55,9 +55,9 @@ function AccountScreen() {
                                     alignItems: 'center',
                                     marginHorizontal: '5%',
                                 }}>
-                                {userData.Avatar ? (
+                                {userData.avatar ? (
                                     <Image
-                                        source={{uri: userData.Avatar}}
+                                        source={{uri: userData.avatar}}
                                         style={{
                                             width: 100,
                                             height: 100,
@@ -89,7 +89,7 @@ function AccountScreen() {
                                             color: CUSTOM_COLOR.White,
                                             fontWeight: '500',
                                         }}>
-                                        {userData.TenND}
+                                        {userData.fullName}
                                     </Text>
 
                                     <Text

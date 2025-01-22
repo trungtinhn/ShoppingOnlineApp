@@ -74,4 +74,4 @@ const storePromotionSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
-module.exports = mongoose.model('storePromotion', storePromotionSchema);
+module.exports = mongoose.models.StorePromotion || mongoose.model('StorePromotion', storePromotionSchema);

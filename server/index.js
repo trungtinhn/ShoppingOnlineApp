@@ -27,7 +27,8 @@ const globalCategoryRoutes = require("./routes/routeGlobalCategory");
 const storePromotionRoutes = require("./routes/routesStorePromotion");
 const rankRoutes = require("./routes/routeRank");
 const rankRuleRoutes = require("./routes/routeRankRule");
-const { api } = require("../src/api/AppApi");
+const visionRoutes = require("./routes/routeVision");
+
 dotenv.config()
 mongoose.connect(process.env.MONGODB_URL.replace("<password>", process.env.MONGODB_PASSWORD)).then(() => {
     console.log("Database connected");
@@ -62,6 +63,7 @@ app.use('/api/storePromotion', storePromotionRoutes);
 app.use('/api/rank', rankRoutes);
 app.use('/api/rankRule', rankRuleRoutes);
 app.use('/api/store', storeRoutes);
+app.use('/api/vision', visionRoutes);
 
 socketSetup(server);
 server.listen(8000, () => {

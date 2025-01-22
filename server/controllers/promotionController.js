@@ -70,34 +70,49 @@ const promotionController = {
     getAvailablePromotionsForUser: async (req, res) => {
         try {
           const { userId } = req.params; // ID của người dùng
-    
-          // Lấy thông tin xếp hạng của người dùng
-          const rank = await Rank.findOne({ userId }).select('rank');
-          if (!rank) {
-            return res.status(404).json({ message: 'User rank not found!' });
+      
+          // Kiểm tra xem người dùng đã có bản ghi trong bảng Rank chưa
+          let userRankDoc = await Rank.findOne({ userId });
+      
+          if (!userRankDoc) {
+            // Nếu chưa có, tạo bản ghi mới với bậc hạng mặc định là Bronze
+            userRankDoc = await Rank.create({
+              userId,
+              totalOrderValue: 0,
+              rank: 'bronze',
+            });
           }
-    
-          // Lấy tất cả khuyến mãi mà người dùng có thể sử dụng
+      
+          const userRank = userRankDoc.rank;
+      
+          // Lấy tất cả khuyến mãi đang còn hiệu lực
           const promotions = await Promotion.find({
-            // Khuyến mãi phải còn hiệu lực
             startDate: { $lte: new Date() },
             endDate: { $gte: new Date() },
-            // Nếu khuyến mãi có hạn chế bậc hạng, kiểm tra bậc hạng của người dùng
-            $or: [
-              { applicableRanks: { $in: [rank.rank] } },  // Khuyến mãi dành riêng cho bậc hạng
-              { applicableRanks: { $size: 0 } },  // Khuyến mãi không giới hạn bậc hạng
-            ],
+            remainingUses: { $gt: 0 },
           });
-    
-          if (!promotions.length) {
+
+          
+          // Lọc khuyến mãi theo bậc hạng người dùng
+          const filteredPromotions = promotions.filter((promo) => {
+            // Nếu không có bậc hạng yêu cầu, áp dụng cho mọi người dùng
+            if (!promo.useableUserRank) return true;
+
+            // Kiểm tra bậc hạng người dùng với bậc hạng yêu cầu của khuyến mãi
+            return promo.useableUserRank === userRank;
+          });
+
+          //console.log(filteredPromotions);
+      
+          if (!filteredPromotions.length) {
             return res.status(404).json({ message: 'No promotions available for this user.' });
           }
-    
-          res.status(200).json({ data: promotions });
+      
+          res.status(200).json(filteredPromotions);
         } catch (error) {
           res.status(500).json({ message: 'Error fetching promotions', error: error.message });
         }
-      },
+      },      
 
     checkPromotion: async (req, res) => {
         try {
