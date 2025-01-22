@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   productListContainer: {
+    alignItems: 'center',
     marginTop: 20,
   },
   productItemContainer: {

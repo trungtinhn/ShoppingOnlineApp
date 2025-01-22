@@ -31,4 +31,10 @@ export {default as CheckFill} from './check-circle-fill.svg'
 export {default as PaymentArea} from './payment.svg'
 export {default as Discount} from './seal-percent.svg'
 export {default as Pen} from './pen.svg'
+
 export {default as AddCart} from './add-cart.svg'
+
+export {default as Chat} from './chats.svg'
+export {default as ArrowRight} from './arrow_forward_ios.svg'
+export {default as Dollar} from './currency-dollar.svg'
+

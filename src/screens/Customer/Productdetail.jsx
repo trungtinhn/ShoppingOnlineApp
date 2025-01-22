@@ -23,6 +23,7 @@ import {RefreshControl, ScrollView} from 'react-native-gesture-handler';
 import {
   AddCart,
   BackIcon,
+  Chat,
   HeartFillIcon,
   HeartIcon,
   ShoppingCartIcon,
@@ -129,7 +130,8 @@ function ProductDetail({navigation, route}) {
   };
 
   const getDataById = async id => {
-    await getDataLove(id);
+    await getDataLove();
+    console.log('Like donw');
     await getDataRecommend();
     try {
       const res = await getProductById({productId: id});
@@ -169,7 +171,9 @@ function ProductDetail({navigation, route}) {
   };
   const onRefresh = useCallback(() => {
     setRefreshing(true);
+
     Promise.all([getDataById(id), getDataLove()])
+
       .then(() => setRefreshing(false))
       .catch(() => setRefreshing(false));
   }, []);
@@ -552,6 +556,7 @@ function ProductDetail({navigation, route}) {
               <View style={styles.header}>
                 <Image
                   source={{uri: shopData.image}}
+
                   style={styles.logo}
                 />
                 <View style={styles.storeInfo}>
@@ -561,7 +566,9 @@ function ProductDetail({navigation, route}) {
                   {/* <Text style={styles.storeDetails}>Online 15 phút trước</Text> */}
                   <Text style={styles.location}>📍 TP. Hồ Chí Minh</Text>
                 </View>
-                <TouchableOpacity style={styles.visitShopButton}>
+                <TouchableOpacity style={styles.visitShopButton} onPress={() => {
+                  navigation.navigate('ViewShopScreen')
+                }}>
                   <Text style={styles.visitShopText}>Xem Shop</Text>
                 </TouchableOpacity>
               </View>
@@ -784,11 +791,11 @@ function ProductDetail({navigation, route}) {
         </ScrollView>
         {/* Purchase Button */}
         <View style={styles.purchaseRow}>
-          {/* <TouchableOpacity style={styles.chatButton}>
-            
-          </TouchableOpacity> */}
-          <TouchableOpacity style={styles.cartButton} onPress={setDataGioHang}>
-            <AddCart width={35} height={35} />
+          <TouchableOpacity style={styles.chatButton}>
+            <Chat fill="#24A99D" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cartButton}>
+            <ShoppingCartIcon fill="#24A99D" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.buyButton}>
             <Text style={styles.buyButtonText}>Mua với voucher</Text>
@@ -955,26 +962,35 @@ const styles = StyleSheet.create({
     color: '#FF5E00',
   },
   purchaseRow: {
+    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#E4F2EE',
-    borderRadius: 8,
+    backgroundColor: CUSTOM_COLOR.White,
+    borderRadius: 10,
+    height: 60
   },
   chatButton: {
-    backgroundColor: '#24A99D',
-    padding: 8,
-    borderRadius: 4,
+    flex: 1,
+    padding: 10,
+    alignItems: 'center',
+    borderRightWidth: 0.5,
+    borderColor: CUSTOM_COLOR.Gray,
+    height: '100%',
   },
   cartButton: {
     backgroundColor: '#24A99D',
-    padding: 11,
+    flex: 1,
+    padding: 8,
+    alignItems: 'center',
+    height: '100%',
   },
   buyButton: {
     backgroundColor: '#FF5E00',
     padding: 8,
-    flex: 1,
+    flex: 3,
     alignItems: 'center',
+    height: '100%',
   },
   buyButtonText: {
     color: '#fff',

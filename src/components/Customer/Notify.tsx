@@ -11,7 +11,7 @@ const Notify = (props: any) => {
       alignItems: 'center',
       borderBottomWidth: 1,
       borderColor: CUSTOM_COLOR.LightGray,
-      backgroundColor: CUSTOM_COLOR.WhitePorcelain,
+      backgroundColor: CUSTOM_COLOR.White,
       padding: 10
     }}>
 
@@ -20,7 +20,6 @@ const Notify = (props: any) => {
           width: 60,
           height: 60,
           margin: 10,
-
         }}
       />
 
