@@ -10,8 +10,6 @@ import {
 import CUSTOM_COLOR from '../../constants/color';
 import ItemList from '../../components/Admin/ItemList';
 import ButtonDetail from '../../components/Admin/ButtonDetail';
-import { id } from 'date-fns/locale';
-import { IC_Back } from '../../../assets/Admin/icons';
 import BackTo from '../../components/Admin/BackTo';
 import { getCategory } from '../../api/CategoryApi';
 export default function Categories({ navigation }) {
@@ -75,7 +73,6 @@ export default function Categories({ navigation }) {
           }}
         />
       </View>
-
     </SafeAreaView>
   );
 }

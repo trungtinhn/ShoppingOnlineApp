@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,19 +8,34 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { firebase } from '../../../firebase/firebase';
+import { getCurrentUserData } from '../../api/UserApi';
+
+
 
 const StoreProfileScreen = () => {
+  const [userData, setUserData] = useState({});
+
+  handleGetCurrentUser = async () => {
+    const user = firebase.auth().currentUser;
+    const res = await getCurrentUserData({userId: user.uid});
+    if (res.status === 200) {
+      setUserData(res.data);
+    }
+  };
+  useEffect(() => {
+    handleGetCurrentUser();
+  }, []);
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <Image
-          source={{uri: 'https://via.placeholder.com/80'}}
+          source={{uri: userData.avatar }}
           style={styles.avatar}
         />
         <View style={styles.headerText}>
-          <Text style={styles.username}>qdSBH6t2</Text>
-          <Text style={styles.sellerID}>Seller ID: VN348SK5RY</Text>
+          <Text style={styles.username}>{userData.fullName}</Text>
+          <Text style={styles.sellerID}>Seller ID: {userData.userId}</Text>
         </View>
       </View>
 
@@ -58,7 +73,6 @@ const StoreProfileScreen = () => {
         <MenuItem title="Notifications" />
         <MenuItem title="Chat" />
         <MenuItem title="Language" />
-        <MenuItem title="Lazada University" />
         <MenuItem title="About" />
       </View>
 

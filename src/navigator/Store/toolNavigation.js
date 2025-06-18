@@ -32,15 +32,20 @@ import DeliveryScreen from '../../screens/Customer/DeliveryScreen';
 import DeTailDelivery from '../../screens/Customer/DetailDelivery';
 import FunctionPermisson from '../../screens/Admin/FunctionPermission';
 import ToolsScreen from '../../screens/Store/StoreToolScreen';
+import ManageStaff from '../../screens/Admin/ManageStaff';
+import StroreProduct from '../../screens/Store/StroreProduct';
+import StoreCategory from '../../screens/Store/StoreCategory';
+import StorePromotionManager from '../../screens/Store/StorePromotion';
 const Stack = createNativeStackNavigator();
 
 const ToolsNavitgation = () => {
   return (
+    
     <Stack.Navigator
       screenOptions={{headerShown: false}}
       initialRouteName="StoreToolScreen">
       <Stack.Screen name="StoreToolScreen" component={ToolsScreen} />
-      <Stack.Screen name="MyProduct" component={MyProduct} />
+      <Stack.Screen name="StoreProducts" component={StroreProduct} />
       <Stack.Screen name="AddProduct" component={AddProduct} />
       <Stack.Screen name="AddPromotion" component={AddPromotion} />
       <Stack.Screen name="ImportProduct" component={ImportProduct} />
@@ -48,15 +53,16 @@ const ToolsNavitgation = () => {
       <Stack.Screen name="DetailChat" component={DetailChatScreen} />
       <Stack.Screen name="EditProduct" component={EditProduct} />
       <Stack.Screen name="OrderScreen" component={Order} />
-      <Stack.Screen name="Promotion" component={Promotion} />
+      <Stack.Screen name="StorePromotion" component={StorePromotionManager} />
       <Stack.Screen name="ReviewScreen" component={ReviewScreen} />
       <Stack.Screen name="EditPromotion" component={EditPromotion} />
-      <Stack.Screen name="Categories" component={Categories} />
+      <Stack.Screen name="Categories" component={StoreCategory} />
       <Stack.Screen name="DetailsCategory" component={DetailCategory} />
       <Stack.Screen name="AddNewCategory" component={AddNewCategory} />
       <Stack.Screen name="EditCategory" component={EditCategory} />
       <Stack.Screen name="FunctionPermission" component={FunctionPermission} />
       <Stack.Screen name="DeliveryDetail" component={DeTailDelivery} />
+      <Stack.Screen name="ManageStaff" component={ManageStaff}/>
     </Stack.Navigator>
   );
 };

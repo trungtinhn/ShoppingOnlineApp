@@ -32,6 +32,15 @@ import DeliveryScreen from '../../screens/Customer/DeliveryScreen';
 import DeTailDelivery from '../../screens/Customer/DetailDelivery';
 import FunctionPermisson from '../../screens/Admin/FunctionPermission';
 import AdminManagement from '../../screens/Admin/AdminManagement';
+import GlobalPromotion from '../../screens/Admin/GlobalPromotion';
+import EditGlobalPromotion from '../../screens/Admin/EditGlobalPromotion';
+import AddGlobalPromotion from '../../screens/Admin/AddGlobalPromotion';
+import ChatWithStore from '../../screens/Admin/ChatWithStore';
+import GlobalCategory from '../../screens/Admin/GlobalCategory';
+import AddGlobalCategory from '../../screens/Admin/AddGlobalCategory';
+import EditGlobalCategory from '../../screens/Admin/EditGlobalCategory';
+import RankManagement from '../../screens/Admin/RankManagement';
+import EditRankRule from '../../screens/Admin/EditRankRule';
 const Stack = createNativeStackNavigator();
 
 const AdminNavigation = () => {
@@ -70,6 +79,16 @@ const AdminNavigation = () => {
             <Stack.Screen name="FunctionPermission" component={FunctionPermission} />
             <Stack.Screen name="DeliveryDetail" component={DeTailDelivery}/>
             <Stack.Screen name="FuctionPermisson" component={FunctionPermisson} />
+
+            <Stack.Screen name="GlobalPromotion" component={GlobalPromotion} />
+            <Stack.Screen name="EditGlobalPromotion" component={EditGlobalPromotion}/>
+            <Stack.Screen name ="AddGlobalPromotion" component={AddGlobalPromotion}/>
+            <Stack.Screen name ="ChatWithStore" component={ChatWithStore}/>
+            <Stack.Screen name ="GlobalCategory" component={GlobalCategory}/>
+            <Stack.Screen name ="AddGlobalCategory" component={AddGlobalCategory}/>
+            <Stack.Screen name ="EditGlobalCategory" component={EditGlobalCategory}/>
+            <Stack.Screen name ="RankManagement" component={RankManagement}/>
+            <Stack.Screen name ="EditRankRule" component={EditRankRule} />
         </Stack.Navigator>
     </NavigationContainer>
   )

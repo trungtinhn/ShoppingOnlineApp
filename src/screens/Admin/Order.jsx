@@ -19,7 +19,7 @@ const Order = ({ navigation }) => {
   const layout = useWindowDimensions();
   const [loading, setLoading] = useState(true);
   const [handle, setHandle] = useState(false);
-
+  const AVATAR_LINK = "https://firebasestorage.googleapis.com/v0/b/shoppingapp-a20a4.appspot.com/o/test%2Fairplane-takeoff-fill%20(1).png?alt=media&token=4fcfdcec-5147-40f9-8f57-708bfe576dc8"
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
       { key: 'confirm', title: 'Confirm' },
@@ -44,7 +44,7 @@ const Order = ({ navigation }) => {
                 getOrderByStatus({ status: 'Delivered' }),
                 getOrderByStatus({ status: 'Cancel' })
           ]);
-          console.log({confirmRes, onWaitRes, deliveringRes, deliveredRes, cancelRes});
+        //   console.log({confirmRes, onWaitRes, deliveringRes, deliveredRes, cancelRes});
 
           if (confirmRes.status === 200) setDonHangConfirm(confirmRes.data);
           if (onWaitRes.status === 200) setDonHangOnWait(onWaitRes.data);
@@ -115,7 +115,7 @@ const Order = ({ navigation }) => {
           <View key={item._id} style={styles.background}>
               <TouchableOpacity onPress={() => navigation.navigate('DeliveryDetail', { item })}>
                   <View style={styles.separatorLine} />
-                  <PerSon avartar={item.Avatar} name={item.TenND} />
+                  <PerSon avartar={item.avatar ?? AVATAR_LINK} name={item.name} />
                   <Text style={styles.labelFocus}>Purchased Products</Text>
                   {item.products.map(product => (
                       <OneOrder
@@ -167,7 +167,7 @@ const Order = ({ navigation }) => {
         <View key={item._id} style={styles.background}>
             <TouchableOpacity onPress={() => navigation.navigate('DeliveryDetail', { item })}>
                 <View style={styles.separatorLine} />
-                <PerSon avartar={item.Avatar} name={item.TenND} />
+                <PerSon avartar={item.avatar ?? AVATAR_LINK} name={item.name} />
                 <Text style={styles.labelFocus}>Purchased Products</Text>
                 {item.products.map(product => (
                     <OneOrder
@@ -219,7 +219,7 @@ const Order = ({ navigation }) => {
             <View key={item._id} style={styles.background}>
                 <TouchableOpacity onPress={() => navigation.navigate('DeliveryDetail', { item })}>
                     <View style={styles.separatorLine} />
-                    <PerSon avartar={item.Avatar} name={item.TenND} />
+                    <PerSon avartar={item.avatar ?? AVATAR_LINK} name={item.name} />
                     <Text style={styles.labelFocus}>Purchased Products</Text>
                     {item.products.map(product => (
                         <OneOrder
@@ -257,7 +257,7 @@ const Order = ({ navigation }) => {
           <View key={item._id} style={styles.background}>
               <TouchableOpacity onPress={() => navigation.navigate('DeliveryDetail', { item })}>
                   <View style={styles.separatorLine} />
-                  <PerSon avartar={item.Avatar} name={item.TenND} />
+                  <PerSon avartar={item.avatar ?? AVATAR_LINK} name={item.name} />
                   <Text style={styles.labelFocus}>Purchased Products</Text>
                   {item.products.map(product => (
                       <OneOrder
@@ -308,7 +308,7 @@ const Order = ({ navigation }) => {
           <View key={item._id} style={styles.background}>
               <TouchableOpacity onPress={() => navigation.navigate('DeliveryDetail', { item })}>
                   <View style={styles.separatorLine} />
-                  <PerSon avartar={item.Avatar} name={item.TenND} />
+                  <PerSon avartar={item.avatar ?? AVATAR_LINK} name={item.name} />
                   <Text style={styles.labelFocus}>Purchased Products</Text>
                   {item.products.map(product => (
                       <OneOrder
@@ -353,7 +353,7 @@ const Order = ({ navigation }) => {
           activeColor={CUSTOM_COLOR.DarkOrange}
           inactiveColor={CUSTOM_COLOR.Black}
           renderLabel={({ route, focused }) => (
-              <Text style={{ color: focused ? CUSTOM_COLOR.DarkOrange : CUSTOM_COLOR.Black, fontWeight: 'bold' }}>
+              <Text style={{fontSize: 12, color: focused ? CUSTOM_COLOR.DarkOrange : CUSTOM_COLOR.Black, fontWeight: 'bold' }}>
                   {route.title}
               </Text>
           )}
@@ -367,7 +367,7 @@ const Order = ({ navigation }) => {
               <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
                   <BackIcon fill={CUSTOM_COLOR.Black} />
               </TouchableOpacity>
-              <Text style={styles.headerText}>Manage Product</Text>
+              <Text style={styles.headerText}>Manage Order</Text>
           </View>
           <TabView
               navigationState={{ index, routes }}

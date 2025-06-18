@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -19,59 +19,80 @@ import io from 'socket.io-client';
 import Message from '../../components/Customer/Message';
 import CUSTOM_COLOR from '../../constants/color';
 
-import {firebase} from '../../../firebase/firebase';
-import {getUserType} from '../../api/UserApi';
+import { firebase } from '../../../firebase/firebase';
+import { getCurrentUserData, getUserType } from '../../api/UserApi';
 import { BackIcon } from '../../../assets/Customer/svgs';
 import FONT_FAMILY from '../../constants/font';
+import { API_URL } from '../../api/AppApi';
 
-const socket = io("https://shoppingserver-yhbt.onrender.com", {
+const socket = io(API_URL.slice(0, -4), {
   path: "/api/Chat/",
 });
 
-function MessagingScreen({navigation, route}) {
+function MessagingScreen({ navigation, route }) {
+  const { item } = route.params;
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [userInfo, setUserInfo] = useState();
-  const adminId = {_id: "66541fed38d9e79683b0b700"};
+
+  const setupSocketListeners = (userInfo, item) => {
+    if (userInfo && item) {
+      socket.emit('getMessages', { userId: userInfo._id, friendId: item._id });
+      socket.on('messages', messages => {
+        setMessages(messages);
+
+        // Mark messages as seen
+        messages.forEach(message => {
+          if (message.recipientId === userInfo._id && !message.isSeen) {
+            socket.emit('messageSeen', { messageId: message._id });
+          }
+        });
+      });
+
+      socket.on('receiveMessage', message => {
+        setMessages(prevMessages => [...prevMessages, message]);
+
+        // Mark the new message as seen if it's for the current user
+        if (message.recipientId === userInfo._id && !message.isSeen) {
+          socket.emit('messageSeen', { messageId: message._id });
+        }
+      });
+
+      socket.on('messageSeen', ({ messageId }) => {
+        setMessages(prevMessages =>
+          prevMessages.map(message =>
+            message._id === messageId ? { ...message, isSeen: true } : message
+          )
+        );
+      });
+
+      return () => {
+        socket.off('messages');
+        socket.off('receiveMessage');
+        socket.off('messageSeen');
+      };
+    }
+  };
+
   useEffect(() => {
     const fetchUserData = async () => {
       const user = firebase.auth().currentUser;
-      const res = await getUserType({MaND: user.uid});
+      const res = await getCurrentUserData({ userId: user.uid });
       setUserInfo(res.data);
-      setupSocketListeners(res.data, adminId);
-    };
-
-    const setupSocketListeners = (userInfo, item) => {
-      if (userInfo && item) {
-        socket.emit('getMessages', {userId: userInfo._id, friendId: item._id});
-
-        socket.on('messages', messages => {
-          setMessages(messages);
-        });
-
-        socket.on('receiveMessage', message => {
-          setMessages(prevMessages => [...prevMessages, message]);
-        });
-
-        return () => {
-          socket.off('messages');
-          socket.off('receiveMessage');
-        };
-      }
+      setupSocketListeners(res.data, item);
     };
     fetchUserData();
-  }, []);
+  }, [item]);
 
   const handleSendMessage = () => {
-    if (userInfo && adminId) {
+    if (userInfo && item) {
       const message = {
         senderId: userInfo._id,
-        recipientId: adminId._id,
+        recipientId: item._id,
         message: newMessage,
         timeStamp: new Date().toISOString(),
       };
       socket.emit('sendMessage', message);
-      //setMessages(prevMessages => [...prevMessages, message]); // Optimistic update
       setNewMessage('');
     }
   };
@@ -79,21 +100,28 @@ function MessagingScreen({navigation, route}) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        {/* <TouchableOpacity style={{padding: 10}} onPress={() => navigation.goBack()}>
+        <TouchableOpacity style={{ padding: 10 }} onPress={() => navigation.goBack()}>
           <BackIcon />
-        </TouchableOpacity> */}
-        <Text style={styles.headerText}>Suport Chat</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerText}>Chat</Text>
       </View>
 
       <ScrollView style={styles.messageContainer}>
-        {messages.map((message, index) => (
-          <Message
-            key={message._id}
-            content={message.message}
-            time={new Date(message.timeStamp).toLocaleTimeString()}
-            isRight={message.senderId === userInfo._id}
-          />
-        ))}
+        {messages
+          .filter(
+            message =>
+              (message.senderId === userInfo._id && message.recipientId === item._id) ||
+              (message.senderId === item._id && message.recipientId === userInfo._id)
+          )
+          .map(message => (
+            <Message
+              key={message._id}
+              content={message.message}
+              time={new Date(message.timeStamp).toLocaleTimeString()}
+              isRight={message.senderId === userInfo._id}
+              isSeen={message.isSeen}
+            />
+          ))}
       </ScrollView>
 
       <View style={styles.inputContainer}>

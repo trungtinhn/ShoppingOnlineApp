@@ -23,7 +23,7 @@ import {
   getUserType,
 } from '../../api/UserApi';
 import {firebase} from '../../../firebase/firebase';
-import {getStoreById, updateStore} from '../../api/StroreApi';
+import {getStoreById, updateStore} from '../../api/StoreApi';
 import { act } from 'react-test-renderer';
 
 function ManageUser({navigation}) {

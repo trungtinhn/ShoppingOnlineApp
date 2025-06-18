@@ -1,170 +1,237 @@
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import React from 'react';
-import ButtonDetail from './ButtonDetail';
-import { WareHouse, Love, Sold, ViewPerSon, IC_Add } from '../../../assets/Admin/icons';
+import { WareHouse, Love, Sold, ViewPerSon } from '../../../assets/Admin/icons';
 import CUSTOM_COLOR from '../../constants/color';
+
 const MyProductOne = (props: any) => {
   return (
-    <View
-      style={{
-        // marginTop: 15,
-        width: '100%',
-        // height: 230,
-        borderBottomWidth: 0.5,
-        flexDirection: 'column',
-      }}>
-      <View style={{ width: '100%', height: 20 }} />
-      <View
-        style={{
-          width: '100%',
-          height: 100,
-          borderBottomWidth: 0.5,
-          flexDirection: 'row',
-          alignItems: 'center'
-        }}>
+    <TouchableOpacity 
+      style={styles.container}
+      onPress={props.onPress}
+      activeOpacity={0.7}
+    >
+      {/* Header Section with Image and Basic Info */}
+      <View style={styles.headerSection}>
         <Image
           source={{ uri: props.source }}
-          style={{ width: 80, height: 80, marginLeft: 15 }}
+          style={styles.productImage}
           resizeMode="cover"
         />
-        <View style={{ flexDirection: 'column', marginLeft: 10, width: 230 }}>
-          <Text style={{ fontSize: 20, color: CUSTOM_COLOR.Black, fontWeight: 'bold' }}>{props.title}</Text>
-          <Text style={{ fontWeight: 'bold', fontSize: 18 }}>{props.price} VND</Text>
+        <View style={styles.productInfo}>
+          <Text style={styles.productTitle} numberOfLines={2}>
+            {props.title}
+          </Text>
+          <Text style={styles.productPrice}>
+            {props.price?.toLocaleString()} VND
+          </Text>
+          {props.type === 'Hidden' && (
+            <View style={styles.hiddenBadge}>
+              <Text style={styles.hiddenText}>Hidden</Text>
+            </View>
+          )}
         </View>
-
-        <TouchableOpacity style={{
-
-        }}
-          onPress={props.AddAmount}
-        >
-          <Image source={IC_Add}
-            style={{
-              width: 30,
-              height: 30,
-              tintColor: CUSTOM_COLOR.DarkOrange
-            }}
-          />
-        </TouchableOpacity>
       </View>
-      <View
-        style={{
-          width: '100%',
-          height: 70,
-          borderBottomWidth: 0.5,
-          flexDirection: 'row',
-        }}>
-        <View
-          style={{
-            width: '50%',
-            height: 70,
-            marginLeft: '10%',
-            justifyContent: 'space-around',
-            flexDirection: 'column',
-          }}>
-          <View style={{ flexDirection: 'row' }}>
+
+      {/* Stats Section */}
+      <View style={styles.statsSection}>
+        <View style={styles.statsColumn}>
+          <View style={styles.statItem}>
             <Image
               source={WareHouse}
-              style={{ width: 20, height: 20 }}
-              resizeMode="stretch"
+              style={styles.statIcon}
+              resizeMode="contain"
             />
-            <Text style={{ marginLeft: 10 }}>WareHouse: </Text>
-            <Text>{props.soluongtonkho}</Text>
+            <Text style={styles.statLabel}>Stock:</Text>
+            <Text style={styles.statValue}>{props.soluongtonkho || 0}</Text>
           </View>
-          <View style={{ flexDirection: 'row' }}>
+          
+          <View style={styles.statItem}>
             <Image
               source={Love}
-              style={{ width: 20, height: 20 }}
-              resizeMode="stretch"
+              style={styles.statIcon}
+              resizeMode="contain"
             />
-            <Text style={{ marginLeft: 10 }}>Love: </Text>
-            <Text>{props.soluonglove}</Text>
+            <Text style={styles.statLabel}>Likes:</Text>
+            <Text style={styles.statValue}>{props.soluonglove || 0}</Text>
           </View>
         </View>
-        <View
-          style={{
-            width: '50%',
-            height: 70,
-            justifyContent: 'space-around',
-            flexDirection: 'column',
-          }}>
-          <View style={{ flexDirection: 'row' }}>
+
+        <View style={styles.statsColumn}>
+          <View style={styles.statItem}>
             <Image
               source={Sold}
-              style={{ width: 20, height: 20 }}
-              resizeMode="stretch"
+              style={styles.statIcon}
+              resizeMode="contain"
             />
-            <Text style={{ marginLeft: 10 }}>Sold Out: </Text>
-            <Text>{props.soluongban}</Text>
+            <Text style={styles.statLabel}>Sold:</Text>
+            <Text style={styles.statValue}>{props.soluongban || 0}</Text>
           </View>
-
+          
+          <View style={styles.statItem}>
+            <Image
+              source={ViewPerSon}
+              style={styles.statIcon}
+              resizeMode="contain"
+            />
+            <Text style={styles.statLabel}>Views:</Text>
+            <Text style={styles.statValue}>{props.soluongview || 0}</Text>
+          </View>
         </View>
       </View>
 
-      {props.type === 'Hidden' ? (
-        <View
-          style={{
-            width: '100%',
-            height: 55,
-            marginTop: 10,
-            flexDirection: 'row',
-            justifyContent: 'center',
-          }}>
-          <ButtonDetail
-            title="Show"
-            color={CUSTOM_COLOR.DarkOrange}
-            onPress={props.show}
-            style={styles.button}
-          />
-
+      {/* Status Indicator */}
+      <View style={styles.statusSection}>
+        <View style={[
+          styles.statusIndicator,
+          { backgroundColor: getStatusColor(props.soluongtonkho, props.type) }
+        ]}>
+          <Text style={styles.statusText}>
+            {getStatusText(props.soluongtonkho, props.type)}
+          </Text>
         </View>
-      ) : (
-        <View
-          style={{
-            width: '100%',
-            height: 55,
-            // marginTop: 10,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <ButtonDetail
-            title="Hide"
-            color={CUSTOM_COLOR.DarkOrange}
-            onPress={props.hide}
-            style={styles.button}
-          />
-          <ButtonDetail
-            title="Edit"
-            color={CUSTOM_COLOR.DarkOrange}
-            onPress={props.edit}
-            style={styles.button}
-          />
-        </View>
-      )}
-      <View
-        style={{
-          width: '100%',
-          height: 10,
-          backgroundColor: CUSTOM_COLOR.LightGray,
-        }}
-      />
-      <View
-        style={{
-          width: '100%',
-          height: 10,
-          backgroundColor: CUSTOM_COLOR.White,
-        }}
-      />
-    </View>
+      </View>
+    </TouchableOpacity>
   );
+};
+
+// Helper functions
+const getStatusColor = (stock: number, type: string) => {
+  if (type === 'Hidden') return CUSTOM_COLOR.Gray;
+  if (stock === 0) return CUSTOM_COLOR.Red;
+  if (stock < 10) return CUSTOM_COLOR.FlushOrange;
+  return CUSTOM_COLOR.Green;
+};
+
+const getStatusText = (stock: number, type: string) => {
+  if (type === 'Hidden') return 'Hidden Product';
+  if (stock === 0) return 'Out of Stock';
+  if (stock < 10) return 'Low Stock';
+  return 'In Stock';
 };
 
 export default MyProductOne;
 
 const styles = StyleSheet.create({
-  button: {
-    width: '35%',
-    height: '80%',
-    marginHorizontal: 20,
+  container: {
+    backgroundColor: CUSTOM_COLOR.White,
+    marginHorizontal: 8,
+    marginVertical: 4,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: CUSTOM_COLOR.LightGray,
+    overflow: 'hidden',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    width: "100%", 
+  },
+  
+  headerSection: {
+    flexDirection: 'row',
+    padding: 12,
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: CUSTOM_COLOR.LightGray,
+  },
+  
+  productImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 8,
+    backgroundColor: CUSTOM_COLOR.LightGray,
+  },
+  
+  productInfo: {
+    flex: 1,
+    marginLeft: 12,
+    justifyContent: 'center',
+  },
+  
+  productTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: CUSTOM_COLOR.Black,
+    marginBottom: 4,
+    lineHeight: 20,
+  },
+  
+  productPrice: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: CUSTOM_COLOR.DarkOrange,
+    marginBottom: 4,
+  },
+  
+  hiddenBadge: {
+    backgroundColor: CUSTOM_COLOR.Gray,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 10,
+    alignSelf: 'flex-start',
+  },
+  
+  hiddenText: {
+    color: CUSTOM_COLOR.White,
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+  
+  statsSection: {
+    flexDirection: 'row',
+    padding: 12,
+    justifyContent: 'space-between',
+  },
+  
+  statsColumn: {
+    flex: 1,
+    paddingHorizontal: 8,
+  },
+  
+  statItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  
+  statIcon: {
+    width: 16,
+    height: 16,
+    marginRight: 6,
+  },
+  
+  statLabel: {
+    fontSize: 12,
+    color: CUSTOM_COLOR.Gray,
+    marginRight: 4,
+    minWidth: 40,
+  },
+  
+  statValue: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: CUSTOM_COLOR.Black,
+  },
+  
+  statusSection: {
+    padding: 12,
+    paddingTop: 0,
+  },
+  
+  statusIndicator: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 15,
+    alignItems: 'center',
+  },
+  
+  statusText: {
+    color: CUSTOM_COLOR.White,
+    fontSize: 12,
+    fontWeight: 'bold',
   },
 });

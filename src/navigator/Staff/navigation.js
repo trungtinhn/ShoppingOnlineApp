@@ -33,7 +33,6 @@ const Stack = createNativeStackNavigator();
 
 const StaffNavigation = () => {
   return (
-    <NavigationContainer>
       <Stack.Navigator
         screenOptions={{headerShown: false}}
         initialRouteName="OverView">
@@ -72,7 +71,6 @@ const StaffNavigation = () => {
           component={FunctionPermission}
         />
       </Stack.Navigator>
-    </NavigationContainer>
   );
 };
 

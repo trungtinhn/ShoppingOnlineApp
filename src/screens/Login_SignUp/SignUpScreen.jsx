@@ -15,6 +15,8 @@ import { avatarDefault, isValidEmail, isValidPassword } from '../../utils/helper
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import {firebase} from '../../../firebase/firebase.js'
 import { registerUser } from '../../api/UserApi';
+import { ROLE_IDS } from '../../constants/roles'; //
+
 export default function SignUpScreen({navigation}) {
   
   const [fullName, setFullName] = useState('');
@@ -23,10 +25,8 @@ export default function SignUpScreen({navigation}) {
   const [birth, setBirth] = useState('01/01/2023');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [userType, setuserType] = useState('customer');
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [isStoreAccount, setIsStoreAccount] = useState(false);
-  // const [errorMessage, setErrorMessage] = useState('');
 
   const isValidForm = (fullName, email, password, confirmPassword, toggleCheckBox) => {
     if (fullName === '' && email === '' && password === '' && confirmPassword === '') {
@@ -50,50 +50,76 @@ export default function SignUpScreen({navigation}) {
     }
     return null;
   };
+
   const handleRegister = () => {
     firebase.auth().createUserWithEmailAndPassword(email, password)
       .then(async(userCredential) => {
           // Signed in
         const user = userCredential.user;
         console.log('Register success: ', user);
-          // ...
+          
         try{
+          // Sử dụng hardcoded role IDs
+          const selectedRoleId = isStoreAccount ? ROLE_IDS.STORE_OWNER : ROLE_IDS.CUSTOMER;
+          
+          console.log('Selected role ID:', selectedRoleId);
+          console.log('Is store account:', isStoreAccount);
+          
           const data = {
             fullName: fullName,
             email: email,
             phone: phoneNumber,
             dateOfBirth: birth,
             userId: user.uid,
-            userType: isStoreAccount ? 'storeOwner' : 'customer',
+            userType: selectedRoleId, // Sử dụng role ID thay vì role name
             avatar: avatarDefault,
             storeId: '',
             address: '',
             gender: '',
           }
+          
+          console.log('Registering user with data:', data);
           const res = await registerUser({data: data});
+          
           if (res.status === 201) {
-            Alert.alert('Success', 'Account created successfully');
+            const accountType = isStoreAccount ? 'Store owner' : 'Customer';
+            Alert.alert('Success', `${accountType} account created successfully`);
             navigation.navigate('Congratulation');
           } else {
-            console.log(res);
-            Alert.alert("Error", 'Failed to create account');
+            console.log('Register user failed:', res);
+            Alert.alert("Error", 'Failed to create account. Please try again.');
           }
           
-        }catch(error){
-          console.log(error);
+        } catch(error) {
+          console.log('Error in user registration:', error);
+          Alert.alert("Error", 'Failed to create account. Please try again.');
         } 
       })
       .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log('Register failed: ', errorMessage);
-        });
+          console.log('Firebase register failed: ', errorMessage);
+          
+          // Handle specific Firebase errors
+          let userFriendlyMessage = 'Failed to create account. Please try again.';
+          if (errorCode === 'auth/email-already-in-use') {
+            userFriendlyMessage = 'This email is already registered. Please use a different email.';
+          } else if (errorCode === 'auth/weak-password') {
+            userFriendlyMessage = 'Password is too weak. Please use a stronger password.';
+          } else if (errorCode === 'auth/invalid-email') {
+            userFriendlyMessage = 'Invalid email address. Please check your email.';
+          }
+          
+          Alert.alert('Registration Failed', userFriendlyMessage);
+      });
   }
+
   const handleDateChange = (date) => {
-    // Xử lý khi người dùng chọn ngày
+    // Xử lý khi người dùng chọn ngày
     setBirth(date);
     console.log('Selected date:', date);
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollview}>
@@ -154,6 +180,9 @@ export default function SignUpScreen({navigation}) {
               onValueChange={newValue => setIsStoreAccount(newValue)}
             />
             <HeaderContent content="I want to create a store account" />
+            {isStoreAccount && (
+              <Text style={styles.roleInfoText}> (Store Owner)</Text>
+            )}
           </View>
 
           <View style={[styles.checkContainer, styles.unitContainer]}>
@@ -189,6 +218,7 @@ export default function SignUpScreen({navigation}) {
     </SafeAreaView>
   )
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -243,5 +273,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: CUSTOM_COLOR.Black,
     left: '5%',
+  },
+  roleInfoText: {
+    fontSize: 12,
+    fontFamily: FONT_FAMILY.Light,
+    color: CUSTOM_COLOR.Gray,
+    fontStyle: 'italic',
   },
 });

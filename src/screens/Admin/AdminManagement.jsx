@@ -7,20 +7,32 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import { IC_AccountManagement, IC_ChatWithStore, IC_logout } from '../../../assets/Admin/icons';
+import { IC_AccountManagement, IC_ChatWithStore, IC_GlobalCategory, IC_GlobalPromotion, IC_Rank } from '../../../assets/Admin/icons';
 import CUSTOM_COLOR from '../../constants/color';
+import FONT_FAMILY from '../../constants/font';
+import { firebase } from '../../../firebase/firebase';
 
 const toolsData = [
   {
     title: 'Basic Function',
     items: [
-      {name: 'ChatWithStore', icon: IC_ChatWithStore, screen: 'Chat'},
+      {name: 'ChatWithStore', icon: IC_ChatWithStore, screen: 'ChatWithStore'},
       {name: 'AdminManament', icon: IC_AccountManagement, screen: 'ManageUser'},
+      {name: 'Global Promotion', icon: IC_GlobalPromotion, screen: 'GlobalPromotion'},
+      {name: 'Global Category', icon: IC_GlobalCategory, screen: 'GlobalCategory'},
+      {name: 'Rank Management', icon: IC_Rank, screen: 'RankManagement'},
     ],
   },
 ];
 
 const AdminManagement = ({navigation}) => {
+  const handleLogout = async () => {
+    try {
+      await firebase.auth().signOut();
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
   <View style={styles.container}>
       {/* Header */}
@@ -48,6 +60,12 @@ const AdminManagement = ({navigation}) => {
           </View>
         ))}
       </ScrollView>
+      <TouchableOpacity 
+        style={styles.logoutButton}
+        onPress={handleLogout}
+      >
+        <Text style={styles.logoutText}>Logout</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -98,6 +116,18 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: 'center',
     color: '#333',
+  },
+  logoutButton: {
+    backgroundColor: CUSTOM_COLOR.Red,
+    padding: 15,
+    margin: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  logoutText: {
+    color: '#fff',
+    fontSize: 16,
+    fontFamily: FONT_FAMILY.Bold,
   },
 });
 

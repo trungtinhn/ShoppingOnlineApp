@@ -1,121 +1,131 @@
 import { getIdToken } from "../middleware/getToken";
-import { api } from "./AppApi";
-
-const addCategory = async ({ data }) => {
+import { api } from './AppApi';
+export const addCategory = async (categoryData) => {
   try {
     const idToken = await getIdToken();
-    const url = "/category/addCategory";
+    const url = `/category/addCategory`;
     const config = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${idToken}`
       },
-      data: data,
+      data: categoryData
     };
-
     const res = await api(url, config);
     return res;
   } catch (error) {
     if (error.response) {
-      return error.response.data;
+      return error.response;
     } else {
       throw error;
     }
   }
 };
-
-const updateCategory = async ({ categoryId, data }) => {
+export const updateCategory = async (id, categoryData) => {
   try {
     const idToken = await getIdToken();
-    const url = `/category/id=${categoryId}`;
+    const url = `/category/${id}`;
     const config = {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${idToken}`
       },
-      data: data,
+      data: categoryData
     };
-
     const res = await api(url, config);
     return res;
   } catch (error) {
     if (error.response) {
-      return error.response.data;
+      return error.response;
     } else {
       throw error;
     }
   }
 };
-
-const deleteCategory = async ({ categoryId }) => {
+export const deleteCategory = async (id) => {
   try {
     const idToken = await getIdToken();
-    const url = `/category/id=${categoryId}`;
+    const url = `/category/${id}`;
     const config = {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${idToken}`
-      },
+      }
     };
-
     const res = await api(url, config);
     return res;
   } catch (error) {
     if (error.response) {
-      return error.response.data;
+      return error.response;
     } else {
       throw error;
     }
   }
 };
-
-const getCategory = async () => {
+export const getCategory = async (id) => {
   try {
     const idToken = await getIdToken();
-    const url = "/category/getCategory";
+    const url = `/category/getCategory`;
     const config = {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${idToken}`
-      },
+      }
     };
-
     const res = await api(url, config);
     return res;
   } catch (error) {
     if (error.response) {
-      return error.response.data;
+      return error.response;
     } else {
       throw error;
     }
   }
 };
-
-const updateProductAmount = async ({categoryId, numProduct}) => {
+export const updateProductAmountInCategory = async (id, productData) => {
   try {
     const idToken = await getIdToken();
-    const url = `/category/updateProductAmount/${categoryId}`;
+    const url = `/category/updateProductAmount/${id}`;
     const config = {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${idToken}`
       },
-      data: {productAmount: numProduct}
+      data: productData
     };
-
     const res = await api(url, config);
     return res;
   } catch (error) {
     if (error.response) {
-      return error.response.data;
+      return error.response;
     } else {
       throw error;
     }
   }
 };
-export { addCategory, updateCategory, deleteCategory, getCategory, updateProductAmount };
+export const getCategoriesByStore = async ({storeId}) => {
+  try {
+    const idToken = await getIdToken();
+    const url = `/category/getCategoriesByStoreId/${storeId}`;
+    const config = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${idToken}`
+      }
+    };
+    const res = await api(url, config);
+    return res;
+  } catch (error) {
+    if (error.response) {
+      return error.response;
+    } else {
+      throw error;
+    }
+  }
+};

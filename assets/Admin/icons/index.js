@@ -49,3 +49,7 @@ export { default as IC_ShoppingCart } from '../icons/shoppingcarticon.png'
 export { default as IC_FunctionPermission } from '../icons/OverView/function.png';
 export { default as IC_AccountManagement } from '../icons/accounts_management.png';
 export {default as IC_ChatWithStore} from '../icons/chatwithstore.png'
+export {default as IC_GlobalPromotion} from '../icons/global_promotion.png'
+export {default as IC_GlobalCategory} from '../icons/global_category.png'
+export {default as IC_Rank} from '../icons/rank.png'
+export {default as IC_Logout} from '../icons/logout.png'

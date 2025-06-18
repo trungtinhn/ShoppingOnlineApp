@@ -10,21 +10,24 @@ import {
   ImageBackground,
   Alert,
   Modal,
-  Button,
 } from 'react-native';
 import {ref, uploadBytes, getDownloadURL} from 'firebase/storage';
-import {Storage} from '../../../firebase/firebase';
-import React, {useContext, useEffect, useState} from 'react';
+import {firebase, Storage} from '../../../firebase/firebase';
+import React, {useEffect, useState} from 'react';
 import {launchImageLibrary} from 'react-native-image-picker';
 import CUSTOM_COLOR from '../../constants/color';
 import CustomHeader from '../../components/Admin/CustomHeader';
-import CheckBox from '@react-native-community/checkbox';
 import ButtonDetail from '../../components/Admin/ButtonDetail';
 import FONT_FAMILY from '../../constants/font';
 import {Dropdown} from 'react-native-element-dropdown';
 import {border_add} from '../../../assets/Admin/images';
-import {getCategory, updateProductAmount} from '../../api/CategoryApi';
+import {
+  getCategory,
+  updateProductAmount,
+} from '../../api/CategoryApi';
 import {addProduct} from '../../api/ProductApi';
+import {getAllGlobalCategory} from '../../api/GlobalCategoryApi';
+import { getCurrentUserData } from '../../api/UserApi';
 export default function AddProduct({navigation}) {
   //const {addProduct} = useContext(useProducts);
   const [value, setValue] = useState(null);
@@ -45,6 +48,8 @@ export default function AddProduct({navigation}) {
   const [newColorName, setNewColorName] = useState('');
   const [newColorCode, setNewColorCode] = useState('');
   const [newSize, setNewSize] = useState('');
+  const [globalValue, setGlobalValue] = useState(null);
+  const [globalCategories, setglobalCategories] = useState([]);
   const [catesgories, setCategories] = useState([]);
 
   const addSize = () => {
@@ -95,6 +100,9 @@ export default function AddProduct({navigation}) {
 
   const setData = async () => {
     const types = [];
+    const user = firebase.auth().currentUser;
+    const userData = await getCurrentUserData({userId: user.uid})
+
     colorList.forEach(color => {
       sizeList.forEach(size => {
         types.push({
@@ -106,30 +114,34 @@ export default function AddProduct({navigation}) {
     });
     const imageUri = await UploadFile();
     const productData = {
-      OriginalPrice: Number(price),
-      DiscountPrice: Number(price),
-      ProductImages: imageUri,
-      CategoryId: categorize,
-      Colors: colorList,
-      Size: sizeList,
-      Type: types,
-      StockQuantity: Number(amount),
-      ProductName: name,
-      ProductDescription: description,
-      Status: 'available',
-      Trending: false,
-      Onsale: false,
+      originalPrice: Number(price),
+      discountPrice: Number(price),
+      productImages: imageUri,
+      categoryId: categorize,
+      globalCategoryId: globalValue,
+      colors: colorList,
+      sizes: sizeList,
+      types: types,
+      stockQuantity: Number(amount),
+      productName: name,
+      productDescription: description,
+      status: 'available',
+      trending: false,
+      onsale: false,
+      storeId: userData.data.storeId,
     };
-    const res = await addProduct({data: productData}).then(handleUpdateProductCategoryAmount());
-    
+    const res = await addProduct({data: productData}).then(
+      handleUpdateProductCategoryAmount(),
+    );
+
     if (res.status === 200) {
+      Alert.alert('Notification', 'Successfully added new Product!', [
+        {text: 'OK', onPress: () => navigation.goBack(), style: 'cancel'},
+      ]);
     } else {
       console.log(res);
       Alert.alert('Error', 'Cant add new product');
     }
-    Alert.alert('Notification', 'Successfully added new Product!', [
-      {text: 'OK', onPress: () => navigation.goBack(), style: 'cancel'},
-    ]);
   };
 
   const UploadFile = async () => {
@@ -162,8 +174,21 @@ export default function AddProduct({navigation}) {
     console.log(data);
     return data;
   };
+  const handleGetGlobalCategory = async () => {
+    const res = await getAllGlobalCategory();
+    if (res.status === 200) {
+      setglobalCategories(res.data);
+    } else {
+      console.log(res);
+    }
+  };
   const handleGetCategory = async () => {
     const categories = await getCategory();
+    if(globalValue){
+      categories.data = categories.data.filter((category) => {
+        return category.globalCategoryId === globalValue;
+      })
+    }
     setCategories(categories.data);
   };
   const handleUpdateProductCategoryAmount = async () => {
@@ -171,15 +196,17 @@ export default function AddProduct({navigation}) {
       categoryId: categorize,
       numProduct: podtuctCategoryAmount + 1,
     });
-    if(res.status === 200){
-      
-    }else{
+    if (res.status === 200) {
+    } else {
       console.log(res.error);
     }
   };
   useEffect(() => {
-    handleGetCategory();
+    handleGetGlobalCategory();
   }, []);
+  useEffect(() => {
+    handleGetCategory();
+  }, [globalValue]);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: CUSTOM_COLOR.White}}>
@@ -587,7 +614,6 @@ export default function AddProduct({navigation}) {
           </>
 
           <View style={{width: '100%', height: 10}} />
-
           <>
             <View style={[styles.inputContainer, {height: 90}]}>
               <View style={{width: '100%', height: 10}} />
@@ -598,7 +624,7 @@ export default function AddProduct({navigation}) {
                     {justifyContent: 'flex-start'},
                   ]}>
                   <View style={{width: '10%', height: '100%'}} />
-                  <Text style={styles.titleInputStyle}>Categorize</Text>
+                  <Text style={styles.titleInputStyle}>Global Category</Text>
                   <Text
                     style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
                     {' '}
@@ -626,47 +652,97 @@ export default function AddProduct({navigation}) {
                   selectedTextStyle={styles.selectedTextStyle}
                   inputSearchStyle={styles.inputSearchStyle}
                   iconStyle={styles.iconStyle}
-                  data={catesgories}
-                  search
-                  maxHeight={200}
+                  data={globalCategories}
                   labelField="name"
                   valueField="_id"
-                  placeholder={!isFocus ? 'Select item' : '...'}
-                  searchPlaceholder="Search..."
-                  value={value}
+                  placeholder="Select global category"
+                  value={globalValue}
                   onFocus={() => setIsFocus(true)}
                   onBlur={() => setIsFocus(false)}
                   onChange={item => {
-                    setValue(item._id);
+                    setGlobalValue(item._id);
                     setIsFocus(false);
-                    setCategorize(item._id);
-                    setpodtuctCategoryAmount(item.numProduct);
-                  }}
-                />
+                    }}
+                  />
+                  <View style={{width: '5%', height: '100%'}} />
+                  </View>
+                </View>
+                </>
+                <View style={{width: '100%', height: 10}} />
+                {globalValue && (
+                <>
+                  <View style={[styles.inputContainer, {height: 90}]}>
+                  <View style={{width: '100%', height: 10}} />
+                  <View style={{flex: 1, flexDirection: 'row'}}>
+                    <View
+                    style={[
+                      styles.unitTitleContainer,
+                      {justifyContent: 'flex-start'},
+                    ]}>
+                    <View style={{width: '10%', height: '100%'}} />
+                    <Text style={styles.titleInputStyle}>Category</Text>
+                    <Text
+                      style={[styles.titleInputStyle, {color: CUSTOM_COLOR.Red}]}>
+                      {' '}
+                      *
+                    </Text>
+                    </View>
+                    <View
+                    style={[
+                      styles.unitTitleContainer,
+                      {justifyContent: 'flex-end'},
+                    ]}>
+                    <View style={{width: '10%', height: '100%'}} />
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                    flex: 2,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    }}>
+                    <View style={{width: '5%', height: '100%'}} />
+                    <Dropdown
+                    style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    iconStyle={styles.iconStyle}
+                    data={catesgories}
+                    search
+                    maxHeight={200}
+                    labelField="name"
+                    valueField="_id"
+                    placeholder={!isFocus ? 'Select item' : '...'}
+                    searchPlaceholder="Search..."
+                    value={value}
+                    onFocus={() => setIsFocus(true)}
+                    onBlur={() => setIsFocus(false)}
+                    onChange={item => {
+                      setValue(item._id);
+                      setIsFocus(false);
+                      setCategorize(item._id);
+                      setpodtuctCategoryAmount(item.numProduct);
+                    }}
+                    />
+                    <View style={{width: '5%', height: '100%'}} />
+                  </View>
+                  </View>
+                </>
+                )}
+                <View style={{width: '100%', height: 15}} />
+                <>
                 <View
                   style={{
-                    width: '5%',
-                    height: '100%',
-                  }}
-                />
-              </View>
-            </View>
-          </>
-
-          <View style={{width: '100%', height: 15}} />
-
-          <>
-            <View
-              style={{
-                width: '100%',
-                height: 55,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <ButtonDetail
-                title="Add now"
-                style={{width: '100%', height: '90%'}}
-                onPress={() => {
+                  width: '100%',
+                  height: 55,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  }}>
+                  <ButtonDetail
+                  title="Add now"
+                  style={{width: '100%', height: '90%'}}
+                  onPress={() => {
                   setData();
                 }}
                 color={CUSTOM_COLOR.DarkOrange}

@@ -68,7 +68,7 @@ const updateUser = async({userId, data}) => {
 const deleteUser = async({userId}) => {
   try {
       const idToken = await getIdToken();
-      const url = `/user/userId=${userId}`;
+      const url = `/user/${userId}`;
       const config = {
           method: "DELETE",
           headers: {
@@ -89,7 +89,7 @@ const deleteUser = async({userId}) => {
 const getCurrentUserData = async({userId}) => {
   try{
     const idToken = await getIdToken();
-    const url = `/user/getUser/userId=${userId}`;
+    const url = `/user/getUser/${userId}`;
     const config = {
         method: "GET",
         headers: {

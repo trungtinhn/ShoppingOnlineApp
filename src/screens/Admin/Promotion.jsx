@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,15 +6,17 @@ import {
   View,
   Image,
   FlatList,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 
-import { IC_Back } from '../../../assets/Admin/icons'
+import {IC_Back} from '../../../assets/Admin/icons';
 import dayjs from 'dayjs';
 import PromotionButton from '../../components/Admin/PromotionButton';
 import CUSTOM_COLOR from '../../constants/color';
 import PromotionCard from '../../components/Admin/PromotionCard';
-import { getAllPromotions } from '../../api/PromotionApi';
+import {getAllPromotions} from '../../api/PromotionApi';
+import {getCurrentUserData} from '../../api/UserApi';
+import { firebase } from '../../../firebase/firebase';
 const sampleDataPromotion = [
   {
     StartDate: new Date('2023-01-01T00:00:00Z'),
@@ -45,21 +47,19 @@ const sampleDataPromotion = [
   },
 ];
 
-function Promotion({navigation}){
+function Promotion({navigation}) {
   const [dataPromotion, setDataPromotion] = useState([]);
 
   const getDataPromotion = async () => {
+    const currentUser = firebase.auth().currentUser;
+    const userDataa = await getCurrentUserData({userId: currentUser.uid});
     const dataPromotion = await getAllPromotions();
-    setDataPromotion(dataPromotion.data);
-    // const q = query(collection(Firestore, 'KHUYENMAI'));
-
-    // const unsubscribe = onSnapshot(q, querySnapshot => {
-    //   const data = [];
-    //   querySnapshot.forEach(doc => {
-    //     data.push(doc.data());
-    //   });
-    //   setDataPromotion(data);
-    // });
+    const fillterData = dataPromotion.data.map(item => {
+      if(item.storeId === userDataa.storeId){
+        return item;
+      }
+    });
+    setDataPromotion(fillterData);
   };
 
   useEffect(() => {
@@ -68,7 +68,7 @@ function Promotion({navigation}){
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ width: '100%', height: 10 }} />
+      <View style={{width: '100%', height: 10}} />
       <>
         <View
           style={{
@@ -103,14 +103,14 @@ function Promotion({navigation}){
         </View>
       </>
 
-      <View style={{ width: '100%', height: 5 }} />
+      <View style={{width: '100%', height: 5}} />
 
       <>
         <View style={styles.listViewContainer}>
           <FlatList
             data={dataPromotion}
             keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => {
+            renderItem={({item}) => {
               const timestampBD = item.StartDate;
               const dateBD = dayjs(timestampBD);
 
@@ -125,25 +125,23 @@ function Promotion({navigation}){
               const monthKT = dateKT.month() + 1;
               const yearKT = dateKT.year();
 
-              console.log(item);
               return (
                 <PromotionCard
-                  source={item.PromotionImage}
-                  name={item.PromotionName}
-                  discount={item.Rate * 100}
-                  minimum={item.DonToiThieu}
+                  source={item.promotionImage}
+                  name={item.promotionName}
+                  discount={item.rate * 100}
+                  minimum={item.minimumOrder}
                   start={`${dayBD}/${monthBD}/${yearBD}`}
                   end={`${dayKT}/${monthKT}/${yearKT}`}
-                  type={item.Type}
-                  onPress={() => navigation.navigate('EditPromotion', { item })}
+                  type={item.type}
+                  onPress={() => navigation.navigate('EditPromotion', {item})}
                 />
               );
             }}
           />
         </View>
       </>
-
-      <View style={{ width: '100%', height: 10 }} />
+      <View style={{width: '100%', height: 10}} />
 
       <>
         <View style={styles.buttonContainer}>
@@ -158,7 +156,7 @@ function Promotion({navigation}){
       </>
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {

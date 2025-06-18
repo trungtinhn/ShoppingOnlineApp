@@ -6,7 +6,8 @@ import Status from "../../components/Admin/Status";
 import CUSTOM_COLOR from "../../constants/color";
 import SearchButton from "../../components/Admin/SearchButton";
 import MyProductOne from "../../components/Admin/MyProductOne";
-import { getProductAvailable, getProductOnwait, getProductOutofstock, setProductStatus } from "../../api/ProductApi";
+import { getProductsByStatus, setProductStatus } from "../../api/ProductApi";
+import { useFocusEffect } from "@react-navigation/native";
 export default function MyProduct({navigation}) {
   const [inventory, setinventory] = useState(true);
   const [Out, setOut] = useState(false);
@@ -22,7 +23,13 @@ export default function MyProduct({navigation}) {
   const ConfirmProduct = item => {
     
   };
-
+  useFocusEffect(
+    React.useCallback(() => {
+      getDadaInventory();
+      getDadaOnWait();
+      getDadaOutOfStock();
+    }, [])
+  )
   const HideSanPham = async item => {
     const res = await setProductStatus({productId: item._id, status: "onwait"});
     if(res.status === 200){
@@ -41,22 +48,23 @@ export default function MyProduct({navigation}) {
   };
 
   const getDadaOnWait = async () => {
-    const res = await getProductOnwait();
-    setDataOnWait(res.data);
+    const res = await getProductsByStatus({status: 'onwait'});
+    if(res.status === 200){
+      setDataOnWait(res.data);
+    }  
   };
 
   const getDadaOutOfStock = async () => {
-    const res = await getProductOutofstock();
-    setDataOutOfStock(res.data);
+    const res = await getProductsByStatus({status: 'outofstock'});
+    if(res.status === 200){
+      setDataOutOfStock(res.data);
+    }
   };
 
   const getDadaInventory = async () => {
-    const res = await getProductAvailable();
-    setDataInventory(res.data);
+    const res = await getProductsByStatus({status: 'available'});
     if(res.status === 200){
-      
-    }else{
-      console.log(res.err)
+      setDataInventory(res.data);
     }
   };
 
@@ -134,13 +142,13 @@ export default function MyProduct({navigation}) {
             renderItem={({item}) => {
               return (
                 <MyProductOne
-                  source={item.ProductImages[0]}
-                  title={item.ProductName}
-                  price={item.OriginalPrice}
-                  soluongtonkho={item.StockQuantity}
-                  soluonglove={item.WishlistCount}
-                  soluongview={item.ViewCount}
-                  soluongban={item.SoldQuantity}
+                  source={item.productImages[0]}
+                  title={item.productName}
+                  price={item.originalPrice}
+                  soluongtonkho={item.stockQuantity}
+                  soluonglove={item.sishlistCount}
+                  soluongview={item.viewCount}
+                  soluongban={item.soldQuantity}
                   edit={() => navigation.navigate('EditProduct', {item})}
                   hide={() => HideSanPham(item)}
                   AddAmount={() => navigation.navigate('ImportProduct', {item})}
@@ -256,13 +264,13 @@ export default function MyProduct({navigation}) {
             renderItem={({item}) => {
               return (
                 <MyProductOne
-                  source={item.ProductImages[0]}
-                  title={item.ProductName}
-                  price={item.OriginalPrice}
-                  soluongtonkho={item.StockQuantity}
-                  soluonglove={item.WishlistCount}
-                  soluongview={item.ViewCount}
-                  soluongban={item.StockQuantity}
+                  source={item.productImages[0]}
+                  title={item.productName}
+                  price={item.originalPrice}
+                  soluongtonkho={item.stockQuantity}
+                  soluonglove={item.wishlistCount}
+                  soluongview={item.viewCount}
+                  soluongban={item.stockQuantity}
                   edit={() => navigation.navigate('EditProduct')}
                 />
               );
@@ -376,13 +384,13 @@ export default function MyProduct({navigation}) {
             renderItem={({item}) => {
               return (
                 <MyProductOne
-                  source={item.ProductImages[0]}
+                  source={item.productImages[0]}
                   title={item.ProductName}
-                  price={item.OriginalPrice}
-                  soluongtonkho={item.StockQuantity}
-                  soluonglove={item.WishlistCount}
-                  soluongview={item.ViewCount}
-                  soluongban={item.StockQuantity}
+                  price={item.originalPrice}
+                  soluongtonkho={item.stockQuantity}
+                  soluonglove={item.wishlistCount}
+                  soluongview={item.viewCount}
+                  soluongban={item.stockQuantity}
                   type="Hidden"
                   show={() => ShowSanPham(item)}
                 />

@@ -5,3 +5,5 @@ export {default as orders_IC} from '../icons/orders.png';
 export {default as product_IC} from '../icons/product.png';
 export {default as voucher_IC} from '../icons/voucher.png';
 export {default as category_IC} from '../icons/category.png';
+export {default as manageStaff_IC} from '../icons/manageStaff.png';
+export {default as functionPermission_IC} from '../icons/functionPermison.png'

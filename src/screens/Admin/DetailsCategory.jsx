@@ -25,7 +25,7 @@ function DetailCategory({navigation, route}) {
   };
 
   const getDataCategory = async () => {
-   const res = await getProductByCategory({MaDM: category._id});
+   const res = await getProductByCategory({categoryId: category._id});
    if(res.status === 200){
     console.log("lấy dữ liệu thành công")
     setItems(res.data)
@@ -96,7 +96,7 @@ function DetailCategory({navigation, route}) {
             fontWeight: 'bold',
             marginBottom: 10,
           }}>
-          {category.TenDM}
+          {category.name}
         </Text>
 
         <Text
@@ -127,9 +127,9 @@ function DetailCategory({navigation, route}) {
                   navigation.navigate('ViewShop2', {item});
                 }}>
                 <ProductView
-                  source={item.HinhAnhSP[0]}
-                  title={item.TenSP}
-                  price={item.GiaGoc}
+                  source={item.productImages[0]}
+                  title={item.productName}
+                  price={item.originalPrice}
                 />
               </TouchableOpacity>
             );

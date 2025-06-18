@@ -49,7 +49,6 @@ function CustomerBottomTab() {
         <KeyboardAvoidingView
           behavior={Platform.OS === 'android' ? 'padding' : 'height'}
           style={{flex: 1}}>
-          <NavigationContainer>
             <TabBottom.Navigator
               screenOptions={{
                 tabBarStyle: {
@@ -157,7 +156,6 @@ function CustomerBottomTab() {
                 })}
               />
             </TabBottom.Navigator>
-          </NavigationContainer>
         </KeyboardAvoidingView>
       </OrderProvider>
     </StripeProvider>

@@ -20,7 +20,7 @@ import Message from '../../components/Customer/Message';
 import CUSTOM_COLOR from '../../constants/color';
 
 import { firebase } from '../../../firebase/firebase';
-import { getUserType } from '../../api/UserApi';
+import { getCurrentUserData, getUserType } from '../../api/UserApi';
 import { BackIcon } from '../../../assets/Customer/svgs';
 import FONT_FAMILY from '../../constants/font';
 import { API_URL } from '../../api/AppApi';
@@ -38,7 +38,6 @@ function DetailChatScreen({ navigation, route }) {
   const setupSocketListeners = (userInfo, item) => {
     if (userInfo && item) {
       socket.emit('getMessages', { userId: userInfo._id, friendId: item._id });
-
       socket.on('messages', messages => {
         setMessages(messages);
 
@@ -78,7 +77,7 @@ function DetailChatScreen({ navigation, route }) {
   useEffect(() => {
     const fetchUserData = async () => {
       const user = firebase.auth().currentUser;
-      const res = await getUserType({ userId: user.uid });
+      const res = await getCurrentUserData({ userId: user.uid });
       setUserInfo(res.data);
       setupSocketListeners(res.data, item);
     };
@@ -104,7 +103,7 @@ function DetailChatScreen({ navigation, route }) {
         <TouchableOpacity style={{ padding: 10 }} onPress={() => navigation.goBack()}>
           <BackIcon />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Customer Support</Text>
+        <Text style={styles.headerText}>Store Support</Text>
       </View>
 
       <ScrollView style={styles.messageContainer}>

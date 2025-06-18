@@ -24,7 +24,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import FONT_FAMILY from '../../constants/font';
 import PromotionButton from '../../components/Admin/PromotionButton';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import IC_Back from '../../../assets/Admin/icons';
+import {IC_Back} from '../../../assets/Admin/icons';
 import moment from 'moment';
 import { isBefore } from 'date-fns';
 import { addPromotion } from '../../api/PromotionApi';
@@ -52,10 +52,6 @@ function AddPromotion({navigation}) {
     {
       id: 'GiamGia',
       title: 'Khuyến mãi giảm giá',
-    },
-    {
-      id: 'MienPhiVanChuyen',
-      title: 'Miễn phí vận chuyển',
     },
   ];
 
@@ -125,16 +121,16 @@ function AddPromotion({navigation}) {
     }
     const imageUri = await UploadFile();
     const newPromotion = {
-      PromotionDetails: description,
-      MinimumOrder: minimumOrder,
-      PromotionImage: imageUri,
-      Type: typeOfPromotion,
-      StartDate: startDate,
-      EndDate: endDate,
-      PromotionName: name,
-      Rate: discount/100,
-      UsageLimit: 1,
-      RemainingUses: 1,
+      promotionDetails: description,
+      minimumOrder: minimumOrder,
+      promotionImage: imageUri,
+      type: typeOfPromotion,
+      startDate: startDate,
+      endDate: endDate,
+      promotionName: name,
+      rate: discount/100,
+      usageLimit: 1,
+      remainingUses: 1,
     }
     const res = await addPromotion({data: newPromotion});
     if(res.status === 200){
@@ -192,7 +188,6 @@ function AddPromotion({navigation}) {
       setStartDateValuse(fDate);
       setEndDateValues(fDate);
     };
-
     getCurrentDate();
   }, []);
 

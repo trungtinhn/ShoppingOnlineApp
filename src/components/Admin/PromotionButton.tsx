@@ -34,10 +34,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 63,
     alignSelf: 'center',
-    backgroundColor: CUSTOM_COLOR.Sapphire,
+    backgroundColor: CUSTOM_COLOR.FlushOrange,
   },
   textButton: {
-    fontFamily: FONT_FAMILY.Semibold,
+    fontFamily: FONT_FAMILY.Bold,
     fontSize: 20,
     color: CUSTOM_COLOR.White,
   },

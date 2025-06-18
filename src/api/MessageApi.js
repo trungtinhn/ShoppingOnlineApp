@@ -24,5 +24,27 @@ const getChatSummary = async ({data}) => {
     }
   }
 };
+const getChatSummaryStore = async ({data}) => {
+  try {
+    const idToken = await getIdToken();
+    const url = `/messages/chat/summary/store`;
+    const config = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${idToken}`,
+      },
+      data: data,
+    };
+    const res = await api(url, config);
+    return res;
+  } catch (error) {
+    if (error.response) {
+      return error.response;
+    } else {
+      throw error;
+    }
+  }
+};
 
-export { getChatSummary};
+export { getChatSummary, getChatSummaryStore };

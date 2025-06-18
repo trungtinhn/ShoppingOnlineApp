@@ -20,7 +20,6 @@ const Stack = createNativeStackNavigator();
 
 const MainNavigation = () => {
   return (
-    <NavigationContainer>
         <Stack.Navigator
           screenOptions={{headerShown: false}}
           initialRouteName='Intro'>
@@ -37,8 +36,6 @@ const MainNavigation = () => {
           <Stack.Screen name='ResetPassword' component={ResetPasswordScreen}/>
           <Stack.Screen name='Done' component={DoneScreen}/>
         </Stack.Navigator>
-       
-    </NavigationContainer>
   )
 }
 

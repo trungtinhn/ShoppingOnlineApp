@@ -5,7 +5,7 @@ import { back } from '../../../assets/Admin/icons';
 
 const ItemList = (props: any) => {
   return (
-    <TouchableOpacity 
+    <TouchableOpacity
       style={styles.container}
       onPress={props.onPress}
     >
@@ -36,11 +36,11 @@ const ItemList = (props: any) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 9,
+    margin: 5,
     flexDirection: 'row',
     width: '100%',
     height: 70,
-    elevation: 3,
+    elevation: 5,
     shadowColor: CUSTOM_COLOR.Black,
     backgroundColor: CUSTOM_COLOR.White,
     alignItems: 'center',

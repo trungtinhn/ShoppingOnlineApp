@@ -78,12 +78,12 @@ export default function EditProduct({navigation, route}) {
   };
 
   const getDataColor = async () => {
-    const colors = item.Colors;
+    const colors = item.colors;
     setColorList(colors);
   };
 
   const getDataSize = () => {
-    const data = item.Size;
+    const data = item.sizes;
     setSizeList(data);
   };
 
@@ -99,19 +99,19 @@ export default function EditProduct({navigation, route}) {
       });
     });
     const productData = {
-      OriginalPrice: Number(price),
-      DiscountPrice: Number(price),
-      ProductImages: image,
-      CategoryId: categorize,
-      Colors: colorList,
-      Size: sizeList,
-      Type: types,
-      StockQuantity: Number(amount),
-      ProductName: name,
-      ProductDescription: description,
-      Status: item.Status,
-      Trending: false,
-      Onsale: false,
+      originalPrice: Number(price),
+      discountPrice: Number(price),
+      productImages: image,
+      categoryId: categorize,
+      colors: colorList,
+      sizes: sizeList,
+      types: types,
+      stockQuantity: Number(amount),
+      productName: name,
+      productDescription: description,
+      status: item.status,
+      trending: false,
+      onsale: false,
     };
     const res = await updateProduct({productId: item._id, data: productData});
     if (res.status === 200) {
@@ -148,17 +148,17 @@ export default function EditProduct({navigation, route}) {
   };
 
   useEffect(() => {
-    setImage(item.ProductImages);
-    setName(item.ProductName);
-    setDescription(item.ProductDescription);
-    setPrice(item.OriginalPrice);
-    setAmount(item.StockQuantity);
-    setValue(item.CategoryId);
+    setImage(item.productImages);
+    setName(item.productName);
+    setDescription(item.productDescription);
+    setPrice(item.originalPrice);
+    setAmount(item.stockQuantity);
+    setValue(item.categoryId);
     getDataColor();
     getDataSize();
     getDataCategories();
-    setLengthName(item.ProductName.length);
-    setLengthDescription(item.ProductDescription.length);
+    setLengthName(item.productName.length);
+    setLengthDescription(item.productDescription.length);
   }, []);
 
   return (
