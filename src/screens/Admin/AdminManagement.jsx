@@ -60,7 +60,7 @@ const toolsData = [
         name: 'Subcategory Management',
         description: 'Manage product subcategories',
         icon: IC_GlobalCategory,
-        screen: 'SubcategoryManagement',
+        screen: 'Subcategory',
         color: '#673AB7'
       },
       {

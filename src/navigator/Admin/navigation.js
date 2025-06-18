@@ -41,6 +41,7 @@ import AddGlobalCategory from '../../screens/Admin/AddGlobalCategory';
 import EditGlobalCategory from '../../screens/Admin/EditGlobalCategory';
 import RankManagement from '../../screens/Admin/RankManagement';
 import EditRankRule from '../../screens/Admin/EditRankRule';
+import SubCategory from '../../screens/Admin/SubCategory';
 const Stack = createNativeStackNavigator();
 
 const AdminNavigation = () => {
@@ -72,6 +73,7 @@ const AdminNavigation = () => {
       <Stack.Screen name="ChangeProfile" component={ChangeProfile} />
       <Stack.Screen name="EditPromotion" component={EditPromotion} />
       <Stack.Screen name="Categories" component={Categories} />
+      <Stack.Screen name="Subcategory" component={SubCategory}/>
       <Stack.Screen name="DetailsCategory" component={DetailCategory} />
       <Stack.Screen name="AddNewCategory" component={AddNewCategory} />
       <Stack.Screen name="EditCategory" component={EditCategory} />
