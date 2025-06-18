@@ -1,7 +1,7 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { NavigationContainer } from '@react-navigation/native';
+import {View, Text} from 'react-native';
+import React from 'react';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {NavigationContainer} from '@react-navigation/native';
 import OverViewScreen from '../../screens/Admin/OverViewScreen';
 import ViewShopScreen from '../../screens/Admin/ViewShopScreen';
 import ViewShopProduct from '../../screens/Admin/ViewShopProduc';
@@ -45,53 +45,54 @@ const Stack = createNativeStackNavigator();
 
 const AdminNavigation = () => {
   return (
-    <NavigationContainer>
-        <Stack.Navigator 
-          screenOptions={{headerShown: false}}
-          initialRouteName='OverView'>
-            <Stack.Screen name='OverView' component={AdminManagement}/>
-            <Stack.Screen name='ViewShopScreen' component={ViewShopScreen}/>
-            <Stack.Screen name='ViewShopProduct' component={ViewShopProduct}/>
-            <Stack.Screen name='ViewDetailsinList' component={ViewDetailsinList}/>
-            <Stack.Screen name="AddAccount" component={AddAccount} />
-            <Stack.Screen name="AddProduct" component={AddProduct} />
-            <Stack.Screen name="AddPromotion" component={AddPromotion} />
-            <Stack.Screen name="Chat" component={Chat} />
-            <Stack.Screen name="ChatScreenStaff" component={ChatScreenStaff} />
-            <Stack.Screen name="DeTailsDelivery" component={DeTailDelivery} />
-            <Stack.Screen name="DetailChat" component= {DetailChatScreen} />
-            <Stack.Screen name="EditAccount" component={EditAccount} />
-            <Stack.Screen name="EditProduct" component={EditProduct} />
-            <Stack.Screen name="ImportProduct" component={ImportProduct} />
-            <Stack.Screen name="ManageUser" component={ManageUser} />
-            <Stack.Screen name="MyProduct" component={MyProduct} />
-            {/* //<Stack.Screen name="Notification" component={Notification} /> */}
-            <Stack.Screen name="Order" component={Order} />
-            <Stack.Screen name="Promotion" component={Promotion} />
-            <Stack.Screen name="ReviewScreen" component={ReviewScreen} />
-            <Stack.Screen name="Setting" component={Setting} />
-            <Stack.Screen name="ChangeProfile" component={ChangeProfile} />
-            <Stack.Screen name="EditPromotion" component={EditPromotion} />
-            <Stack.Screen name="Categories" component={Categories} />
-            <Stack.Screen name="DetailsCategory" component={DetailCategory} />
-            <Stack.Screen name="AddNewCategory" component={AddNewCategory} />
-            <Stack.Screen name="EditCategory" component={EditCategory} />
-            <Stack.Screen name="FunctionPermission" component={FunctionPermission} />
-            <Stack.Screen name="DeliveryDetail" component={DeTailDelivery}/>
-            <Stack.Screen name="FuctionPermisson" component={FunctionPermisson} />
+    <Stack.Navigator
+      screenOptions={{headerShown: false}}
+      initialRouteName="OverView">
+      <Stack.Screen name="OverView" component={AdminManagement} />
+      <Stack.Screen name="ViewShopScreen" component={ViewShopScreen} />
+      <Stack.Screen name="ViewShopProduct" component={ViewShopProduct} />
+      <Stack.Screen name="ViewDetailsinList" component={ViewDetailsinList} />
+      <Stack.Screen name="AddAccount" component={AddAccount} />
+      <Stack.Screen name="AddProduct" component={AddProduct} />
+      <Stack.Screen name="AddPromotion" component={AddPromotion} />
+      <Stack.Screen name="Chat" component={Chat} />
+      <Stack.Screen name="ChatScreenStaff" component={ChatScreenStaff} />
+      <Stack.Screen name="DeTailsDelivery" component={DeTailDelivery} />
+      <Stack.Screen name="DetailChat" component={DetailChatScreen} />
+      <Stack.Screen name="EditAccount" component={EditAccount} />
+      <Stack.Screen name="EditProduct" component={EditProduct} />
+      <Stack.Screen name="ImportProduct" component={ImportProduct} />
+      <Stack.Screen name="ManageUser" component={ManageUser} />
+      <Stack.Screen name="MyProduct" component={MyProduct} />
+      {/* //<Stack.Screen name="Notification" component={Notification} /> */}
+      <Stack.Screen name="Order" component={Order} />
+      <Stack.Screen name="Promotion" component={Promotion} />
+      <Stack.Screen name="ReviewScreen" component={ReviewScreen} />
+      <Stack.Screen name="Setting" component={Setting} />
+      <Stack.Screen name="ChangeProfile" component={ChangeProfile} />
+      <Stack.Screen name="EditPromotion" component={EditPromotion} />
+      <Stack.Screen name="Categories" component={Categories} />
+      <Stack.Screen name="DetailsCategory" component={DetailCategory} />
+      <Stack.Screen name="AddNewCategory" component={AddNewCategory} />
+      <Stack.Screen name="EditCategory" component={EditCategory} />
+      <Stack.Screen name="FunctionPermission" component={FunctionPermission} />
+      <Stack.Screen name="DeliveryDetail" component={DeTailDelivery} />
+      <Stack.Screen name="FuctionPermisson" component={FunctionPermisson} />
 
-            <Stack.Screen name="GlobalPromotion" component={GlobalPromotion} />
-            <Stack.Screen name="EditGlobalPromotion" component={EditGlobalPromotion}/>
-            <Stack.Screen name ="AddGlobalPromotion" component={AddGlobalPromotion}/>
-            <Stack.Screen name ="ChatWithStore" component={ChatWithStore}/>
-            <Stack.Screen name ="GlobalCategory" component={GlobalCategory}/>
-            <Stack.Screen name ="AddGlobalCategory" component={AddGlobalCategory}/>
-            <Stack.Screen name ="EditGlobalCategory" component={EditGlobalCategory}/>
-            <Stack.Screen name ="RankManagement" component={RankManagement}/>
-            <Stack.Screen name ="EditRankRule" component={EditRankRule} />
-        </Stack.Navigator>
-    </NavigationContainer>
-  )
-}
+      <Stack.Screen name="GlobalPromotion" component={GlobalPromotion} />
+      <Stack.Screen
+        name="EditGlobalPromotion"
+        component={EditGlobalPromotion}
+      />
+      <Stack.Screen name="AddGlobalPromotion" component={AddGlobalPromotion} />
+      <Stack.Screen name="ChatWithStore" component={ChatWithStore} />
+      <Stack.Screen name="GlobalCategory" component={GlobalCategory} />
+      <Stack.Screen name="AddGlobalCategory" component={AddGlobalCategory} />
+      <Stack.Screen name="EditGlobalCategory" component={EditGlobalCategory} />
+      <Stack.Screen name="RankManagement" component={RankManagement} />
+      <Stack.Screen name="EditRankRule" component={EditRankRule} />
+    </Stack.Navigator>
+  );
+};
 
-export default AdminNavigation
+export default AdminNavigation;
