@@ -26,11 +26,10 @@ import Setting from '../../screens/Admin/Setting';
 import Chat from '../../screens/Admin/Chat';
 import Categories from '../../screens/Admin/Categories';
 import EditCategory from '../../screens/Admin/EditCategory';
-import FunctionPermission from '../../screens/Admin/FunctionPermission';
 import DetailChatScreen from '../../screens/Admin/DetailChat';
 import DeliveryScreen from '../../screens/Customer/DeliveryScreen';
 import DeTailDelivery from '../../screens/Customer/DetailDelivery';
-import FunctionPermisson from '../../screens/Admin/FunctionPermission';
+import FunctionPermission from '../../screens/Admin/FunctionPermission';
 import AdminManagement from '../../screens/Admin/AdminManagement';
 import GlobalPromotion from '../../screens/Admin/GlobalPromotion';
 import EditGlobalPromotion from '../../screens/Admin/EditGlobalPromotion';
@@ -42,6 +41,7 @@ import EditGlobalCategory from '../../screens/Admin/EditGlobalCategory';
 import RankManagement from '../../screens/Admin/RankManagement';
 import EditRankRule from '../../screens/Admin/EditRankRule';
 import SubCategory from '../../screens/Admin/SubCategory';
+import AddStaff from '../../screens/Admin/AddStaff';
 const Stack = createNativeStackNavigator();
 
 const AdminNavigation = () => {
@@ -79,7 +79,7 @@ const AdminNavigation = () => {
       <Stack.Screen name="EditCategory" component={EditCategory} />
       <Stack.Screen name="FunctionPermission" component={FunctionPermission} />
       <Stack.Screen name="DeliveryDetail" component={DeTailDelivery} />
-      <Stack.Screen name="FuctionPermisson" component={FunctionPermisson} />
+      <Stack.Screen name="FuctionPermisson" component={FunctionPermission} />
 
       <Stack.Screen name="GlobalPromotion" component={GlobalPromotion} />
       <Stack.Screen
@@ -93,6 +93,7 @@ const AdminNavigation = () => {
       <Stack.Screen name="EditGlobalCategory" component={EditGlobalCategory} />
       <Stack.Screen name="RankManagement" component={RankManagement} />
       <Stack.Screen name="EditRankRule" component={EditRankRule} />
+      <Stack.Screen name="AddStaff" component={AddStaff}/>
     </Stack.Navigator>
   );
 };

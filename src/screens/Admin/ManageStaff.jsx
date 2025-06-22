@@ -15,7 +15,7 @@ import LoadingComponent from '../../components/LoadingComponent';
 import CUSTOM_COLOR from '../../constants/color';
 import FONT_FAMILY from '../../constants/font';
 import Search from '../../components/Admin/Search';
-import { getAllUsers, getCurrentUserData, getUserType } from '../../api/UserApi';
+import { getAllUsers, getCurrentUserData } from '../../api/UserApi';
 import { firebase } from '../../../firebase/firebase';
 
 export const Acount = {
@@ -175,7 +175,7 @@ const getUserData = async () => {
               <TouchableOpacity style={styles.butAddContainer}>
                 <Text
                   style={{ color: CUSTOM_COLOR.White }}
-                  onPress={() => navigation.navigate('AddAccount')}>
+                  onPress={() => navigation.navigate('AddStaff')}>
                   Add Account
                 </Text>
               </TouchableOpacity>
